@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <input type="file" id="fileInput">
+    <button id="uploadButton">Upload</button>
+
+    <script>
+    $(document).ready(function() {
+        $("#uploadButton").click(function() {
+            var fileInput = $("#fileInput")[0];
+            var file = fileInput.files[0];
+
+            var formData = new FormData();
+            formData.append("file", file);
+
+            $.ajax({
+                url: "/api/display/",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}",
+                },
+                success: function(response) {
+                    // Handle the response data here
+                    console.log(response);
+                },
+                error: function(xhr, status, error) {
+                    // Handle any errors that occur during the request
+                    console.error(error);
+                }
+            });
+        });
+    });
+    </script>
+</body>
+</html>
