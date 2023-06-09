@@ -10,7 +10,7 @@ To run this project, follow these steps:
 
 1. Clone the repository:
    ```
-   git clone https://github.com/Mehedi-10/Matflow.git
+   git clone https://github.com/nafeu-khan/mf_backend/
    ```
 2. Install the required packages:
    ```
@@ -42,8 +42,3 @@ The project has one endpoint that receives a request and returns a response:
 - Django
 - Django REST framework
 
-## Author
-Mehedi Hasan Arafat
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
