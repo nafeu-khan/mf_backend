@@ -76,6 +76,7 @@ def display_correlation(request):
     file = data.get('file')
     file = pd.DataFrame(file)
     correlation_method="kendall"
+    file = file.select_dtypes(include='number')
     correlation_data =file.corr(correlation_method)
     data = correlation_data.to_json(orient='records')
     return JsonResponse({'data': data})
