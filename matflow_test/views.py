@@ -11,7 +11,7 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import authenticate, login
 from rest_framework import status
 from django.contrib.auth.models import User
-
+from .Matflow_Main.modules.dataframe import group,correlation
 @api_view(['POST'])
 def signup(request):
     try:
@@ -31,8 +31,6 @@ def signup(request):
     user = User.objects.create_user(username=username, password=password)
 
     return Response({'message': 'User created successfully.'}, status=status.HTTP_201_CREATED)
-
-
 @api_view(['POST'])
 def login(request):
     try:
@@ -51,13 +49,9 @@ def login(request):
 
     return Response({'message': 'User logged in successfully.'}, status=status.HTTP_200_OK)
 
-
 def test_page(request):
 
     return render(request, 'index.html')
-
-from .Matflow_Main.modules import utils
-
 
 @api_view(['GET', 'POST'])
 def display_group(request):
@@ -74,19 +68,23 @@ def display_group(request):
     data = file.groupby(by=group_var, as_index=False).agg(agg_func)
     data = data.to_json(orient='records')
     return JsonResponse({'data': data})
-@api_view(['GET','POST'])
-def display(request):
-    print(request)
-    data = request.FILES.get('file')
-    data = request.body.get('file')
-    data=pd.read_csv(data)
-    group_var = request.body.get("group_var")
+@api_view(['GET', 'POST'])
+def display_correlation(request):
+    print (request)
+    data = json.loads(request.body)
+    # data = request.FILES.get('file')
+    file = data.get('file')
+    # file=pd.read_csv(file)
+    file = pd.DataFrame(file)
 
-    agg_func = request.body.get("filter_agg_func")
+    group_var = data.get("group_var")
 
-    data.groupby(by=group_var, as_index=False).agg(agg_func)
+    agg_func = data.get("agg_func")
 
-    return JsonResponse({'data':data})
+    data = file.groupby(by=group_var, as_index=False).agg(agg_func)
+    data = data.to_json(orient='records')
+    return JsonResponse({'data': data})
+
 
 
 def custom(data, var, params):

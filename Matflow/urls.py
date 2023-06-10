@@ -16,12 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from matflow_test.views import login,signup,display,test_page
+from matflow_test.views import login,signup,display_group,test_page,display_correlation
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/signup/', signup, name='signup'),
     path('api/login/', login, name='login'),
     path('',test_page),
-    path('api/display/', display, name='display-api'),
+    path('api/display_group/', display_group, name='display-api'),
+    path('api/display_correlation/', display_correlation, name='display-api'),
+
 ]

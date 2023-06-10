@@ -1,6 +1,6 @@
 import streamlit as st 
 
-from modules import utils
+from ...modules import utils
 
 def group(data):
 	columns = utils.get_variables(data)

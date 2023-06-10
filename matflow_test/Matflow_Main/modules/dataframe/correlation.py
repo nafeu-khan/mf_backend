@@ -3,15 +3,11 @@ import pandas as pd
 import matplotlib.pyplot as plt  
 import seaborn as sns
 
-from modules import utils
+from ...modules import utils
 
 def correlation(data):
-	st.title("Feature Correlation")
-
 	num_var = utils.get_numerical(data)
 	col1, col2 = st.columns([8,2])
-
-	col2.markdown("#")
 	select_all = col2.checkbox("Select all", True, key="correlation_select_all")
 	
 	if select_all:
