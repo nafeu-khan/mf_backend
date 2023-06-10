@@ -65,27 +65,20 @@ def display_group(request):
 
     agg_func = data.get("agg_func")
 
-    data = file.groupby(by=group_var, as_index=False).agg(agg_func)
+    numeric_columns = file.select_dtypes(include='number').columns
+
+    data = file.groupby(by=group_var, as_index=False)[numeric_columns].agg(agg_func)
     data = data.to_json(orient='records')
     return JsonResponse({'data': data})
 @api_view(['GET', 'POST'])
 def display_correlation(request):
-    print (request)
     data = json.loads(request.body)
-    # data = request.FILES.get('file')
     file = data.get('file')
-    # file=pd.read_csv(file)
     file = pd.DataFrame(file)
-
-    group_var = data.get("group_var")
-
-    agg_func = data.get("agg_func")
-
-    data = file.groupby(by=group_var, as_index=False).agg(agg_func)
-    data = data.to_json(orient='records')
+    correlation_method="kendall"
+    correlation_data =file.corr(correlation_method)
+    data = correlation_data.to_json(orient='records')
     return JsonResponse({'data': data})
-
-
 
 def custom(data, var, params):
     idx_start = int(params.get("idx_start", 0))
