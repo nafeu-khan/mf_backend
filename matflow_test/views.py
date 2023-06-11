@@ -3,15 +3,19 @@ import json
 import pandas as pd
 import numpy as np
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from io import BytesIO
-import matplotlib.pyplot as plt
+
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import authenticate, login
 from rest_framework import status
 from django.contrib.auth.models import User
-from .Matflow_Main.modules.dataframe import group,correlation
+from .Matflow_Main.modules.dataframe import group,correlation,correlation
+from .Matflow_Main.modules.dataframe.correlation import display_pair
+
+from .Matflow_Main.modules.graph import barplot
+
 @api_view(['POST'])
 def signup(request):
     try:
@@ -56,7 +60,6 @@ def test_page(request):
 @api_view(['GET', 'POST'])
 def display_group(request):
     data = json.loads(request.body)
-    # data = request.FILES.get('file')
     file = data.get('file')
     # file=pd.read_csv(file)
     file = pd.DataFrame(file)
@@ -81,6 +84,27 @@ def display_correlation(request):
     data = correlation_data.to_json(orient='records')
     return JsonResponse({'data': data})
 
+def display_correlation_featurePair(request):
+    data = json.loads(request.body)
+    correlation_data =pd.DataFrame(data.get('file'))
+    bg_gradient= data.get('gradient')
+    feature1 = data.get('feature1')
+    feature2 = data.get('feature2')
+    drop = data.get('drop')
+    absol = data.get('absol')
+    high = data.get('high')
+    df=display_pair(correlation_data,bg_gradient,feature1,feature2,high,drop,absol)
+    data = df.to_json(orient='records')
+    return JsonResponse({'data': data})
+
+@api_view(['GET'])
+@csrf_exempt
+def eda_barplot(request):
+    data = json.loads(request.body)
+    file = data.get('file')
+    response= barplot(file,request)
+    return response
+
 def custom(data, var, params):
     idx_start = int(params.get("idx_start", 0))
     idx_end = int(params.get("idx_end", data.shape[0]))
@@ -94,7 +118,6 @@ def custom(data, var, params):
 
     return data_slice.to_dict(orient="records")
 
-
 def filter_data(data, params, display_var):
     filter_var = params.get("filter_var", "")
     filter_operator = params.get("filter_cond", "")
@@ -104,7 +127,6 @@ def filter_data(data, params, display_var):
     result = filtered_data[display_var]
 
     return result
-
 
 def filter_result(data, filter_var, filter_operator, filter_value):
     if filter_operator == "<":

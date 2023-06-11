@@ -84,28 +84,9 @@ def display_heatmap(correlation_data, annot):
 	ax.set_title("Feature Correlation Heatmap", pad=20)
 	st.pyplot(fig)
 	
-def display_pair(correlation_data, bg_gradient):
+def display_pair(correlation_data, bg_gradient,feature1,feature2,higher_than,drop_perfect,convert_abs):
 	features = correlation_data.columns.to_list()
 	features.insert(0, "-")
-
-	col1, col2, col3 = st.columns([3.8,3.8,2.4])
-	feature1 = col1.selectbox(
-			"Feature 1 Filter",
-			features,
-			key="feature_pair1"
-		)
-
-	feature2 = col2.selectbox(
-			"Feature 2 Filter",
-			features,
-			key="feature_pair2"
-		)
-
-	higher_than = col3.number_input(
-			"Correlation higher than",
-			0.0, 1.0, 0.0,
-			key="correlation_higher_than"
-		)
 
 	col1, col2, _ = st.columns([2.5,2.5,5])
 	drop_perfect = col1.checkbox("Drop Perfect", key="correlation_drop_perfect")
@@ -155,6 +136,6 @@ def display_pair(correlation_data, bg_gradient):
 		sorted_corr = sorted_corr.drop(sorted_corr.iloc[1::2].index).reset_index(drop=True)
 
 	if bg_gradient:
-		st.dataframe(sorted_corr.style.background_gradient())
+		return sorted_corr.style.background_gradient()
 	else:
-		st.dataframe(sorted_corr)
+		return sorted_corr
