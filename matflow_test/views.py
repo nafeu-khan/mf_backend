@@ -14,7 +14,7 @@ from django.contrib.auth.models import User
 from .Matflow_Main.modules.dataframe import group,correlation,correlation
 from .Matflow_Main.modules.dataframe.correlation import display_pair
 
-from .Matflow_Main.modules.graph import barplot
+from .Matflow_Main.modules.graph.barplot import Barplot
 
 @api_view(['POST'])
 def signup(request):
@@ -33,7 +33,6 @@ def signup(request):
 
     # Create a new user
     user = User.objects.create_user(username=username, password=password)
-
     return Response({'message': 'User created successfully.'}, status=status.HTTP_201_CREATED)
 @api_view(['POST'])
 def login(request):
@@ -70,7 +69,7 @@ def display_group(request):
 
     numeric_columns = file.select_dtypes(include='number').columns
 
-    data = file.groupby(by=group_var, as_index=False)[numeric_columns].agg(agg_func)
+    data = file.groupby(by=group_var, as_index=False).agg(agg_func)
     data = data.to_json(orient='records')
     return JsonResponse({'data': data})
 @api_view(['GET', 'POST'])
@@ -84,6 +83,7 @@ def display_correlation(request):
     data = correlation_data.to_json(orient='records')
     return JsonResponse({'data': data})
 
+@api_view(['GET','POST'])
 def display_correlation_featurePair(request):
     data = json.loads(request.body)
     correlation_data =pd.DataFrame(data.get('file'))
@@ -97,12 +97,16 @@ def display_correlation_featurePair(request):
     data = df.to_json(orient='records')
     return JsonResponse({'data': data})
 
-@api_view(['GET'])
-@csrf_exempt
+@api_view(['GET','POST'])
 def eda_barplot(request):
     data = json.loads(request.body)
     file = data.get('file')
-    response= barplot(file,request)
+    cat = data.get('cat')  # Get the categorical variable from the query parameter
+    num = data.get('num')  # Get the numerical variable from the query parameter
+    hue = data.get('hue')  # Get the hue variable from the query parameter
+    orient = data.get('orient')  # Get the orientation from the query parameter
+    annote=data.get('annote')
+    response= Barplot(file,cat,num,hue,orient,annote)
     return response
 
 def custom(data, var, params):

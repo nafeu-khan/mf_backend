@@ -135,7 +135,4 @@ def display_pair(correlation_data, bg_gradient,feature1,feature2,higher_than,dro
 	else:
 		sorted_corr = sorted_corr.drop(sorted_corr.iloc[1::2].index).reset_index(drop=True)
 
-	if bg_gradient:
-		return sorted_corr.style.background_gradient()
-	else:
-		return sorted_corr
+	return sorted_corr

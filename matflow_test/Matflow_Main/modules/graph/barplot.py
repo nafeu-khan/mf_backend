@@ -5,24 +5,15 @@ from django.http import HttpResponse
 from io import BytesIO
 from ...modules import utils
 
-def barplot(data,request):
+def Barplot(data,cat,num,hue,orient,annotate):
 	num_var = utils.get_numerical(data, add_hypen=True)
 	low_cardinality = utils.get_low_cardinality(data, add_hypen=True)
-
-	cat = request.GET.get('cat')  # Get the categorical variable from the query parameter
-	num = request.GET.get('num')  # Get the numerical variable from the query parameter
-	hue = request.GET.get('hue')  # Get the hue variable from the query parameter
-	orient = request.GET.get('orient', 'Vertical')  # Get the orientation from the query parameter
-
+	errorbar=True
 	fig, ax = plt.subplots()
 
 	if cat != "-" and num != "-":
 		hue = None if (hue == "-") else hue
-		errorbar = ("ci", 95) if request.GET.get('errorbar') == 'true' else None
-
-		if request.GET.get('set_title') == 'true':
-			title = request.GET.get('title', f"{num} by {cat}")
-			ax.set_title(title)
+		errorbar = ("ci", 95) if errorbar== True else None
 
 		if orient == "Vertical":
 			try:
@@ -35,7 +26,7 @@ def barplot(data,request):
 			order = sorted(data[cat].unique())
 			ax = sns.barplot(data=data, x=num, y=cat, hue=hue, order=order, errorbar=errorbar)
 
-		if request.GET.get('annotate') == 'true':
+		if annotate== True:
 			if orient == "Vertical":
 				for bar in ax.patches:
 					ax.annotate(format("{:.3f}".format(bar.get_height())),
@@ -61,5 +52,4 @@ def barplot(data,request):
 	# Create a response with the image data
 	response = HttpResponse(content_type='image/png')
 	response.write(image_stream.getvalue())
-
 	return response
