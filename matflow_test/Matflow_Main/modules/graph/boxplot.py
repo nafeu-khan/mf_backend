@@ -4,10 +4,8 @@ import matplotlib.pyplot as plt
 from django.http import HttpResponse
 
 def boxplot(data,title,cat,num,hue,orient,dodge):
-
 	if num != "-":
 		fig, ax = plt.subplots()
-
 		cat = None if (cat == "-") else cat
 		hue = None if (hue == "-") else hue
 

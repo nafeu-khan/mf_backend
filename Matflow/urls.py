@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from matflow_test.views import login,signup,display_group,test_page,display_correlation,eda_barplot,display_correlation_featurePair,eda_pieplot
+from matflow_test.views import login,signup,display_group,test_page,display_correlation,eda_barplot,display_correlation_featurePair,eda_pieplot,eda_boxplot,eda_countplot
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,9 +26,9 @@ urlpatterns = [
     path('api/display_group/', display_group, name='display-api'),
     path('api/display_correlation/', display_correlation, name='display-api'),
     path('api/display_correlation_featurePair/', display_correlation_featurePair, name='display-api'),
-    path('api/eda_barplot/', eda_barplot, name='display-api'),
-    path('api/eda_barplot/', eda_pieplot, name='display-api'),
-
-
+    path('api/eda_barplot/', eda_barplot, name='bar-api'),
+    path('api/eda_countplot/', eda_countplot, name='count-api'),
+    path('api/eda_boxplot/', eda_boxplot, name='box-api'),
+    path('api/eda_pieplot/', eda_boxplot, name='box-api'),
 
 ]

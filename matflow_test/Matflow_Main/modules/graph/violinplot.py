@@ -2,7 +2,7 @@ import streamlit as st
 import seaborn as sns
 import matplotlib.pyplot as plt 
 
-from modules import utils
+from ...modules import utils
 
 def violinplot(data):
 	num_var = utils.get_numerical(data, add_hypen=True)
