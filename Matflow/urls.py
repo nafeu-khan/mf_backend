@@ -29,6 +29,6 @@ urlpatterns = [
     path('api/eda_barplot/', eda_barplot, name='bar-api'),
     path('api/eda_countplot/', eda_countplot, name='count-api'),
     path('api/eda_boxplot/', eda_boxplot, name='box-api'),
-    path('api/eda_pieplot/', eda_boxplot, name='box-api'),
+    path('api/eda_pieplot/', eda_pieplot, name='box-api'),
 
 ]
