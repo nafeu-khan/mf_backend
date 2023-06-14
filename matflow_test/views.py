@@ -15,6 +15,11 @@ from .Matflow_Main.modules.dataframe import group,correlation,correlation
 from .Matflow_Main.modules.dataframe.correlation import display_pair
 
 from .Matflow_Main.modules.graph.barplot import Barplot
+from .Matflow_Main.modules.graph.pieplot import Pieplot
+from .Matflow_Main.modules.graph.countplot import countplot
+from .Matflow_Main.modules.graph import countplot
+from .Matflow_Main.modules.graph.boxplot import boxplot
+
 
 @api_view(['POST'])
 def signup(request):
@@ -108,6 +113,40 @@ def eda_barplot(request):
     annote=data.get('annote')
     response= Barplot(file,cat,num,hue,orient,annote)
     return response
+@api_view(['GET','POST'])
+def eda_pieplot(request):
+    data =json.loads((request.body))
+    file=data.get('file')
+    var=data.get('cat')
+    explode=data.get('gap')
+    title=data.get('title')
+    label=data.get('label')
+    percentage=data.get('percentage')
+    return Pieplot(file,var,explode,title,label,percentage)
+@api_view(['GET','POST'])
+def eda_countplot(request):
+    data =json.loads((request.body))
+    file=data.get('file')
+    var=data.get('cat')
+    title=data.get('title')
+    hue=data.get('hue')
+    orient=data.get('orientation')
+    annotate=data.get('annotate')
+    return countplot(file,var,title,hue,orient,annotate)
+@api_view(['GET','POST'])
+def eda_boxplot(request):
+    data = json.loads(request.body)
+    file = data.get('file')
+    cat = data.get('cat')  # Get the categorical variable from the query parameter
+    num = data.get('num')  # Get the numerical variable from the query parameter
+    hue = data.get('hue')  # Get the hue variable from the query parameter
+    orient = data.get('orient')  # Get the orientation from the query parameter
+    title = data.get('title')
+    dodge=data.get('dodge')
+    response= boxplot(file,title,cat,num,hue,orient,dodge)
+    return response
+
+
 
 def custom(data, var, params):
     idx_start = int(params.get("idx_start", 0))

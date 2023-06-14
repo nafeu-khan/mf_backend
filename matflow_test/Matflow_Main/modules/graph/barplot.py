@@ -6,8 +6,7 @@ from io import BytesIO
 from ...modules import utils
 
 def Barplot(data,cat,num,hue,orient,annotate):
-	num_var = utils.get_numerical(data, add_hypen=True)
-	low_cardinality = utils.get_low_cardinality(data, add_hypen=True)
+
 	errorbar=True
 	fig, ax = plt.subplots()
 
@@ -43,13 +42,14 @@ def Barplot(data,cat,num,hue,orient,annotate):
 							 ha='center', va='center'
 							 )
 
-	# Save the plot image to a BytesIO object
-	image_stream = io.BytesIO()
-	plt.savefig(image_stream, format='png')
-	plt.close(fig)
-	image_stream.seek(0)
+		image_stream = io.BytesIO()
+		plt.savefig(image_stream, format='png')
+		plt.close(fig)
+		image_stream.seek(0)
+		response = HttpResponse(content_type='image/png')
+		response.write(image_stream.getvalue())
+		return response
 
-	# Create a response with the image data
-	response = HttpResponse(content_type='image/png')
-	response.write(image_stream.getvalue())
-	return response
+	return HttpResponse("Invalid parameters or method.", status=400)
+
+

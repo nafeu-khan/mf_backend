@@ -1,42 +1,9 @@
-import streamlit as st 
+import io
 import seaborn as sns
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
+from django.http import HttpResponse
 
-from modules import utils
-
-def boxplot(data):
-	num_var = utils.get_numerical(data, add_hypen=True)
-	low_cardinality = utils.get_low_cardinality(data, add_hypen=True)
-
-	col1, col2, col3, col4 = st.columns([2.7, 2.7, 2.7, 1.9])
-	num = col1.selectbox(
-			"Numerical Variable",
-			num_var,
-			key="box_num_var"
-		)
-
-	cat = col2.selectbox(
-			"Categorical Variable",
-			low_cardinality,    
-			key="box_cat_var"
-		)
-	
-	hue = col3.selectbox(
-			"Hue",
-			low_cardinality,   
-			key="box_hue"
-		)
-
-	orient = col4.selectbox(
-			"Orientation",
-			["Vertical", "Horizontal"],
-			index=1,
-			key="box_orient"
-		)
-
-	col1, col2, _ = st.columns([1.5,1.5,7])
-	set_title = col1.checkbox("Title", key="box_set_title")
-	dodge = col2.checkbox("Dodge", True, key="box_dodge")
+def boxplot(data,title,cat,num,hue,orient,dodge):
 
 	if num != "-":
 		fig, ax = plt.subplots()
@@ -44,18 +11,11 @@ def boxplot(data):
 		cat = None if (cat == "-") else cat
 		hue = None if (hue == "-") else hue
 
-		if set_title:
+		if title.length>0:
 			default_title = f"Boxplot of {num} by {cat}"
 
 			if hue:
 				default_title = f"Boxplot of {num} by {cat} and {hue}"
-
-			title = st.text_input(
-					"Input title",
-					default_title,
-					key="box_title"
-				)
-
 			ax.set_title(title)
 
 		if orient == "Vertical":
@@ -69,5 +29,12 @@ def boxplot(data):
 				ax = sns.boxplot(data=data, x=num, y=cat, hue=hue, dodge=dodge)
 			else:
 				ax = sns.boxplot(data=data, x=num, hue=hue, dodge=dodge)
+		image_stream = io.BytesIO()
+		plt.savefig(image_stream, format='png')
+		plt.close(fig)
+		image_stream.seek(0)
+		response = HttpResponse(content_type='image/png')
+		response.write(image_stream.getvalue())
+		return response
+	return HttpResponse("Invalid parameters or method.", status=400)
 
-		st.pyplot(fig)

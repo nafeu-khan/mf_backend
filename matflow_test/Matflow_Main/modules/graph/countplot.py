@@ -1,48 +1,19 @@
-import streamlit as st 
+import io
+
+import streamlit as st
 import seaborn as sns
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
+from django.http import HttpResponse
 
-from modules import utils
+from ...modules import utils
 
-def countplot(data):
-	low_cardinality = utils.get_low_cardinality(data, add_hypen=True)
-
-	col1, col2, col3 = st.columns([4,4,2])
-	var = col1.selectbox(
-				"Categorical Variable",
-				low_cardinality,    
-				key="count_var"
-			)
-
-	hue = col2.selectbox(
-				"Hue",
-				low_cardinality,   
-				key="count_hue"
-			)
-
-	orient = col3.selectbox(
-				"Orientation",
-				["Vertical", "Horizontal"],
-				key="count_orient"
-			)
-
-	col1, col2, _ = st.columns([1.5,1.5,7])
-	set_title = col1.checkbox("Title", key="count_set_title")
-	annot = col2.checkbox("Annotate", True, key="count_annot")
-
-	if var != "-":
+def countplot(data,var,title,hue,orient,annot):
+	if var != "":
 		fig, ax = plt.subplots()
 
-		if hue == "-":
+		if hue == "":
 			hue = None
-
-		if set_title:
-			title = st.text_input(
-					"Input title",
-					f"{var} Count",
-					key="count_title"
-				)
-
+		if title.length>0:
 			ax.set_title(title)
 			ax.title.set_position([.5, 1.5])
 
@@ -68,4 +39,12 @@ def countplot(data):
 				            ha='center', va='center'
 			            )
 
-		st.pyplot(fig)
+		image_stream = io.BytesIO()
+		plt.savefig(image_stream, format='png')
+		plt.close(fig)
+		image_stream.seek(0)
+		response = HttpResponse(content_type='image/png')
+		response.write(image_stream.getvalue())
+		return response
+	return HttpResponse("Invalid parameters or method.", status=400)
+
