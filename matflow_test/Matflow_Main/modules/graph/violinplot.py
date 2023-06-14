@@ -1,44 +1,8 @@
-import streamlit as st 
+import io
 import seaborn as sns
-import matplotlib.pyplot as plt 
-
-from ...modules import utils
-
-def violinplot(data):
-	num_var = utils.get_numerical(data, add_hypen=True)
-	low_cardinality = utils.get_low_cardinality(data, add_hypen=True)
-
-	col1, col2, col3, col4 = st.columns([2.7, 2.7, 2.7, 1.9])
-	num = col1.selectbox(
-			"Numerical Variable",
-			num_var,
-			key="violin_num_var"
-		)
-
-	cat = col2.selectbox(
-			"Categorical Variable",
-			low_cardinality,    
-			key="violin_cat_var"
-		)
-	
-	hue = col3.selectbox(
-			"Hue",
-			low_cardinality,   
-			key="violin_hue"
-		)
-
-	orient = col4.selectbox(
-			"Orientation",
-			["Vertical", "Horizontal"],
-			index=1,
-			key="violin_orient"
-		)
-
-	col1, col2, col3, _ = st.columns([1.5, 1.5, 1.5, 5.5])
-	set_title = col1.checkbox("Title", key="violin_set_title")
-	dodge = col2.checkbox("Dodge", True, key="violin_dodge")
-	split = col3.checkbox("Split", key="violin_split")
-
+import matplotlib.pyplot as plt
+from django.http import HttpResponse
+def Violinplot(data,cat,num,hue,orient,dodge,split,title):
 	if num != "-":
 			fig, ax = plt.subplots()
 
@@ -47,18 +11,11 @@ def violinplot(data):
 			if cat == hue:
 				split = False 
 
-			if set_title:
-				default_title = f"Violinplot of {num} by {cat}"
-
-				if hue:
-					default_title = f"Violinplot of {num} by {cat} and {hue}"
-
-				title = st.text_input(
-						"Input title",
-						default_title,
-						key="violin_title"
-					)
-
+			if len(title)>0:
+				# title = f"Violinplot of {num} by {cat}"
+				#
+				# if hue:
+				# 	title = f"Violinplot of {num} by {cat} and {hue}"
 				ax.set_title(title)
 
 			if orient == "Vertical":
@@ -73,4 +30,11 @@ def violinplot(data):
 				else:
 					ax = sns.violinplot(data=data, x=num, hue=hue, dodge=dodge, split=split)
 
-			st.pyplot(fig)
+			image_stream = io.BytesIO()
+			plt.savefig(image_stream, format='png')
+			plt.close(fig)
+			image_stream.seek(0)
+			response = HttpResponse(content_type='image/png')
+			response.write(image_stream.getvalue())
+			return response
+	return HttpResponse("Invalid parameters or method.", status=400)

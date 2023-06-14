@@ -1,24 +1,24 @@
 import json
-
 import pandas as pd
 import numpy as np
 from django.shortcuts import render
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.contrib.auth import authenticate, login
 from rest_framework import status
 from django.contrib.auth.models import User
-from .Matflow_Main.modules.dataframe import group,correlation,correlation
 from .Matflow_Main.modules.dataframe.correlation import display_pair
-
 from .Matflow_Main.modules.graph.barplot import Barplot
+from .Matflow_Main.modules.graph.lineplot import Lineplot
 from .Matflow_Main.modules.graph.pieplot import Pieplot
-from .Matflow_Main.modules.graph.countplot import countplot
-from .Matflow_Main.modules.graph import countplot
-from .Matflow_Main.modules.graph.boxplot import boxplot
+from .Matflow_Main.modules.graph.countplot import Countplot
+from .Matflow_Main.modules.graph.boxplot import Boxplot
+from .Matflow_Main.modules.graph.histogram import Histogram
+from .Matflow_Main.modules.graph.regplot import Regplot
+from .Matflow_Main.modules.graph.scatterplot import Scatterplot
+from .Matflow_Main.modules.graph.violinplot import Violinplot
+
 
 
 @api_view(['POST'])
@@ -56,11 +56,9 @@ def login(request):
     login(request, user)
 
     return Response({'message': 'User logged in successfully.'}, status=status.HTTP_200_OK)
-
 def test_page(request):
 
     return render(request, 'index.html')
-
 @api_view(['GET', 'POST'])
 def display_group(request):
     data = json.loads(request.body)
@@ -106,17 +104,21 @@ def display_correlation_featurePair(request):
 def eda_barplot(request):
     data = json.loads(request.body)
     file = data.get('file')
+    file = pd.DataFrame(file)
     cat = data.get('cat')  # Get the categorical variable from the query parameter
     num = data.get('num')  # Get the numerical variable from the query parameter
     hue = data.get('hue')  # Get the hue variable from the query parameter
     orient = data.get('orient')  # Get the orientation from the query parameter
     annote=data.get('annote')
-    response= Barplot(file,cat,num,hue,orient,annote)
+    title=data.get('title')
+
+    response= Barplot(file,cat,num,hue,orient,annote,title)
     return response
 @api_view(['GET','POST'])
 def eda_pieplot(request):
     data =json.loads((request.body))
     file=data.get('file')
+    file = pd.DataFrame(file)
     var=data.get('cat')
     explode=data.get('gap')
     title=data.get('title')
@@ -127,32 +129,97 @@ def eda_pieplot(request):
 def eda_countplot(request):
     data =json.loads((request.body))
     file=data.get('file')
+    file = pd.DataFrame(file)
     var=data.get('cat')
     title=data.get('title')
     hue=data.get('hue')
-    orient=data.get('orientation')
-    annotate=data.get('annotate')
-    return countplot(file,var,title,hue,orient,annotate)
+    orient=data.get('orient')
+    annotate=data.get('annote')
+    return Countplot(file,var,title,hue,orient,annotate)
 @api_view(['GET','POST'])
 def eda_boxplot(request):
     data = json.loads(request.body)
     file = data.get('file')
+    file = pd.DataFrame(file)
     cat = data.get('cat')  # Get the categorical variable from the query parameter
     num = data.get('num')  # Get the numerical variable from the query parameter
     hue = data.get('hue')  # Get the hue variable from the query parameter
     orient = data.get('orient')  # Get the orientation from the query parameter
     title = data.get('title')
     dodge=data.get('dodge')
-    response= boxplot(file,title,cat,num,hue,orient,dodge)
+    response= Boxplot(file,title,cat,num,hue,orient,dodge)
+    return response
+@api_view(['GET','POST'])
+def eda_histogram(request):
+    data =json.loads((request.body))
+    file=data.get('file')
+    file = pd.DataFrame(file)
+    var=data.get('var')
+    title=data.get('title')
+    hue=data.get('hue')
+    orient=data.get('orient')
+    agg=data.get('agg')
+    autoBin=data.get('autoBin')
+    kde=data.get('kde')
+    legend=data.get('legend')
+    return Histogram(file,var,title,hue,orient,agg,autoBin,kde,legend)
+@api_view(['GET','POST'])
+def eda_violinplot(request):
+    data = json.loads(request.body)
+    file = data.get('file')
+    file = pd.DataFrame(file)
+    cat = data.get('cat')  # Get the categorical variable from the query parameter
+    num = data.get('num')  # Get the numerical variable from the query parameter
+    hue = data.get('hue')  # Get the hue variable from the query parameter
+    orient = data.get('orient')  # Get the orientation from the query parameter
+    dodge=data.get('dodge')
+    split=data.get('split')
+
+    title=data.get('title')
+    response= Violinplot(file,cat,num,hue,orient,dodge,split,title)
+    return response
+@api_view(['GET','POST'])
+def eda_scatterplot(request):
+    data = json.loads(request.body)
+    file = data.get('file')
+    file = pd.DataFrame(file)
+    x_var = data.get('x_var')
+    y_var = data.get('y_var')
+    title = data.get('title')
+    hue = data.get('hue')
+    response= Scatterplot(file,x_var,y_var,hue,title)
+    return response
+@api_view(['GET','POST'])
+def eda_regplot(request):
+    data = json.loads(request.body)
+    file = data.get('file')
+    file = pd.DataFrame(file)
+    x_var = data.get('x_var')
+    y_var = data.get('y_var')
+    title = data.get('title')
+    sctr = data.get('scatter')
+    response= Regplot(file,x_var,y_var,title,sctr)
     return response
 
+@api_view(['GET','POST'])
+def eda_lineplot(request):
+    data = json.loads(request.body)
+    file = data.get('file')
+    file = pd.DataFrame(file)
+    x_var = data.get('x_var')
+    y_var = data.get('y_var')
+    title = data.get('title')
+    hue = data.get('hue')
+    style = data.get('style')
+    legend = data.get('legend')
 
 
+    response= Lineplot(file,x_var,y_var,hue,title,style,legend)
+    return response
 def custom(data, var, params):
     idx_start = int(params.get("idx_start", 0))
     idx_end = int(params.get("idx_end", data.shape[0]))
     is_filter = params.get("is_filter", False)
-
     if is_filter:
         filtered_data = filter_data(data, params, var)
         data_slice = filtered_data.loc[idx_start:idx_end, var]

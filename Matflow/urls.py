@@ -16,7 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from matflow_test.views import login,signup,display_group,test_page,display_correlation,eda_barplot,display_correlation_featurePair,eda_pieplot,eda_boxplot,eda_countplot
+from matflow_test.views import login, signup, display_group, test_page, display_correlation, eda_barplot, \
+    display_correlation_featurePair, eda_pieplot, eda_boxplot, eda_countplot, eda_histogram, eda_violinplot, \
+    eda_scatterplot, eda_regplot, eda_lineplot
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,7 +30,11 @@ urlpatterns = [
     path('api/display_correlation_featurePair/', display_correlation_featurePair, name='display-api'),
     path('api/eda_barplot/', eda_barplot, name='bar-api'),
     path('api/eda_countplot/', eda_countplot, name='count-api'),
-    path('api/eda_boxplot/', eda_boxplot, name='box-api'),
-    path('api/eda_pieplot/', eda_pieplot, name='box-api'),
-
+    path('api/eda_boxplot/', eda_boxplot, name='eda-api'),
+    path('api/eda_pieplot/', eda_pieplot, name='eda-api'),
+    path('api/eda_histogram/', eda_histogram, name='eda-api'),
+    path('api/eda_violinplot/', eda_violinplot, name='eda-api'),
+    path('api/eda_scatterplot/', eda_scatterplot, name='eda-api'),
+    path('api/eda_regplot/', eda_regplot, name='reg-api'),
+    path('api/eda_lineplot/', eda_lineplot, name='line-api'),
 ]

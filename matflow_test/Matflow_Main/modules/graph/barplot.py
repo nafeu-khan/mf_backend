@@ -2,14 +2,11 @@ import io
 import seaborn as sns
 import matplotlib.pyplot as plt
 from django.http import HttpResponse
-from io import BytesIO
-from ...modules import utils
 
-def Barplot(data,cat,num,hue,orient,annotate):
 
+def Barplot(data,cat,num,hue,orient,annotate,title):
 	errorbar=True
 	fig, ax = plt.subplots()
-
 	if cat != "-" and num != "-":
 		hue = None if (hue == "-") else hue
 		errorbar = ("ci", 95) if errorbar== True else None
@@ -24,7 +21,11 @@ def Barplot(data,cat,num,hue,orient,annotate):
 			data[cat] = data[cat].astype(str)
 			order = sorted(data[cat].unique())
 			ax = sns.barplot(data=data, x=num, y=cat, hue=hue, order=order, errorbar=errorbar)
-
+		if len(title) == 0:
+			# title = f"Barplot of {num} by {cat}"
+			# if hue:
+			# 	title = f"Barplot of {num} by {cat} and {hue}"
+			ax.set_title(title)
 		if annotate== True:
 			if orient == "Vertical":
 				for bar in ax.patches:

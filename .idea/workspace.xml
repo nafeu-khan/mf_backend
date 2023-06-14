@@ -6,6 +6,78 @@
   <component name="ChangeListManager">
     <list default="true" id="c617f45b-4bc5-4052-81c6-2d12815f7126" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Matflow/asgi.py" beforeDir="false" afterPath="$PROJECT_DIR$/Matflow/asgi.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Matflow/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/Matflow/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Matflow/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/Matflow/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Matflow/wsgi.py" beforeDir="false" afterPath="$PROJECT_DIR$/Matflow/wsgi.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/manage.py" beforeDir="false" afterPath="$PROJECT_DIR$/manage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classes/creator.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classes/creator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classes/data.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classes/data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classes/dropper.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classes/dropper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classes/dtype_changer.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classes/dtype_changer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classes/encoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classes/encoder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classes/imputer.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classes/imputer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classes/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classes/model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classes/pipeline.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classes/pipeline.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classes/scaler.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classes/scaler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/decision_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/decision_tree.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/knn.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/knn.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/log_reg.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/log_reg.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/perceptron.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/perceptron.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/random_forest.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/random_forest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/svm.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/svm.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/dataframe/correlation.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/dataframe/correlation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/dataframe/duplicate.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/dataframe/duplicate.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/dataframe/filters.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/dataframe/filters.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/dataframe/group.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/dataframe/group.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/dataframe/info.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/dataframe/info.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/dataframe/stats.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/dataframe/stats.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/dataset/display.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/dataset/display.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/dataset/read.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/dataset/read.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/change_dtype.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/change_dtype.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/change_fieldname.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/change_fieldname.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/cluster.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/cluster.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/creation.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/creation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/dropping.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/dropping.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/encoding.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/encoding.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/feature_selection.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/feature_selection.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/imputation.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/imputation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/scaling.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/scaling.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/graph/barplot.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/graph/barplot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/graph/boxplot.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/graph/boxplot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/graph/countplot.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/graph/countplot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/graph/histogram.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/graph/histogram.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/graph/lineplot.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/graph/lineplot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/graph/pieplot.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/graph/pieplot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/graph/regplot.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/graph/regplot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/graph/scatterplot.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/graph/scatterplot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/graph/violinplot.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/graph/violinplot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/build_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/build_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/classification.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/classification.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/delete_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/delete_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/feature_selection.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/feature_selection.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/model_evaluation.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/model_evaluation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/model_report.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/model_report.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/prediction.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/prediction.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/prediction_classification.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/prediction_classification.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/prediction_regression.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/prediction_regression.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/regression.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/regression.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/split_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/split_dataset.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/regressor/decision_tree_regression.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/regressor/decision_tree_regression.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/regressor/lasso_regression.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/regressor/lasso_regression.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/regressor/linear_regression.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/regressor/linear_regression.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/regressor/random_forest_regression.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/regressor/random_forest_regression.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/regressor/ridge_regression.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/regressor/ridge_regression.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/subpage/Dataset_Visualization.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/subpage/Dataset_Visualization.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/apps.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/apps.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/tests.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/readme.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,6 +102,9 @@
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectId" id="2PgBynrsOxpP1MeFpJsKW1EouMh" />
   <component name="ProjectViewState">
