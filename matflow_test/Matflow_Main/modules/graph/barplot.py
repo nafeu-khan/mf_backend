@@ -21,7 +21,7 @@ def Barplot(data,cat,num,hue,orient,annotate,title):
 			data[cat] = data[cat].astype(str)
 			order = sorted(data[cat].unique())
 			ax = sns.barplot(data=data, x=num, y=cat, hue=hue, order=order, errorbar=errorbar)
-		if len(title) == 0:
+		if len(title)> 0:
 			# title = f"Barplot of {num} by {cat}"
 			# if hue:
 			# 	title = f"Barplot of {num} by {cat} and {hue}"

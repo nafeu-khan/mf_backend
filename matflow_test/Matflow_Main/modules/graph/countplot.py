@@ -8,7 +8,7 @@ def Countplot(data,var,title,hue,orient,annot):
 		fig, ax = plt.subplots()
 		if hue == "-":
 			hue = None
-		if len(title) == 0:
+		if len(title) > 0:
 			# title = f"{var} Count"
 			ax.set_title(title)
 			ax.title.set_position([.5, 1.5])
