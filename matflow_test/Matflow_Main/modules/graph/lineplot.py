@@ -6,7 +6,7 @@ def Lineplot(data,x,y,hue,title,style,legend):
 	if x != "-" and y != "-":
 		fig, ax = plt.subplots()
 		hue = None if (hue == "-") else hue
-		style = None if (style == "-") else style
+		style = None if (style == "") else style
 		if len(title)>0:
 			ax.set_title(title)
 		ax = sns.lineplot(data=data, x=x, y=y, hue=hue, style=style, legend=legend)	
