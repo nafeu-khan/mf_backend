@@ -15,9 +15,7 @@ def Lineplot(data,x,y,hue,title,style,legend):
 		if len(title)>0:
 			ax.set_title(title)
 		ax = sns.lineplot(data=data, x=x, y=y, hue=hue, style=style, legend=legend)	
-		image_stream = io.BytesIO()
-		plt.savefig(image_stream, format='png')
-		plt.close(fig)
+
 		# Save the plot to a BytesIO stream
 		image_stream = io.BytesIO()
 		plt.savefig(image_stream, format='png', bbox_inches='tight')

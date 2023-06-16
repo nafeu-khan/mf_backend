@@ -14,9 +14,7 @@ def Scatterplot(data,x,y,hue,title):
 			ax.set_title(title)
 		hue = None if (hue == "-") else hue
 		ax = sns.scatterplot(data=data, x=x, y=y, hue=hue)
-		image_stream = io.BytesIO()
-		plt.savefig(image_stream, format='png')
-		plt.close(fig)
+
 		# Save the plot to a BytesIO stream
 		image_stream = io.BytesIO()
 		plt.savefig(image_stream, format='png', bbox_inches='tight')

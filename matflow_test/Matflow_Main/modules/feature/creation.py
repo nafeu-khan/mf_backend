@@ -4,83 +4,56 @@ import numpy as np
 from ...modules import utils
 from ...modules.classes import creator
 
-def creation(data, data_opt):
+def creation(file):
 	temp_name=''
-	variables = utils.get_variables(data)
-
+	# variables = utils.get_variables(data)
 	col1, col2, col3, col4 = st.columns([1.6, 3, 2.4, 2.4])
-	add_or_mod = col1.selectbox(
-			"Options",
-			["Add", "Modify"],
-			key="add_or_modify"
-		)
-	st.session_state.add=add_or_mod=='Add'
-
+	data=file.get("file")
+	add_or_mod =file.get("addMod")
+	# st.session_state.add=add_or_mod=='Add'
 	method_name = ["New Column","Math Operation", "Extract Text", "Group Categorical", "Group Numerical"]
 	if add_or_mod == "Modify":
 		method_name.pop(0)
 		method_name.append("Replace Values")
 		method_name.append("Progress Apply")
-	method = col3.selectbox(
-		"Method", method_name,
-		key="creation_method"
-	)
-
 
 	if add_or_mod == "Add":
-		var = col2.text_input(
-				"New column name",
-				key="add_column_name"
-			)
+		var = file.get("column_name")
 	else:
-		var = col2.selectbox(
-				"Select column",
-				variables,
-				key="modify_column_name"
-			)
-
-
-	col4.markdown("#")
+		var = file.get("modify_column_name")
 	add_pipeline = col4.checkbox("Add To Pipeline", True, key="creation_add_pipeline")
-
-
+	method = file.get("creation_method")
 	var = var.strip() # remove whitespace
 	if method == "Math Operation":
-		math_operation(data, data_opt, var, add_pipeline, add_or_mod)
+		math_operation(data, var, add_pipeline, add_or_mod,file)
 	elif method == "Extract Text":
-		extract_text(data, data_opt, var, add_pipeline, add_or_mod)
+		extract_text(data, var, add_pipeline, add_or_mod,file)
 	elif method == "Group Categorical":
-		group_categorical(data, data_opt, var, add_pipeline, add_or_mod)
+		group_categorical(data, var, add_pipeline, add_or_mod,file)
 	elif method == "Group Numerical":
-		group_numerical(data, data_opt, var, add_pipeline, add_or_mod)
+		group_numerical(data, var, add_pipeline, add_or_mod,file)
 	elif add_or_mod=="Modify" and method=="Replace Values":
-		replace_values(data,data_opt,var,add_pipeline)
+		replace_values(data,var,add_pipeline,file)
 	elif method=='Progress Apply':
-		my_progress_apply(data,data_opt,var,add_pipeline)
+		my_progress_apply(data,var,add_pipeline,file)
 	elif method=="New Column":
-		add_new(data,data_opt,var,add_pipeline)
+		add_new(data,var,add_pipeline,file)
 
 
-def math_operation(data, data_opt, var, add_pipeline, add_or_mod):
+def math_operation(data, var, add_pipeline, add_or_mod,file):
 	temp_name=''
 	col1, col2 = st.columns([7,3])
-	operation = col1.text_area(
-			"New Value Operation",
-			key="new_value"
-		)
-	col1.caption("<math expression> <column name>. example: 10 ** Height " )
-
-	col1.caption(
-			"Separate all expression with space (including parenthesis).<br>Example: Weight / ( Height ** 2 )", 
-			unsafe_allow_html=True
-		)
-
-	col2.markdown("##")
+	operation =file.get("new_value")
+	# 	col1.caption("<math expression> <column name>. example: 10 ** Height ")
+	#
+	# col1.caption(
+	# 		"Separate all expression with space (including parenthesis).<br>Example: Weight / ( Height ** 2 )",
+	# 		unsafe_allow_html=True
+	# 	)
 	if col2.button("Show Sample", key="creation_show_sample") and operation:
 		crt = creator.Creator("Math Operation", var, operation_string=operation)
 		new_value = crt.fit_transform(data)
 		st.dataframe(new_value.head())
-
 	col1, col2,c0 = st.columns([2,2,2])
 	save_as = col1.checkbox('Save as New Dataset', True, key="save_as_new")
 
@@ -96,16 +69,14 @@ def math_operation(data, data_opt, var, add_pipeline, add_or_mod):
 				name = f"{add_or_mod} column {var}"
 				utils.add_pipeline(name, crt)
 
-			utils.update_value(data_opt, new_value,temp_name,save_as)
+			utils.update_value( new_value,temp_name,save_as)
 			st.success("Success")
 
 			utils.rerun()
 		
 		else:
 			st.warning("New column name cannot be empty!")
-
-
-def extract_text(data, data_opt, var, add_pipeline, add_or_mod):
+def extract_text(data,  var, add_pipeline, add_or_mod):
 	cat_var = utils.get_categorical(data)
 
 	col1, col2 = st.columns([7,3])
@@ -142,15 +113,14 @@ def extract_text(data, data_opt, var, add_pipeline, add_or_mod):
 				name = f"{add_or_mod} column {var}"
 				utils.add_pipeline(name, crt)
 
-			utils.update_value(data_opt, new_value,temp_name,save_as)
+			utils.update_value( new_value,temp_name,save_as)
 			st.success("Success")
 
 			utils.rerun()
 			
 		else:
 			st.warning("New column name cannot be empty!")
-
-def group_categorical(data, data_opt, var, add_pipeline, add_or_mod):
+def group_categorical(data,  var, add_pipeline, add_or_mod):
 	temp_name=''
 	columns = utils.get_variables(data)
 	group_dict = {}
@@ -226,15 +196,14 @@ def group_categorical(data, data_opt, var, add_pipeline, add_or_mod):
 				name = f"{add_or_mod} column {var}"
 				utils.add_pipeline(name, crt)
 
-			utils.update_value(data_opt, new_value,temp_name,save_as)
+			utils.update_value( new_value,temp_name,save_as)
 			st.success("Success")
 
 			utils.rerun()
 
 		else:
 			st.warning("New column name cannot be empty!")
-
-def group_numerical(data, data_opt, var, add_pipeline, add_or_mod):
+def group_numerical(data,  var, add_pipeline, add_or_mod):
 	temp_name=''
 	num_var = utils.get_numerical(data)
 
@@ -311,7 +280,7 @@ def group_numerical(data, data_opt, var, add_pipeline, add_or_mod):
 				name = f"{add_or_mod} column {var}"
 				utils.add_pipeline(name, crt)
 
-			utils.update_value(data_opt, new_value,temp_name,save_as)
+			utils.update_value( new_value,temp_name,save_as)
 			st.success("Success")
 
 			utils.rerun()
@@ -321,8 +290,7 @@ def group_numerical(data, data_opt, var, add_pipeline, add_or_mod):
 
 	if show_group :
 		st.json(group_dict)
-
-def replace_values(data,data_opt,var,add_pipeline):
+def replace_values(data,var,add_pipeline):
 	temp_name=''
 	temp = data.copy(deep=True)
 	column=st.session_state.modify_column_name
@@ -407,17 +375,14 @@ def replace_values(data,data_opt,var,add_pipeline):
 			else:
 				temp[column] = temp[column].apply(options[operation])
 
-		utils.update_value(data_opt, temp,temp_name,save_as)
+		utils.update_value( temp,temp_name,save_as)
 		st.success("Success")
 		utils.rerun()
-
-
 from tqdm import tqdm
 from epsilon import features
 tqdm.pandas()
 from rdkit import Chem
-
-def my_progress_apply(data,data_opt,var,add_pipeline):
+def my_progress_apply(data,var,add_pipeline):
 	temp_name = ''
 	temp = data.copy(deep=True)
 	col2,cx, col3 = st.columns([4,2, 2])
@@ -443,12 +408,11 @@ def my_progress_apply(data,data_opt,var,add_pipeline):
 			# elif selected_fun==fun[1]:
 			### 	problem is this is a list
 			# 	new_value=temp[var].progress_apply(lambda x: Chem.inchi.MolToInchiKey(Chem.MolFromSmiles(x))).to_list()
-			utils.update_value(data_opt, new_value, temp_name, save_as)
+			utils.update_value( new_value, temp_name, save_as)
 			utils.rerun()
 		except Exception as e:
 			st.write(e)
-
-def add_new(data,data_opt,var,add_pipeline):
+def add_new(data,var,add_pipeline):
 	temp_name = ''
 	temp = data.copy(deep=True)
 	col2,cx, col3 = st.columns([4,2, 2])
@@ -473,6 +437,6 @@ def add_new(data,data_opt,var,add_pipeline):
 			temp[var]=value
 		else:
 			temp[var]=temp[col_name]
-		utils.update_value(data_opt, temp, temp_name, save_as)
+		utils.update_value( temp, temp_name, save_as)
 		utils.rerun()
 

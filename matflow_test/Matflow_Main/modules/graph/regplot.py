@@ -14,9 +14,7 @@ def Regplot(data,x,y,title,sctr):
 		if len(title):
 			ax.set_title(title)
 		ax = sns.regplot(data=data, x=x, y=y, scatter=sctr)
-		image_stream = io.BytesIO()
-		plt.savefig(image_stream, format='png')
-		plt.close(fig)
+
 		# Save the plot to a BytesIO stream
 		image_stream = io.BytesIO()
 		plt.savefig(image_stream, format='png', bbox_inches='tight')

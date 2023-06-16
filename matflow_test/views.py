@@ -9,6 +9,7 @@ from django.contrib.auth import authenticate, login
 from rest_framework import status
 from django.contrib.auth.models import User
 from .Matflow_Main.modules.dataframe.correlation import display_pair
+from .Matflow_Main.modules.feature.creation import creation
 from .Matflow_Main.modules.graph.barplot import Barplot
 from .Matflow_Main.modules.graph.lineplot import Lineplot
 from .Matflow_Main.modules.graph.pieplot import Pieplot
@@ -214,11 +215,11 @@ def eda_lineplot(request):
     legend = data.get('legend')
     response= Lineplot(file,x_var,y_var,hue,title,style,legend)
     return response
-# @api_view(['GET','POST'])
-# def feature_creation(request):
-#     data=json.loads(request.body)
-#
-#     creation(data,)
+@api_view(['GET','POST'])
+def feature_creation(request):
+    data=json.loads(request.body)
+    response = creation(data)
+    return response
 
 def custom(data, var, params):
     idx_start = int(params.get("idx_start", 0))
