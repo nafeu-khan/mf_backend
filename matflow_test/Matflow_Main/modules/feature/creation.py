@@ -1,8 +1,8 @@
 import streamlit as st
 import pandas as pd 
 import numpy as np
-from modules import utils
-from modules.classes import creator
+from ...modules import utils
+from ...modules.classes import creator
 
 def creation(data, data_opt):
 	temp_name=''

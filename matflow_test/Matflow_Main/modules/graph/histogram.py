@@ -4,13 +4,17 @@ import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 import plotly.io as pio
 from django.http import HttpResponse
+from django.http import JsonResponse
+import base64
+import json
+
+
 
 def Histogram(data, var, title, hue, orient, stat, auto_bin, kde, legend):
     if auto_bin > 0:
         bins = auto_bin
     else:
         bins = "auto"
-
     if var != "-":
         fig, ax = plt.subplots()
         hue = None if hue == "-" else hue
@@ -24,16 +28,23 @@ def Histogram(data, var, title, hue, orient, stat, auto_bin, kde, legend):
 
             # Save the plot to a BytesIO stream
             image_stream = io.BytesIO()
-            plt.savefig(image_stream, format='png')
+            plt.savefig(image_stream, format='png', bbox_inches='tight')
             plt.close(fig)
             image_stream.seek(0)
 
-            # Convert the matplotlib plot to Plotly graph object
-            pio.templates.default = "plotly_dark"  # Use a dark theme, you can change this if desired
-            graph = go.Figure(go.Image(source=image_stream.getvalue()))
+            # Encode the image stream as base64
+            image_base64 = base64.b64encode(image_stream.getvalue()).decode('utf-8')
 
+            # Create the Plotly graph with the base64-encoded image and increase size
+            graph = go.Figure(go.Image(source=f'data:image/png;base64,{image_base64}'))
+            graph.update_layout( font=dict(family="Arial",size=12),width=1000, height=800,
+                #xaxis=dict(editable=True),yaxis=dict(editable=True)
+            )
             # Convert the graph to HTML and send as a response
             html_content = pio.to_html(graph, full_html=False)
             response = HttpResponse(content_type='text/html')
             response.write(html_content)
-            return response
+
+            # Return the graph JSON data
+            graph_json = graph.to_json()
+            return JsonResponse(graph_json, safe=False)

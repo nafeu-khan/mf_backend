@@ -212,10 +212,14 @@ def eda_lineplot(request):
     hue = data.get('hue')
     style = data.get('style')
     legend = data.get('legend')
-
-
     response= Lineplot(file,x_var,y_var,hue,title,style,legend)
     return response
+# @api_view(['GET','POST'])
+# def feature_creation(request):
+#     data=json.loads(request.body)
+#
+#     creation(data,)
+
 def custom(data, var, params):
     idx_start = int(params.get("idx_start", 0))
     idx_end = int(params.get("idx_end", data.shape[0]))
