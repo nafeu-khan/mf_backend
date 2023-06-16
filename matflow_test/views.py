@@ -215,11 +215,11 @@ def eda_lineplot(request):
     legend = data.get('legend')
     response= Lineplot(file,x_var,y_var,hue,title,style,legend)
     return response
-@api_view(['GET','POST'])
-def feature_creation(request):
-    data=json.loads(request.body)
-    response = creation(data)
-    return response
+# @api_view(['GET','POST'])
+# def feature_creation(request):
+#     data=json.loads(request.body)
+#     response = creation(data)
+#     return response
 
 def custom(data, var, params):
     idx_start = int(params.get("idx_start", 0))
