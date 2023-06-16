@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from matflow_test.views import login, signup, display_group, test_page, display_correlation, eda_barplot, \
     display_correlation_featurePair, eda_pieplot, eda_boxplot, eda_countplot, eda_histogram, eda_violinplot, \
-    eda_scatterplot, eda_regplot, eda_lineplot, eda_customplot
+    eda_scatterplot, eda_regplot, eda_lineplot, eda_customplot, feature_creation
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -38,5 +38,8 @@ urlpatterns = [
     path('api/eda_regplot/', eda_regplot, name='reg-api'),
     path('api/eda_lineplot/', eda_lineplot, name='line-api'),
     path('api/eda_customplot/', eda_customplot, name='customplot-api'),
+    path('api/feature_creation/', feature_creation, name='feature_creationapi'),
+
+
 
 ]
