@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 from .Matflow_Main.modules.dataframe.correlation import display_pair
 from .Matflow_Main.modules.feature.creation import creation
 from .Matflow_Main.modules.graph.barplot import Barplot
+from .Matflow_Main.modules.graph.customplot import comparison_plot
 from .Matflow_Main.modules.graph.lineplot import Lineplot
 from .Matflow_Main.modules.graph.pieplot import Pieplot
 from .Matflow_Main.modules.graph.countplot import Countplot
@@ -215,11 +216,21 @@ def eda_lineplot(request):
     legend = data.get('legend')
     response= Lineplot(file,x_var,y_var,hue,title,style,legend)
     return response
-# @api_view(['GET','POST'])
-# def feature_creation(request):
-#     data=json.loads(request.body)
-#     response = creation(data)
-#     return response
+@api_view(['GET','POST'])
+def eda_customplot(request):
+    data = json.loads(request.body)
+    file = data.get('file')
+    file = pd.DataFrame(file)
+    x_var = data.get('x_var')
+    y_var = data.get('y_var')
+    hue = data.get('hue')
+    response= comparison_plot(file,x_var,y_var,hue)
+    return response
+@api_view(['GET','POST'])
+def feature_creation(request):
+    data=json.loads(request.body)
+    response = creation(data)
+    return response
 
 def custom(data, var, params):
     idx_start = int(params.get("idx_start", 0))

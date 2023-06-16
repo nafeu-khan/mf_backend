@@ -5,12 +5,12 @@ from ...modules import utils
 from ...modules.classes import creator
 
 def creation(file):
-    pass
+	pass
 # 	temp_name=''
 # 	# variables = utils.get_variables(data)
 # 	col1, col2, col3, col4 = st.columns([1.6, 3, 2.4, 2.4])
 # 	data=file.get("file")
-# 	add_or_mod =file.get("addMod")
+# 	add_or_mod =file.get("option")
 # 	# st.session_state.add=add_or_mod=='Add'
 # 	method_name = ["New Column","Math Operation", "Extract Text", "Group Categorical", "Group Numerical"]
 # 	if add_or_mod == "Modify":
@@ -21,9 +21,9 @@ def creation(file):
 # 	if add_or_mod == "Add":
 # 		var = file.get("column_name")
 # 	else:
-# 		var = file.get("modify_column_name")
-# 	add_pipeline = col4.checkbox("Add To Pipeline", True, key="creation_add_pipeline")
-# 	method = file.get("creation_method")
+# 		var = file.get("select_column")
+# 	add_pipeline = file.get("add_to_pipeline")
+# 	method = file.get("method")
 # 	var = var.strip() # remove whitespace
 # 	if method == "Math Operation":
 # 		math_operation(data, var, add_pipeline, add_or_mod,file)
@@ -44,7 +44,7 @@ def creation(file):
 # def math_operation(data, var, add_pipeline, add_or_mod,file):
 # 	temp_name=''
 # 	col1, col2 = st.columns([7,3])
-# 	operation =file.get("new_value")
+# 	operation =file.get.("data").get("new_value_operation")
 # 	# 	col1.caption("<math expression> <column name>. example: 10 ** Height ")
 # 	#
 # 	# col1.caption(
