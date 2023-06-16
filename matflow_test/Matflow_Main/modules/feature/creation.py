@@ -1,10 +1,11 @@
-# import streamlit as st
-# import pandas as pd
-# import numpy as np
-# from ...modules import utils
-# from ...modules.classes import creator
-#
-# def creation(file):
+import streamlit as st
+import pandas as pd
+import numpy as np
+from ...modules import utils
+from ...modules.classes import creator
+
+def creation(file):
+    pass
 # 	temp_name=''
 # 	# variables = utils.get_variables(data)
 # 	col1, col2, col3, col4 = st.columns([1.6, 3, 2.4, 2.4])
