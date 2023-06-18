@@ -2,15 +2,15 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from django.http import JsonResponse
-
 from ...modules import utils
 from ...modules.classes import creator
 
 def creation(file):
 	temp_name=''
 	# variables = utils.get_variables(data)
-	col1, col2, col3, col4 = st.columns([1.6, 3, 2.4, 2.4])
+	# col1, col2, col3, col4 = st.columns([1.6, 3, 2.4, 2.4])
 	data=file.get("file")
+	data=pd.DataFrame(data)
 	add_or_mod =file.get("option")
 	# st.session_state.add=add_or_mod=='Add'
 	method_name = ["New Column","Math Operation", "Extract Text", "Group Categorical", "Group Numerical"]
@@ -25,39 +25,30 @@ def creation(file):
 		var = file.get("select_column")
 	add_pipeline = file.get("add_to_pipeline")
 	method = file.get("method")
-	var = var.strip() # remove whitespace
+	# var = var.strip() # remove whitespace
+
 	if method == "Math Operation":
-		math_operation(data, var, add_pipeline, add_or_mod,file)
+		return math_operation(data, var, add_pipeline, add_or_mod,file)
 	elif method == "Extract Text":
-		extract_text(data, var, add_pipeline, add_or_mod,file)
+		return extract_text(data, var, add_pipeline, add_or_mod,file)
 	elif method == "Group Categorical":
-		group_categorical(data, var, add_pipeline, add_or_mod,file)
+		return group_categorical(data, var, add_pipeline, add_or_mod,file)
 	elif method == "Group Numerical":
-		group_numerical(data, var, add_pipeline, add_or_mod,file)
+		return group_numerical(data, var, add_pipeline, add_or_mod,file)
 	elif add_or_mod=="Modify" and method=="Replace Values":
-		replace_values(data,var,add_pipeline,file)
+		return replace_values(data,var,add_pipeline,file)
 	elif method=='Progress Apply':
-		my_progress_apply(data,var,add_pipeline,file)
+		return my_progress_apply(data,var,add_pipeline,file)
 	elif method=="New Column":
-		add_new(data,var,add_pipeline,file)
+		return add_new(data,var,add_pipeline,file)
 
 
 def math_operation(data, var, add_pipeline, add_or_mod,file):
-	temp_name=''
-	col1, col2 = st.columns([7,3])
 	operation =file.get("data").get("new_value_operation")
-	# 	col1.caption("<math expression> <column name>. example: 10 ** Height ")
-	#
-	# col1.caption(
-	# 		"Separate all expression with space (including parenthesis).<br>Example: Weight / ( Height ** 2 )",
-	# 		unsafe_allow_html=True
-	# 	)
-	# if col2.button("Show Sample", key="creation_show_sample") and operation:
 	crt = creator.Creator("Math Operation", var, operation_string=operation)
 	new_value = crt.fit_transform(data)
-	# st.dataframe(new_value.head())
-	return JsonResponse(new_value.to_json(orient="record"),safe=False)
-
+	df=new_value.to_json(orient="records")
+	return JsonResponse(df,safe=False)
 	# col1, col2,c0 = st.columns([2,2,2])
 	# save_as = col1.checkbox('Save as New Dataset', True, key="save_as_new")
 	#
@@ -80,55 +71,18 @@ def math_operation(data, var, add_pipeline, add_or_mod,file):
 	#
 	# 	else:
 	# 		st.warning("New column name cannot be empty!")
-def extract_text(data,  var, add_pipeline, add_or_mod):
-	cat_var = utils.get_categorical(data)
+def extract_text(data,  var, add_pipeline, add_or_mod,file):
+	regex = file.get("regex")
+	extract_var =file.get("extract_from")
+	crt = creator.Creator("Extract String", column=var, extract_col=extract_var, regex_pattern=regex)
+	new_value = crt.fit_transform(data)
+	df = new_value.to_json(orient="records")
+	return JsonResponse(df, safe=False)
 
-	col1, col2 = st.columns([7,3])
-	regex = col1.text_area(
-			"Regex pattern",
-			key="extract_regex",
-			help=r"Example: ([A-Za-z]+)\\.",
-
-		)
-
-	extract_var = col2.selectbox(
-			"Extract From:",
-			cat_var,
-			key="extract_var"
-		)
-
-	if col2.button("Show Sample", key="creation_show_sample") and regex:
-		crt = creator.Creator("Extract String", column=var, extract_col=extract_var, regex_pattern=regex)
-		new_value = crt.fit_transform(data)
-		st.dataframe(new_value.head())
-
-	col1, col2, c0 = st.columns([2, 2, 2])
-	save_as = col1.checkbox('Save as New Dataset', True, key="save_as_new")
-
-	if save_as:
-		temp_name = col2.text_input('New Dataset Name', key="temp_name")
-
-	if st.button("Submit", key="extract_submit"):
-		if var:
-			crt = creator.Creator("Extract String", column=var, extract_col=extract_var, regex_pattern=regex)
-			new_value = crt.fit_transform(data)
-
-			if add_pipeline:
-				name = f"{add_or_mod} column {var}"
-				utils.add_pipeline(name, crt)
-
-			utils.update_value( new_value,temp_name,save_as)
-			st.success("Success")
-
-			utils.rerun()
-
-		else:
-			st.warning("New column name cannot be empty!")
-def group_categorical(data,  var, add_pipeline, add_or_mod):
+def group_categorical(data,  var, add_pipeline, add_or_mod,file):
 	temp_name=''
 	columns = utils.get_variables(data)
 	group_dict = {}
-
 	col1, col2, col3, col4 = st.columns([1.7, 4, 2, 2.3])
 	n_groups = col1.number_input(
 			"N Group",

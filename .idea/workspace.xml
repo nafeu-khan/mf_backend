@@ -5,24 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c617f45b-4bc5-4052-81c6-2d12815f7126" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/epsilon/Deep4che.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/epsilon/Dynamocs.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/epsilon/Experimental.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/epsilon/Overall_Data.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/epsilon/Overall_RandomForest_Regrassion.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/epsilon/Overall_Randomforest_Classifaications.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/epsilon/Photoche.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/epsilon/Prediction.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/epsilon/Pubche.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/epsilon/Training.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/epsilon/Unknown.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/epsilon/features.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/epsilon/labels.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/epsilon/train.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/epsilon/utils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Matflow/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/Matflow/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/creation.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/creation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/graph/customplot.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/graph/customplot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,13 +42,13 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "D:/pyhton_project/react/matflow backend github/matflow_test/Matflow_Main"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/pyhton_project/react/matflow backend github/matflow_test/Matflow_Main&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\pyhton_project\react\matflow backend github\matflow_test\Matflow_Main" />

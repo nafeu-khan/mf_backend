@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 from .Matflow_Main.modules.dataframe.correlation import display_pair
 from .Matflow_Main.modules.feature.creation import creation
 from .Matflow_Main.modules.graph.barplot import Barplot
-from .Matflow_Main.modules.graph.customplot import comparison_plot
+from .Matflow_Main.modules.graph.customplot import Custom_plot
 from .Matflow_Main.modules.graph.lineplot import Lineplot
 from .Matflow_Main.modules.graph.pieplot import Pieplot
 from .Matflow_Main.modules.graph.countplot import Countplot
@@ -87,7 +87,6 @@ def display_correlation(request):
     correlation_data =file.corr(correlation_method)
     data = correlation_data.to_json(orient='records')
     return JsonResponse({'data': data})
-
 @api_view(['GET','POST'])
 def display_correlation_featurePair(request):
     data = json.loads(request.body)
@@ -202,7 +201,6 @@ def eda_regplot(request):
     sctr = data.get('scatter')
     response= Regplot(file,x_var,y_var,title,sctr)
     return response
-
 @api_view(['GET','POST'])
 def eda_lineplot(request):
     data = json.loads(request.body)
@@ -224,7 +222,7 @@ def eda_customplot(request):
     x_var = data.get('x_var')
     y_var = data.get('y_var')
     hue = data.get('hue')
-    response= comparison_plot(file,x_var,y_var,hue)
+    response= Custom_plot(file,x_var,y_var,hue)
     return response
 @api_view(['GET','POST'])
 def feature_creation(request):
