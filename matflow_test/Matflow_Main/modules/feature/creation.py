@@ -6,7 +6,6 @@ from ...modules import utils
 from ...modules.classes import creator
 
 def creation(file):
-	temp_name=''
 	# variables = utils.get_variables(data)
 	# col1, col2, col3, col4 = st.columns([1.6, 3, 2.4, 2.4])
 	data=file.get("file")
@@ -18,11 +17,10 @@ def creation(file):
 		method_name.pop(0)
 		method_name.append("Replace Values")
 		method_name.append("Progress Apply")
-
-	if add_or_mod == "Add":
-		var = file.get("column_name")
-	else:
-		var = file.get("select_column")
+	# if add_or_mod == "Add":
+	var = file.get("Column Name")
+	# else:
+	# 	var = file.get("select_column")
 	add_pipeline = file.get("add_to_pipeline")
 	method = file.get("method")
 	# var = var.strip() # remove whitespace
@@ -45,9 +43,11 @@ def creation(file):
 
 def math_operation(data, var, add_pipeline, add_or_mod,file):
 	operation =file.get("data").get("new_value_operation")
+	print(f"op = {operation} var = {var}")
 	crt = creator.Creator("Math Operation", var, operation_string=operation)
 	new_value = crt.fit_transform(data)
-	df=new_value.to_json(orient="records")
+
+	df=new_value.to_dict(orient="records")
 	return JsonResponse(df,safe=False)
 	# col1, col2,c0 = st.columns([2,2,2])
 	# save_as = col1.checkbox('Save as New Dataset', True, key="save_as_new")
@@ -84,24 +84,11 @@ def group_categorical(data,  var, add_pipeline, add_or_mod,file):
 	columns = utils.get_variables(data)
 	group_dict = {}
 	col1, col2, col3, col4 = st.columns([1.7, 4, 2, 2.3])
-	n_groups = col1.number_input(
-			"N Group",
-			1, 100, 3, 1,
-			format="%d",
-			key="n_groups"
-		)
+	n_groups = file.get("n_groups")
 
-	group_var = col2.selectbox(
-			"Group Column",
-			columns,
-			key="group_cat_var"
-		)
-
-	col3.markdown("#")
-	sort_values = col3.checkbox("Sort Values", True, key="group_sort_values")
-
-	col4.markdown("#")
-	show_group = col4.checkbox("Show Group", key="group_show_group")
+	group_var = file.get("group_cat_var")
+	sort_values = file.get("group_sort_values")
+	show_group = file.get("group_show_group")
 
 	unique_val = data[group_var].unique()
 	if sort_values:
@@ -109,7 +96,6 @@ def group_categorical(data,  var, add_pipeline, add_or_mod,file):
 
 	n_iter = 1 if (n_groups < 2) else int(n_groups-1)
 
-	col1, col2 = st.columns([2.5,7.5])
 	for i in range(n_iter):
 		group_name = col1.text_input("Group Name", key=f"group_name_{i}")
 		group_members = col2.multiselect("Group Members", unique_val, key=f"group_members_{i}")
@@ -135,7 +121,6 @@ def group_categorical(data,  var, add_pipeline, add_or_mod,file):
 			group_members = col2.multiselect("Group Members", unique_val, key=f"group_members_end")
 			group_dict[group_name] = group_members
 
-	col1, col2 = st.columns([2.5,7.5])
 	if show_group:
 		col2.write(group_dict)
 
