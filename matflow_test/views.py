@@ -229,7 +229,6 @@ def feature_creation(request):
     data=json.loads(request.body)
     response = creation(data)
     return response
-
 def custom(data, var, params):
     idx_start = int(params.get("idx_start", 0))
     idx_end = int(params.get("idx_end", data.shape[0]))

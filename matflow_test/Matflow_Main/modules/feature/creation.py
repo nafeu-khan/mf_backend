@@ -18,7 +18,8 @@ def creation(file):
 		method_name.append("Replace Values")
 		method_name.append("Progress Apply")
 	# if add_or_mod == "Add":
-	var = file.get("Column Name")
+	var = file.get("column_name")
+	# print (f"var={var}")
 	# else:
 	# 	var = file.get("select_column")
 	add_pipeline = file.get("add_to_pipeline")
@@ -34,11 +35,25 @@ def creation(file):
 	elif method == "Group Numerical":
 		return group_numerical(data, var, add_pipeline, add_or_mod,file)
 	elif add_or_mod=="Modify" and method=="Replace Values":
-		return replace_values(data,var,add_pipeline,file)
+		return replace_values(data,var,add_pipeline)
 	elif method=='Progress Apply':
-		return my_progress_apply(data,var,add_pipeline,file)
+		return my_progress_apply(data,var,add_pipeline)
 	elif method=="New Column":
 		return add_new(data,var,add_pipeline,file)
+
+def add_new(data,var,add_pipeline,file):
+	temp = data.copy(deep=True)
+	slt_=file.get("Select Method")
+	if slt_=='Input String':
+		value=file.get('Input String')
+	else:
+		col_name=file.get('Select Field')
+	if slt_ == 'Input String':
+		temp[var]=value
+	else:
+		temp[var]=temp[col_name]
+	df = temp.to_dict(orient="records")
+	return JsonResponse(df, safe=False)
 
 
 def math_operation(data, var, add_pipeline, add_or_mod,file):
@@ -46,7 +61,6 @@ def math_operation(data, var, add_pipeline, add_or_mod,file):
 	print(f"op = {operation} var = {var}")
 	crt = creator.Creator("Math Operation", var, operation_string=operation)
 	new_value = crt.fit_transform(data)
-
 	df=new_value.to_dict(orient="records")
 	return JsonResponse(df,safe=False)
 	# col1, col2,c0 = st.columns([2,2,2])
@@ -76,16 +90,12 @@ def extract_text(data,  var, add_pipeline, add_or_mod,file):
 	extract_var =file.get("extract_from")
 	crt = creator.Creator("Extract String", column=var, extract_col=extract_var, regex_pattern=regex)
 	new_value = crt.fit_transform(data)
-	df = new_value.to_json(orient="records")
+	df = new_value.to_dict(orient="records")
 	return JsonResponse(df, safe=False)
 
 def group_categorical(data,  var, add_pipeline, add_or_mod,file):
-	temp_name=''
-	columns = utils.get_variables(data)
 	group_dict = {}
-	col1, col2, col3, col4 = st.columns([1.7, 4, 2, 2.3])
 	n_groups = file.get("n_groups")
-
 	group_var = file.get("group_cat_var")
 	sort_values = file.get("group_sort_values")
 	show_group = file.get("group_show_group")
@@ -97,142 +107,60 @@ def group_categorical(data,  var, add_pipeline, add_or_mod,file):
 	n_iter = 1 if (n_groups < 2) else int(n_groups-1)
 
 	for i in range(n_iter):
-		group_name = col1.text_input("Group Name", key=f"group_name_{i}")
-		group_members = col2.multiselect("Group Members", unique_val, key=f"group_members_{i}")
+		group_name = file.get("group_name")
+		group_members = file.get("group_members")
 		group_dict[group_name] = group_members
-
-		# update unique value when selected to prevent same value in different group
 		selected = [item for sublist in list(group_dict.values()) for item in sublist]
 		unique_val = [val for val in unique_val if val not in selected]
 
 	if n_groups > 1:
-		col1, col2, col3 = st.columns([2.5,6.3,1.2])
-		col3.markdown("#")
-		if col3.checkbox("Other", key="group_other"):
-			group_name = col1.text_input("Group Name", key="group_name_end")
-			group_members = col2.multiselect("Group Members", unique_val, key=f"group_members_end", disabled=True)
-
+		OTHER=file.get("other")
+		if OTHER==True:
+			group_name = file.get("group_name_end")
+			group_members = file.get("group_members_end")
 			group_member_vals = sum(group_dict.values(), []) # Gather all group member values in 1D list
 			group_members = [val for val in unique_val if val not in group_member_vals]
 			group_dict[group_name] = group_members
 
 		else:
-			group_name = col1.text_input("Group Name", key="group_name_end")
-			group_members = col2.multiselect("Group Members", unique_val, key=f"group_members_end")
+			group_name = file.get("group_name_end")
+			group_members = file.get("group_members_end")
 			group_dict[group_name] = group_members
+	# if show_group:
+	# 	col2.write(group_dict)
+	crt = creator.Creator("Group Categorical", column=var, group_col=group_var, group_dict=group_dict)
+	new_value = crt.fit_transform(data)
+	new_value=new_value.to_dict(orient="records")
+	return JsonResponse(new_value,safe=False)
 
-	if show_group:
-		col2.write(group_dict)
-
-	col1, col2, c0 = st.columns([2, 2, 2])
-	save_as = col1.checkbox('Save as New Dataset', True, key="save_as_new")
-
-	if save_as:
-		temp_name = col2.text_input('New Dataset Name', key='creation')
-
-	if col1.button("Submit", key="group_submit"):
-		if var:
-			crt = creator.Creator("Group Categorical", column=var, group_col=group_var, group_dict=group_dict)
-			new_value = crt.fit_transform(data)
-
-			if add_pipeline:
-				name = f"{add_or_mod} column {var}"
-				utils.add_pipeline(name, crt)
-
-			utils.update_value( new_value,temp_name,save_as)
-			st.success("Success")
-
-			utils.rerun()
-
-		else:
-			st.warning("New column name cannot be empty!")
-def group_numerical(data,  var, add_pipeline, add_or_mod):
+def group_numerical(data,  var, add_pipeline, add_or_mod,file):
 	temp_name=''
 	num_var = utils.get_numerical(data)
 
 	col1, col2, col3 = st.columns(3)
-	n_groups = col1.number_input(
-			"N Groups",
-			1, 100, 2,
-			key="n_bins"
-		)
+	n_groups = file.get("n_bins")
 
-	group_var = col2.selectbox(
-			"Bin Column",
-			num_var,
-			key="group_num_var"
-		)
+	group_var = file.get("group_num_var")
 
-	col3.markdown("#")
-	show_group = col3.checkbox("Show Bin Dict")
+	show_group = file.get("Show Bin Dict")
 
 	group_dict = {}
 	min_val, max_val = data[group_var].min(), data[group_var].max()
 	for i in range(int(n_groups)):
-		col1, col2, col3, col4 = st.columns([2.6,2.6,2.2,2.6])
-
-		group_val = col4.number_input(
-				f"Bin Value",
-				i, 100, i,
-				key=f"bin_value_{i}"
-			)
-
-		col3.markdown("#")
-		use_operator = col3.checkbox("Use Operator", key=f"bin_use_operator_{i}")
-
+		group_val = file.get("bin_value")
+		use_operator = file.get("bin_use_operator")
 		if use_operator:
-			val1 = col1.selectbox(
-					"Operator",
-					["==", "!=", "<", ">", "<=", ">="],
-					key=f"bin_operator_{i}"
-				)
-
-			val2 = col2.number_input(
-					"Value",
-					min_val, max_val, max_val,
-					key=f"max_value_{i}"
-				)
-
+			val1 = file.get("bin_operator")
+			val2 = file.get("max_value")
 		else:
-			val1 = col1.number_input(
-				"Min Value",
-				min_val, max_val, min_val,
-				key=f"min_value_{i}"
-			)
-
-			val2 = col2.number_input(
-					"Max Value",
-					min_val, max_val, max_val,
-					key=f"max_value_{i}"
-				)
-
+			val1 = file.get("min_value")
+			val2 = file.get("max_value")
 		group_dict[group_val] = (val1, val2)
+	crt = creator.Creator("Group Numerical", column=var, group_col=group_var, group_dict=group_dict)
+	new_value = crt.fit_transform(data)
+	new_value = new_value.to_dict(orient="records")
+	return JsonResponse(new_value, safe=False)
 
-	col1, col2, c0 = st.columns([2, 2, 2])
-	save_as = col1.checkbox('Save as New Dataset', True, key="save_as_new")
-
-	if save_as:
-		temp_name = col2.text_input('New Dataset Name', key='create_data')
-
-	if st.button("Submit"):
-		if var:
-			crt = creator.Creator("Group Numerical", column=var, group_col=group_var, group_dict=group_dict)
-			new_value = crt.fit_transform(data)
-
-			if add_pipeline:
-				name = f"{add_or_mod} column {var}"
-				utils.add_pipeline(name, crt)
-
-			utils.update_value( new_value,temp_name,save_as)
-			st.success("Success")
-
-			utils.rerun()
-
-		else:
-			st.warning("New column name cannot be empty!")
-
-	if show_group :
-		st.json(group_dict)
 def replace_values(data,var,add_pipeline):
 	temp_name=''
 	temp = data.copy(deep=True)
@@ -246,7 +174,6 @@ def replace_values(data,var,add_pipeline):
 					li.append(i)
 				elif isinstance(i, str):
 					li.append(i)
-
 			old_value = st.selectbox('Old Value',set(li))
 			new_value = st.text_input('New Value', np.nan)
 		elif new_value_input=='Numpy Operations':
@@ -355,31 +282,4 @@ def my_progress_apply(data,var,add_pipeline):
 			utils.rerun()
 		except Exception as e:
 			st.write(e)
-def add_new(data,var,add_pipeline):
-	temp_name = ''
-	temp = data.copy(deep=True)
-	col2,cx, col3 = st.columns([4,2, 2])
-	if col3.button("Show Sample", key="creation_show_sample"):
-		pass
-	slt_=st.radio('Select Method',['Input String','Copy Another Field'])
-	if slt_=='Input String':
-		value=st.text_input('Input String')
-	else:
-		col_name=st.selectbox('Select Field',temp.columns)
-
-
-	col1, col2, c0 = st.columns([2, 2, 2])
-	save_as = col1.checkbox('Save as New Dataset', True, key="save_as_new")
-
-	if save_as:
-		temp_name = col2.text_input('New Dataset Name', key="temp_name")
-
-
-	if st.button("Submit", key="add_new"):
-		if slt_ == 'Input String':
-			temp[var]=value
-		else:
-			temp[var]=temp[col_name]
-		utils.update_value( temp, temp_name, save_as)
-		utils.rerun()
 
