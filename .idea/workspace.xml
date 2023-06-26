@@ -6,7 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="c617f45b-4bc5-4052-81c6-2d12815f7126" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Matflow/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/Matflow/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classes/dtype_changer.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classes/dtype_changer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/change_dtype.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/change_dtype.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/change_fieldname.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/change_fieldname.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/creation.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/creation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/dropping.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/dropping.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/encoding.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/encoding.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/imputation.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/imputation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/scaling.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/feature/scaling.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/matflow_test/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -45,7 +53,7 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/pyhton_project/react/matflow backend github/matflow_test/Matflow_Main&quot;
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/nafeu/Downloads/DENOPTIM-master/DENOPTIM-master&quot;
   }
 }</component>
   <component name="RecentsManager">

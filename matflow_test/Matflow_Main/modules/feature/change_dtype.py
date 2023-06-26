@@ -1,86 +1,40 @@
-import streamlit as st  
+import pandas as pd
+from django.http import JsonResponse
 
-from modules import utils
-from modules.classes import dtype_changer
+from ...modules import utils
+from ...modules.classes import dtype_changer
 
-def change_dtype(data, data_opt):
+def change_dtype(file):
+	print (file)
+	data = file.get("data")
+	data = pd.DataFrame(data)
+
 	variables = utils.get_variables(data)
 	orig_dtypes = utils.get_dtypes(data)
 	var_with_dtype = {f"{var} ({dtype})": var for (var, dtype) in zip(variables, orig_dtypes)}
 	cat_var = utils.get_categorical(data)
 
-	col1, col2, _ = st.columns([3, 3, 4])
-	n_iter = col1.number_input(
-			"Number of Columns",
-			1, len(variables), 1,
-			key="change_dtype_n_rows"
-		)
-
-	col2.markdown("#")
-	add_pipeline = col2.checkbox("Add To Pipeline", True, key="change_dtype_add_pipeline")
-
+	n_iter = file.get("number_of_columns")
 	change_dict = {}
-	col1, col2, col3, col4 = st.columns([5,2,2,1])
+	temp_array=file.get("values")
 	for i in range(int(n_iter)):
-		var = col1.selectbox(
-				f"Column {i+1}",
-				var_with_dtype.keys(),
-				key=f"change_dtype_var_{i}"
-			)
-
-		desired_dtype = col2.selectbox(
-				"Desired Dtype",
-				["int", "float", "complex", "str"],
-				key=f"change_desired_dtype_{i}"
-			)
-
+		var =temp_array[i].get("column")
+		desired_dtype = temp_array[i].get("desired_dtype")
 		if desired_dtype in ["int", "float"]:
-			desired_bits = col3.selectbox(
-					"Desired Bit Length",
-					["8", "16", "32", "64", "128", "256"],
-					key=f"change_dtype_bit_{i}"
-				)
-
+			desired_bits = temp_array.get("desired_dtype")
 		else:
-			desired_bits = col3.selectbox(
-					"Desired Bit Length",
-					[""],
-					key=f"change_dtype_bit_{i}",
-					disabled=True
-				)
-
-		col4.markdown("###")	
-		if change_check(data, var_with_dtype[var], desired_dtype+desired_bits):
-			col4.success("", icon="✅")
-		else:
-			col4.error("", icon="❌")
-
+			desired_bits =temp_array[i].get("desired_dtype")
 		change_dict[var_with_dtype[var]] = desired_dtype + desired_bits
-		
-
-		# update unique value when selected to prevent same value in different group
 		selected = list(change_dict.keys())
 		var_with_dtype = {key: val for (key, val) in var_with_dtype.items() if val not in selected}
 
 	status = [change_check(data, var, dtype) for (var, dtype) in change_dict.items()]
 
-	if st.button("Submit", "dtype_change_submit"):
-		if all(status): 
-			chg = dtype_changer.DtypeChanger(change_dict)
-			new_value = chg.fit_transform(data)
-
-			if add_pipeline:
-				name = f"Change {', '.join(change_dict.keys())} column dtype"
-				utils.add_pipeline(name, chg)
-
-			utils.update_value(data_opt, new_value,'',False)
-			st.success("Success")
-
-			utils.rerun()
-
-		else:
-			st.error("Conversion Failed!")
-
+	if all(status):
+		chg = dtype_changer.DtypeChanger(change_dict)
+		new_value = chg.fit_transform(data)
+		df = new_value.to_dict(orient="records")
+		return JsonResponse(df, safe=False)
 
 def change_check(data, var, dtype):
 	try:

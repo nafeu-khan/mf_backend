@@ -9,6 +9,7 @@ from django.contrib.auth import authenticate, login
 from rest_framework import status
 from django.contrib.auth.models import User
 from .Matflow_Main.modules.dataframe.correlation import display_pair
+from .Matflow_Main.modules.feature.change_dtype import change_dtype
 from .Matflow_Main.modules.feature.creation import creation
 from .Matflow_Main.modules.graph.barplot import Barplot
 from .Matflow_Main.modules.graph.customplot import Custom_plot
@@ -59,7 +60,6 @@ def login(request):
 
     return Response({'message': 'User logged in successfully.'}, status=status.HTTP_200_OK)
 def test_page(request):
-
     return render(request, 'index.html')
 @api_view(['GET', 'POST'])
 def display_group(request):
@@ -67,13 +67,9 @@ def display_group(request):
     file = data.get('file')
     # file=pd.read_csv(file)
     file = pd.DataFrame(file)
-
     group_var = data.get("group_var")
-
     agg_func = data.get("agg_func")
-
     numeric_columns = file.select_dtypes(include='number').columns
-
     data = file.groupby(by=group_var, as_index=False).agg(agg_func)
     data = data.to_json(orient='records')
     return JsonResponse({'data': data})
@@ -175,7 +171,6 @@ def eda_violinplot(request):
     orient = data.get('orient')  # Get the orientation from the query parameter
     dodge=data.get('dodge')
     split=data.get('split')
-
     title=data.get('title')
     response= Violinplot(file,cat,num,hue,orient,dodge,split,title)
     return response
@@ -228,6 +223,16 @@ def eda_customplot(request):
 def feature_creation(request):
     data=json.loads(request.body)
     response = creation(data)
+    return response
+@api_view(['GET','POST'])
+def change_dtype(request):
+    data=json.loads(request.body)
+    response = change_dtype(data)
+    return response
+@api_view(['GET','POST'])
+def alter_field(request):
+    data=json.loads(request.body)
+    response = alter_field(data,"None")
     return response
 def custom(data, var, params):
     idx_start = int(params.get("idx_start", 0))

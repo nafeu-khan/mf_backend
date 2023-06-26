@@ -1,50 +1,29 @@
 import streamlit as st
 import numpy as np
+from django.http import JsonResponse
 
-from modules import utils
-from modules.classes import encoder
+from ...modules import utils
+from ...modules.classes import encoder
 
-
-def encoding(data, data_opt):
-    cat_var = utils.get_categorical(data)
-    num_var = utils.get_numerical(data)
-    low_cardinality = utils.get_low_cardinality(data, max_unique=5)
-
-    col1, col2, col3 = st.columns([4, 3.6, 2.4])
-    var = col1.selectbox(
-        "Select column",
-        set(cat_var + low_cardinality),
-        key="encoding_var"
-    )
-
-    enc_method = ["Ordinal Encoding", "One-Hot Encoding", "Target Encoding"]
-    method = col2.selectbox(
-        "Select method",
-        enc_method,
-        key="encoding_method"
-    )
-
-    col3.markdown("#")
-    add_pipeline = col3.checkbox("Add To Pipeline", True, key="encoding_add_pipeline")
+def encoding(file, data_opt):
+    data=file.get("data")
+    var = file.get("select_column")
+    method = file.get("select_method")
+    add_pipeline = file.get("add_to_pipeline")
 
     if method == "Ordinal Encoding":
-        try:
-            ordinal_encoding(data, data_opt, var, add_pipeline)
-        except:
-            pass
-
+        ordinal_encoding(data, data_opt, var, add_pipeline)
     elif method == "One-Hot Encoding":
         onehot_encoding(data, data_opt, var, add_pipeline)
-
     elif method == "Target Encoding":
-        target_encoding(data, data_opt, var, num_var, add_pipeline)
+        target_encoding(data, data_opt, var, add_pipeline)
 
 
-def ordinal_encoding(data, data_opt, var, add_pipeline):
-    col1, col2, col3, _ = st.columns([2, 2, 2, 4])
-    from_zero = col1.checkbox("Start from 0")
-    inc_nan = col2.checkbox("Include nan")
-    asc_order = col3.checkbox("Sort Values")
+def ordinal_encoding(data, data_opt, var, add_pipeline,file):
+
+    from_zero = file.get("Start from 0")
+    inc_nan = file.get("Include nan")
+    asc_order = file.get("Sort Values")
 
     # include null or no
     unique_val = data[var].unique() if inc_nan else data[var].dropna().unique()
@@ -55,69 +34,37 @@ def ordinal_encoding(data, data_opt, var, add_pipeline):
     # encoding value start from 0 or 1
     enc_val = range(len(unique_val)) if from_zero else range(1, len(unique_val) + 1)
 
-    col1, col2 = st.columns(2)
-    order = col1.multiselect(
-        "Set value order",
-        unique_val,
-        key="ordinal_order"
-    )
+    order =file.get("Set value order")
 
     ordinal_enc_dict = {val: new_val for val, new_val in zip(order, enc_val)}
-    col2.json(ordinal_enc_dict)
+    # col2.json(ordinal_enc_dict)
+    #
+    # if col1.button("Submit", key="ordinal_submit"):
 
-    if col1.button("Submit", key="ordinal_submit"):
-        if len(ordinal_enc_dict) == len(unique_val):
-            enc = encoder.Encoder(strategy="ordinal", column=var, ordinal_dict=ordinal_enc_dict)
-            new_value = enc.fit_transform(data)
+    if len(ordinal_enc_dict) == len(unique_val):
+        enc = encoder.Encoder(strategy="ordinal", column=var, ordinal_dict=ordinal_enc_dict)
+        new_value = enc.fit_transform(data)
 
-            if add_pipeline:
-                name = f"{var} ordinal encoding"
-                utils.add_pipeline(name, enc)
-
-            utils.update_value(data_opt, new_value)
-            st.success("Success")
-
-            utils.rerun()
-
-        else:
-            st.warning("Failed")
+    new_value = new_value.to_dict(orient="records")
+    return JsonResponse(new_value, safe=False)
 
 
-def onehot_encoding(data, data_opt, var, add_pipeline):
-    col1, _ = st.columns([2, 8])
-    drop_first = col1.checkbox("Drop First")
+
+def onehot_encoding(data, data_opt, var, add_pipeline,file):
+
+    drop_first = file.get("drop_first")
 
     if st.button("Submit", "oh_submit"):
         enc = encoder.Encoder(strategy="onehot", column=var)
         new_value = enc.fit_transform(data)
 
-        if add_pipeline:
-            name = f"{var} one-hot encoding"
-            utils.add_pipeline(name, enc)
-
-        utils.update_value(data_opt, new_value)
-        st.success("Success")
-
-        utils.rerun()
+        new_value = new_value.to_dict(orient="records")
+        return JsonResponse(new_value, safe=False)
 
 
-def target_encoding(data, data_opt, var, num_var, add_pipeline):
-    col1, _ = st.columns([4, 6])
-    target_var = col1.selectbox(
-        "Select target",
-        num_var,
-        key="target_enc_var"
-    )
-
-    if st.button("Submit", "oh_submit"):
-        enc = encoder.Encoder(strategy="target", column=var, target_var=target_var)
-        new_value = enc.fit_transform(data)
-
-        if add_pipeline:
-            name = f"{var} target encoding by {target_var}"
-            utils.add_pipeline(name, enc)
-
-        utils.update_value(data_opt, new_value)
-        st.success("Success")
-
-        utils.rerun()
+def target_encoding(data, data_opt, var, add_pipeline,file):
+    target_var = file.get("select_target")
+    enc = encoder.Encoder(strategy="target", column=var, target_var=target_var)
+    new_value = enc.fit_transform(data)
+    new_value = new_value.to_dict(orient="records")
+    return JsonResponse(new_value, safe=False)

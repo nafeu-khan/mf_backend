@@ -1,5 +1,4 @@
 
-
 class DtypeChanger:
 	def __init__(self, change_dict):
 		self.change_dict = change_dict

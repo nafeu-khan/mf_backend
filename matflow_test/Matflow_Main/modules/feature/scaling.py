@@ -1,9 +1,11 @@
-import streamlit as st  
+import streamlit as st
+from django.http import JsonResponse
 
-from modules import utils
-from modules.classes import scaler
+from ...modules import utils
+from ...modules.classes import scaler
 
-def scaling(data, data_opt):
+def scaling(file, data_opt):
+	data=file.get("data")
 	variables = utils.get_variables(data)
 	num_var = utils.get_numerical(data)
 	cat_var = utils.get_categorical(data)
@@ -16,33 +18,15 @@ def scaling(data, data_opt):
 		}
 
 	col1, col2, col3 = st.columns([4,4,2.5])
-	col_options = col1.selectbox(
-			"Options",
-			["Select Columns", "Select All Except"],
-			key="col_options"
-		)
+	col_options = file.get("options")
 
-	method = col2.selectbox(
-			"Method",
-			["Standard Scaler", "Min-Max Scaler", "Robust Scaler"],
-			key="scaling_method"
-		)
+	method = col2.selectbox("method")
 
-	col3.markdown("#")
-	add_pipeline = col3.checkbox("Add To Pipeline", True, key="scaling_add_pipeline")
+	add_pipeline = file.get("add_to_pipeline")
 
-	default = st.radio(
-			"Default Value",
-			default_dict.keys(),
-			key="scaling_default_col",
-			horizontal=True
-		)
+	default = file.get("default_value")
 
-	columns = st.multiselect(
-			col_options, 
-			variables,
-			default_dict[default]
-		)
+	columns =file.get("col_options")
 
 	if st.button("Submit", key="scaling_submit"):
 		if col_options == "Select All Except":
@@ -51,11 +35,5 @@ def scaling(data, data_opt):
 		sc = scaler.Scaler(method, columns)
 		new_value = sc.fit_transform(data)
 
-		if add_pipeline:
-			name = f"Feature scaling using {method}"
-			utils.add_pipeline(name, sc)
-
-		utils.update_value(data_opt, new_value)
-		st.success("Success")
-
-		utils.rerun()
+		new_value = new_value.to_dict(orient="records")
+		return JsonResponse(new_value, safe=False)
