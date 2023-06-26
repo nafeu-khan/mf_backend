@@ -18,7 +18,7 @@ def creation(file):
 		method_name.append("Replace Values")
 		method_name.append("Progress Apply")
 	# if add_or_mod == "Add":
-	var = file.get("column_name")
+	var = file.get("select_column")
 	# print (f"var={var}")
 	# else:
 	# 	var = file.get("select_column")
@@ -147,7 +147,6 @@ def group_numerical(data,  var, add_pipeline, add_or_mod,file):
 		use_operator = file[i].get("use_operator")
 		if use_operator==True:
 			val1 = file[i].get("operator")
-			print(f"operator={val1}")
 			val2 = float(file[i].get("value"))
 		else:
 			val1 =float(file[i].get("min_value"))
@@ -167,11 +166,11 @@ def group_numerical(data,  var, add_pipeline, add_or_mod,file):
 def replace_values(data,var,add_pipeline,file):
 	temp = data.copy(deep=True)
 	column=var
-	print(file)
-	new_value_input = file.get("sub_methods")
+	file=file.get("data")
+	new_value_input = file.get("sub_method")
 	if new_value_input!='Fill Null':
 		if new_value_input == 'Text Input':
-			old_value = file.get("old_value")
+			old_value = int(file.get("old_value"))
 			new_value = file.get("new_value")
 		elif new_value_input=='Numpy Operations':
 			new_value = file.get('select_an_operation')
@@ -188,7 +187,7 @@ def replace_values(data,var,add_pipeline,file):
 				# 'Split text into multiple columns': lambda s: s.str.split(expand=True),
 			}
 			# Create the select box in Streamlit
-			operation = file.get('select_an_operation:', list(options.keys()))
+			operation = file.get('select_an_operation')
 			if operation=='Remove characters':
 				char_to_remove= file.get('enter_character to remove')
 			# Apply the selected operation to the selected column of the dataframe
@@ -225,8 +224,8 @@ def replace_values(data,var,add_pipeline,file):
 			temp[column] = temp[column].apply(options[operation], char=char_to_remove)
 		else:
 			temp[column] = temp[column].apply(options[operation])
-	new_value=temp
-	new_value = new_value.to_dict(orient="records")
+	# new_value=temp
+	new_value = temp.to_dict(orient="records")
 	return JsonResponse(new_value, safe=False)
 
 from tqdm import tqdm

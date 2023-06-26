@@ -40,6 +40,6 @@ urlpatterns = [
     path('api/eda_customplot/', eda_customplot, name='customplot-api'),
     path('api/feature_creation/', feature_creation, name='feature_creationapi'),
     path('api/change_dtype/',change_dtype, name='change_dtype'),
-    path('api/alter_field/', alter_field, name='change_dtype'),
+    path('api/alter_field/', alter_field, name='alter_field'),
 
 ]
