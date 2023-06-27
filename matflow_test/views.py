@@ -239,7 +239,7 @@ def changeDtype(request):
 @api_view(['GET','POST'])
 def Alter_field(request):
     data=json.loads(request.body)
-    response = change_field_name(data,"None")
+    response = change_field_name(data)
     return response
 @api_view(['GET','POST'])
 def merge_dataset(request):
