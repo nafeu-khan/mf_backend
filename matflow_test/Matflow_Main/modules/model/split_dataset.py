@@ -1,7 +1,7 @@
 import streamlit as st
 import os
-from modules.dataset import read
-from modules import utils
+from ...modules.dataset import read
+from ...modules import utils
 from sklearn.model_selection import train_test_split
 
 def split_dataset(dataset,data_opt):

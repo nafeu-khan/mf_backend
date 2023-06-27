@@ -9,8 +9,15 @@ from django.contrib.auth import authenticate, login
 from rest_framework import status
 from django.contrib.auth.models import User
 from .Matflow_Main.modules.dataframe.correlation import display_pair
-from .Matflow_Main.modules.feature.change_dtype import change_dtype
+from .Matflow_Main.modules.feature.append import append
+from .Matflow_Main.modules.feature.change_dtype import Change_dtype
+from .Matflow_Main.modules.feature.change_fieldname import change_field_name
+from .Matflow_Main.modules.feature.cluster import cluster_dataset
 from .Matflow_Main.modules.feature.creation import creation
+from .Matflow_Main.modules.feature.dropping import  drop_row, drop_column
+from .Matflow_Main.modules.feature.encoding import encoding
+from .Matflow_Main.modules.feature.merge_dataset import merge_df
+from .Matflow_Main.modules.feature.scaling import scaling
 from .Matflow_Main.modules.graph.barplot import Barplot
 from .Matflow_Main.modules.graph.customplot import Custom_plot
 from .Matflow_Main.modules.graph.lineplot import Lineplot
@@ -225,15 +232,66 @@ def feature_creation(request):
     response = creation(data)
     return response
 @api_view(['GET','POST'])
-def change_dtype(request):
+def changeDtype(request):
     data=json.loads(request.body)
-    response = change_dtype(data)
+    response = Change_dtype(data)
     return response
 @api_view(['GET','POST'])
-def alter_field(request):
+def Alter_field(request):
     data=json.loads(request.body)
-    response = alter_field(data,"None")
+    response = change_field_name(data,"None")
     return response
+@api_view(['GET','POST'])
+def merge_dataset(request):
+    data=json.loads(request.body)
+    response = merge_df(data)
+    return response
+@api_view(['GET','POST'])
+def Encoding(request):
+    data=json.loads(request.body)
+    response = encoding(data)
+    return response
+@api_view(['GET','POST'])
+def Scaling(request):
+    data=json.loads(request.body)
+    response = scaling(data)
+    return response
+@api_view(['GET','POST'])
+def Drop_column(request):
+    data=json.loads(request.body)
+    response = drop_column(data)
+    return response
+@api_view(['GET','POST'])
+def Drop_row(request):
+    data=json.loads(request.body)
+    response = drop_row(data)
+    return response
+@api_view(['GET','POST'])
+def Append(request):
+    data=json.loads(request.body)
+    response = append(data)
+    return response
+@api_view(['GET','POST'])
+def Cluster(request):
+    data=json.loads(request.body)
+    response = cluster_dataset(data)
+    return response
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def custom(data, var, params):
     idx_start = int(params.get("idx_start", 0))
     idx_end = int(params.get("idx_end", data.shape[0]))
