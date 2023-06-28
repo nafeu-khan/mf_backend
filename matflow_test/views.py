@@ -28,7 +28,8 @@ from .Matflow_Main.modules.graph.histogram import Histogram
 from .Matflow_Main.modules.graph.regplot import Regplot
 from .Matflow_Main.modules.graph.scatterplot import Scatterplot
 from .Matflow_Main.modules.graph.violinplot import Violinplot
-
+from .Matflow_Main.modules.model.split_dataset import split_dataset
+from .Matflow_Main.subpage.time_series import time_series_analysis
 
 
 @api_view(['POST'])
@@ -275,6 +276,16 @@ def Append(request):
 def Cluster(request):
     data=json.loads(request.body)
     response = cluster_dataset(data)
+    return response
+@api_view(['GET','POST'])
+def Split(request):
+    data=json.loads(request.body)
+    response = split_dataset(data)
+    return response
+@api_view(['GET','POST'])
+def Time_series(request):
+    data=json.loads(request.body)
+    response = time_series_analysis(data)
     return response
 
 

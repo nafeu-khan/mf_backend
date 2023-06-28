@@ -25,13 +25,9 @@ def ordinal_encoding(data, var, add_pipeline,file):
     from_zero = file.get("start_from_0") ==True
     inc_nan = file.get("include_nan") ==True
     asc_order = file.get("sort_values")  ==True
-    print(f"from zro = {from_zero} \n  inc = {inc_nan} \n asc = {asc_order}")
-    print(data)
-    print(var)
     # include null or no
     unique_val = data[var].unique() if inc_nan else data[var].dropna().unique()
 
-    # sort or no
     unique_val = sorted(unique_val, key=lambda val: (val is np.nan, val)) if asc_order else unique_val
 
     # encoding value start from 0 or 1
@@ -40,15 +36,14 @@ def ordinal_encoding(data, var, add_pipeline,file):
     order = file.get("set_value_order")
 
     ordinal_enc_dict = {val: new_val for val, new_val in zip(order, enc_val)}
-    # col2.json(ordinal_enc_dict)
-    #
-    # if col1.button("Submit", key="ordinal_submit"):
-
     if len(ordinal_enc_dict) == len(unique_val):
         enc = encoder.Encoder(strategy="ordinal", column=var, ordinal_dict=ordinal_enc_dict)
         new_value = enc.fit_transform(data)
         new_value = new_value.to_dict(orient="records")
         return JsonResponse(new_value, safe=False)
+    else:
+        #return error
+        return JsonResponse("")
 
 
 
