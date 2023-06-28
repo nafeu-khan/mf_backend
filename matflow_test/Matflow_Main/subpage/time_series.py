@@ -26,9 +26,15 @@ def time_series_analysis(file):
                 return JsonResponse(obj, safe=False)
 
     if(len(date_columns)==0):
-        st.warning("No datetime found")
         obj = {
             "error": True
+        }
+        return JsonResponse(obj, safe=False)
+
+    column = file.get("select_column")
+    if(column==""):
+        obj = {
+            "error": False
         }
         return JsonResponse(obj, safe=False)
 
@@ -70,7 +76,6 @@ def time_series_analysis(file):
     # Filter the data based on the selected range
     filtered_data = data.loc[selected_start:selected_end]
 
-    column = file.get("select_column")
 
     if isinstance(filtered_data, pd.DataFrame):
         fig = go.Figure()
