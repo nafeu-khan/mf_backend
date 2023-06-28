@@ -11,7 +11,7 @@ import plotly.graph_objects as go
 from datetime import datetime, timedelta
 
 def time_series_analysis(file):
-    data=file.get('file')
+    data=pd.DataFrame(file.get('file'))
     date_columns = []
 
     for column_name in data.columns:
@@ -40,17 +40,23 @@ def time_series_analysis(file):
 
     data.rename(columns={date_columns[0]:"date"},inplace=True)
     data['date'] = pd.to_datetime(data["date"])
-
-    data = data.set_index('date')
+    print(str(data['date'][2]))
+    # data = data.set_index('date')
     # ----------datetime
-    date_string =  data['date'].dt.date
+    date_string =  str(data["date"][2])
     formats = [
+        "%Y-%m-%d %H:%M:%S",
         "%Y-%m-%d",  # Year-Month-Day
         "%Y/%m/%d",  # Year/Month/Day
         "%m-%d-%Y",  # Month-Day-Year
         "%d-%m-%Y",  # Day-Month-Year
         "%m/%d/%Y",  # Month/Day/Year
         "%d/%m/%Y"  # Day/Month/Year
+        "%Y/%m/%d %H:%M:%S",  # Year/Month/Day
+        "%m-%d-%Y %H:%M:%S",  # Month-Day-Year
+        "%d-%m-%Y %H:%M:%S",  # Day-Month-Year
+        "%m/%d/%Y %H:%M:%S",  # Month/Day/Year
+        "%d/%m/%Y %H:%M:%S",
     ]
     detected_format = None
     for fmt in formats:
@@ -60,18 +66,18 @@ def time_series_analysis(file):
             break
         except ValueError:
             continue
-
+    print(detected_format)
 
     min_date_range = data.index.min()
     max_date_range = data.index.max() #+ timedelta(days=365 * ex_t)
-    selected_range = st.slider("Select a time range:",
-                               min_value=min_date_range,
-                               max_value=max_date_range,
-                               value=(data.index.max().to_pydatetime()))
+    # selected_range = st.slider("Select a time range:",
+    #                            min_value=min_date_range,
+    #                            max_value=max_date_range,
+    #                            value=(data.index.max().to_pydatetime()))
 
     # Convert selected range to Timestamp objects
     selected_start = min_date_range
-    selected_end =  selected_range
+    selected_end =  max_date_range
 
     # Filter the data based on the selected range
     filtered_data = data.loc[selected_start:selected_end]
@@ -102,7 +108,7 @@ def time_series_analysis(file):
         # Save the plot to a BytesIO stream
         image_stream = io.BytesIO()
         plt.savefig(image_stream, format='png', bbox_inches='tight')
-        plt.close(fig)
+        # plt.close(fig)
         image_stream.seek(0)
 
         # Encode the image stream as base64
@@ -122,7 +128,7 @@ def time_series_analysis(file):
 
         object= {
             "graph": graph_json,
-            "format": detected_format if detected_format else None ,
+            "format": detected_format #if detected_format else None ,
         }
         return JsonResponse(object, safe=False)
 
