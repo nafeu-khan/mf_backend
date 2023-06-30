@@ -3,10 +3,8 @@ from django.http import JsonResponse
 from ...modules.classes import scaler
 
 def scaling(file):
-	print(file)
 	data=file.get("file")
 	data=pd.DataFrame(data)
-
 	variables = data.columns.to_list()
 	col_options = file.get("options")
 	method =file.get("method")

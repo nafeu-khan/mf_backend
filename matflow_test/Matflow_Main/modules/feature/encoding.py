@@ -14,11 +14,11 @@ def encoding(file):
     add_pipeline = file.get("add_to_pipeline")
     file=file.get('data')
     if method == "Ordinal Encoding":
-        ordinal_encoding(data, var, add_pipeline,file)
+        return ordinal_encoding(data, var, add_pipeline,file)
     elif method == "One-Hot Encoding":
-        onehot_encoding(data, var, add_pipeline,file)
+        return onehot_encoding(data, var, add_pipeline,file)
     elif method == "Target Encoding":
-        target_encoding(data, var, add_pipeline,file)
+        return target_encoding(data, var, add_pipeline,file)
 
 
 def ordinal_encoding(data, var, add_pipeline,file):
@@ -54,7 +54,6 @@ def onehot_encoding(data, var, add_pipeline,file):
 
     enc = encoder.Encoder(strategy="onehot", column=var)
     new_value = enc.fit_transform(data)
-
     new_value = new_value.to_dict(orient="records")
     return JsonResponse(new_value, safe=False)
 
