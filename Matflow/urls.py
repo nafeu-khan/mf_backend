@@ -20,7 +20,7 @@ from django.urls import path
 from matflow_test.views import login, signup, display_group, test_page, display_correlation, eda_barplot, \
     display_correlation_featurePair, eda_pieplot, eda_boxplot, eda_countplot, eda_histogram, eda_violinplot, \
     eda_scatterplot, eda_regplot, eda_lineplot, eda_customplot, feature_creation, Alter_field, changeDtype, \
-    merge_dataset, Encoding, Scaling, Drop_row, Drop_column, Append, Cluster, Split, Time_series
+    merge_dataset, Encoding, Scaling, Drop_row, Drop_column, Append, Cluster, Split, Time_series, Time_series_analysis
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -52,5 +52,6 @@ urlpatterns = [
     path('api/cluster/', Cluster, name='dropping'),
     path('api/split_dataset/', Split, name='dropping'),
     path('api/time_series/', Time_series, name='dropping'),
+    path('api/time_series_analysis/', Time_series_analysis, name='dropping'),
 
 ]

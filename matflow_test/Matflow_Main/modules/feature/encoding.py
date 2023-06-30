@@ -48,15 +48,15 @@ def ordinal_encoding(data, var, add_pipeline,file):
 
 
 def onehot_encoding(data, var, add_pipeline,file):
-
+    print(data)
+    print(var)
     drop_first = file.get("drop_first")
 
-    if st.button("Submit", "oh_submit"):
-        enc = encoder.Encoder(strategy="onehot", column=var)
-        new_value = enc.fit_transform(data)
+    enc = encoder.Encoder(strategy="onehot", column=var)
+    new_value = enc.fit_transform(data)
 
-        new_value = new_value.to_dict(orient="records")
-        return JsonResponse(new_value, safe=False)
+    new_value = new_value.to_dict(orient="records")
+    return JsonResponse(new_value, safe=False)
 
 
 def target_encoding(data,  var, add_pipeline,file):

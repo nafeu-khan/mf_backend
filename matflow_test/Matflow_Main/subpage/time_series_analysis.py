@@ -1,5 +1,4 @@
 import io
-import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 from statsmodels.tsa.arima.model import ARIMA
@@ -10,7 +9,7 @@ import base64
 import plotly.graph_objects as go
 from datetime import datetime, timedelta
 
-def time_series(file):
+def time_series_analysis(file):
     data=pd.DataFrame(file.get('file'))
     date_columns = []
 

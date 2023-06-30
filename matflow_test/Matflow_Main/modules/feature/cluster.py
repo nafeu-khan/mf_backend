@@ -35,7 +35,7 @@ def cluster_dataset(file):
         ax.annotate(txt, (centroids[i, 0], centroids[i, 1]), xytext=(-10, 10),
                     textcoords='offset points', color='red')
 
-    ax.set_title('K-means Clustering of Dataset')
+    # ax.set_title('K-means Clustering of Dataset')
 
     df['Class'] = [cluster_labels[label] for label in kmeans.labels_]
 
