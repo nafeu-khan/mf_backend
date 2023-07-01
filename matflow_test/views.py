@@ -285,6 +285,14 @@ def Split(request):
     response = split_dataset(data)
     return response
 @api_view(['GET','POST'])
+def Build_model(request):
+    data=json.loads(request.body)
+    response = split_dataset(data)
+    return response
+
+
+
+@api_view(['GET','POST'])
 def Time_series(request):
     data=json.loads(request.body)
     response = time_series(data)
@@ -294,7 +302,6 @@ def Time_series_analysis(request):
     data=json.loads(request.body)
     response = time_series_analysis(data)
     return response
-
 
 
 

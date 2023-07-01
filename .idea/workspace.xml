@@ -6,6 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="c617f45b-4bc5-4052-81c6-2d12815f7126" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/build_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/build_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/classification.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/classification.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/subpage/model_builder.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/subpage/model_builder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/subpage/time_series.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/subpage/time_series.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/subpage/time_series_analysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/subpage/time_series_analysis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

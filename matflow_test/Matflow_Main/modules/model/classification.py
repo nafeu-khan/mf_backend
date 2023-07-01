@@ -1,8 +1,8 @@
 import streamlit as st
 import pandas as pd
 import pickle
-from modules.utils import split_xy
-from modules.classifier import knn, svm, log_reg, decision_tree, random_forest, perceptron
+from ...modules.utils import split_xy
+from ...modules.classifier import knn, svm, log_reg, decision_tree, random_forest, perceptron
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
 def clear_opti_results_df():
@@ -12,23 +12,15 @@ def clear_opti_results_df():
         pass
 
 
-def classification(split_name, models):
-    try:
-        dataset = st.session_state.splitted_data[split_name]
+def classification(file):
+    # train_name = dataset['train_name']
+    # test_name = dataset['test_name']
+    train_data = file.get("train_name")
+    test_data = file.get("test_name")
+    target_var = file.get("target_var")
+    X_train, y_train = split_xy(train_data, target_var)
+    X_test, y_test = split_xy(test_data, target_var)
 
-        train_name = dataset['train_name']
-        test_name = dataset['test_name']
-        train_data = st.session_state.dataset.get_data(dataset['train_name'])
-        test_data = st.session_state.dataset.get_data(dataset['test_name'])
-        target_var = dataset["target_var"]
-        X_train, y_train = split_xy(train_data, target_var)
-        X_test, y_test = split_xy(test_data, target_var)
-    except:
-        st.header("Properly Split Dataset First")
-        return
-
-    if "has_models" not in st.session_state:
-        st.session_state.has_models = {}
 
     try:
         X_train, X_test = X_train.drop(target_var, axis=1), X_test.drop(target_var, axis=1)
@@ -45,14 +37,8 @@ def classification(split_name, models):
     }
     metric_list = ["Accuracy", "Precision", "Recall", "F1-Score"]
 
-    st.markdown("#")
     col1, col2 = st.columns([6.66, 3.33])
-    classifier = col1.selectbox(
-        "Classifier",
-        classifiers.keys(),
-        key="model_classifier",
-        on_change=clear_opti_results_df
-    )
+    classifier = file.get("model_classifier")
 
     model_name = col2.text_input(
         "Model Name",
@@ -73,13 +59,7 @@ def classification(split_name, models):
     elif classifier == "Multilayer Perceptron":
         model = perceptron.perceptron(X_train, y_train)
 
-    col1, col2 = st.columns([6.66, 3.33])
-    metrics = col1.multiselect(
-        "Display Metrics",
-        metric_list,
-        metric_list,
-        key="model_clf_metrics"
-    )
+    metrics = file.get("metric_list")
 
     target_nunique = y_train.nunique()
     if target_nunique > 2:
