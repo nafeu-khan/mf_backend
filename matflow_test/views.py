@@ -29,6 +29,7 @@ from .Matflow_Main.modules.graph.regplot import Regplot
 from .Matflow_Main.modules.graph.scatterplot import Scatterplot
 from .Matflow_Main.modules.graph.violinplot import Violinplot
 from .Matflow_Main.modules.model.split_dataset import split_dataset
+from .Matflow_Main.subpage.temp import temp
 from .Matflow_Main.subpage.time_series import  time_series
 from .Matflow_Main.subpage.time_series_analysis import  time_series_analysis
 

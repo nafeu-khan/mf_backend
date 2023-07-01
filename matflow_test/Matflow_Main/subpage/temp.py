@@ -10,7 +10,7 @@ import base64
 import plotly.graph_objects as go
 from datetime import datetime, timedelta
 
-def time_series(file):
+def temp(file):
     data=pd.DataFrame(file.get('file'))
     date_columns = []
 
@@ -70,7 +70,6 @@ def time_series(file):
     # Convert selected range to Timestamp objects
     selected_start = min_date_range
     selected_end =  max_date_range
-
 
     # Filter the data based on the selected range
     filtered_data = data.loc[selected_start:selected_end]
