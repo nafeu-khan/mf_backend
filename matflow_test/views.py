@@ -8,6 +8,8 @@ from django.http import JsonResponse
 from django.contrib.auth import authenticate, login
 from rest_framework import status
 from django.contrib.auth.models import User
+
+from .Matflow_Main.modules.classifier import knn, svm, log_reg, decision_tree, random_forest, perceptron
 from .Matflow_Main.modules.dataframe.correlation import display_pair
 from .Matflow_Main.modules.feature.append import append
 from .Matflow_Main.modules.feature.change_dtype import Change_dtype
@@ -289,8 +291,30 @@ def Build_model(request):
     data=json.loads(request.body)
     response = split_dataset(data)
     return response
-
-
+@api_view(['GET','POST'])
+def Hyper_opti(request):
+    data=json.loads(request.body)
+    classifier=data.get("classifier")
+    X_train=data.get("x_train")
+    y_train=data.get("y_train")
+    if(classifier=="K-Nearest Neighbors"):
+        response= knn.hyperparameter_optimization(X_train, y_train,data)
+    elif(classifier=="Support Vector Machine"):
+        response= svm.hyperparameter_optimization(X_train, y_train,data)
+    elif(classifier=="Logistic Regression"):
+        response= log_reg.hyperparameter_optimization(X_train, y_train,data)
+    elif(classifier=="Decision Tree Classification"):
+        response= decision_tree.hyperparameter_optimization(X_train, y_train,data)
+    elif(classifier=="Random Forest Classification"):
+        response = random_forest.hyperparameter_optimization(X_train, y_train, data)
+    elif(classifier=="Multilayer Perceptron"):
+        response = perceptron.hyperparameter_optimization(X_train, y_train, data)
+    return response
+@api_view(['GET','POST'])
+def Build_model(request):
+    data=json.loads(request.body)
+    response = split_dataset(data)
+    return response
 
 @api_view(['GET','POST'])
 def Time_series(request):

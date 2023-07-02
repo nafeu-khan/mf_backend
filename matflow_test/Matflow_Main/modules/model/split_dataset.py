@@ -1,9 +1,10 @@
+import pandas as pd
 from django.http import JsonResponse
 from sklearn.model_selection import train_test_split
 
 def split_dataset(file):
-    data = file.get("file")
-    target_var = file.get("target_var")
+    data = pd.DataFrame (file.get("file"))
+    target_var = file.get("target_variable")
     stratify = file.get("stratify")
     test_size = file.get("test_size")
     random_state = file.get("random_state")
@@ -19,8 +20,8 @@ def split_dataset(file):
     X_train=X_train.to_dict(orient="records")
     X_test = X_test.to_dict(orient="records")
     obj={
-        "train", X_train ,
-        "test", X_test
+        "train": X_train ,
+        "test": X_test
     }
 
     # df = obj.to_dict(orient="records")

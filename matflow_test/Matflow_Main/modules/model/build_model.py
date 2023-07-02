@@ -8,6 +8,6 @@ from ...modules.model import model_report, prediction_classification, prediction
 def build_model(file):
     type = file.get("type")
     if 'Classification'==type:
-        classification.classification(split_name, models)
+        classification.classification(file)
     else:
-        regression.regression(split_name, models)
+        regression.regression(file)

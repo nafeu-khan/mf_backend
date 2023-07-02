@@ -1,15 +1,9 @@
-import streamlit as st
-import pandas as pd
-import pickle
+
+from django.http import JsonResponse
+
 from ...modules.utils import split_xy
 from ...modules.classifier import knn, svm, log_reg, decision_tree, random_forest, perceptron
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
-
-def clear_opti_results_df():
-    try:
-       del st.session_state["opti_results_df"]
-    except:
-        pass
 
 
 def classification(file):
@@ -27,83 +21,42 @@ def classification(file):
     except:
         pass
 
-    classifiers = {
-        "K-Nearest Neighbors": "KNN_Classification",
-        "Support Vector Machine": "SVM_Classification",
-        "Logistic Regression": "LR_Classification",
-        "Decision Tree Classification": "DT_Classification",
-        "Random Forest Classification": "RF_Classification",
-        "Multilayer Perceptron": "MLP_Classification"
-    }
-    metric_list = ["Accuracy", "Precision", "Recall", "F1-Score"]
-
-    col1, col2 = st.columns([6.66, 3.33])
     classifier = file.get("model_classifier")
 
-    model_name = col2.text_input(
-        "Model Name",
-        classifiers[classifier],
-        key="model_name"
-    )
+    # model_name = col2.text_input(
+    #     "Model Name",
+    #     classifiers[classifier],
+    #     key="model_name"
+    # )
 
     if classifier == "K-Nearest Neighbors":
-        model = knn.knn(X_train,y_train)
+        model = knn.knn(X_train,y_train,file)
     elif classifier == "Support Vector Machine":
-        model = svm.svm(X_train, y_train)
+        model = svm.svm(X_train, y_train,file)
     elif classifier == "Logistic Regression":
-        model = log_reg.log_reg(X_train, y_train)
+        model = log_reg.log_reg(X_train, y_train,file)
     elif classifier == "Decision Tree Classification":
-        model = decision_tree.decision_tree(X_train, y_train)
+        model = decision_tree.decision_tree(X_train, y_train,file)
     elif classifier == "Random Forest Classification":
-        model = random_forest.random_forest(X_train, y_train)
+        model = random_forest.random_forest(X_train, y_train,file)
     elif classifier == "Multilayer Perceptron":
-        model = perceptron.perceptron(X_train, y_train)
+        model = perceptron.perceptron(X_train, y_train,file)
 
     metrics = file.get("metric_list")
 
     target_nunique = y_train.nunique()
     if target_nunique > 2:
-        multi_average = col2.selectbox(
-            "Multiclass Average",
-            ["micro", "macro", "weighted"],
-            key="clf_multi_average"
-        )
+        multi_average = file.get("multi_average")
     else:
         multi_average = "binary"
 
-    if st.button("Submit", key="model_submit"):
-        if model_name not in models.list_name():
-            try:
-                model.fit(X_train, y_train)
-            except Exception as e:
-                st.error(e)
-                return
+    model.fit(X_train, y_train)
 
-            if 'all_models' not in st.session_state:
-                st.session_state.all_models = {}
+    selected_metrics = get_result(model, X_test, y_test, metrics, multi_average)
+    return JsonResponse(selected_metrics)
+    # for met in metrics:
+    #     st.metric(met, selected_metrics.get(met))
 
-            all_models = st.session_state.all_models
-
-            selected_metrics = get_result(model, X_test, y_test, metrics, multi_average)
-
-            for met in metrics:
-                st.metric(met, selected_metrics.get(met))
-
-            result = []
-            for X, y in zip([X_train, X_test], [y_train, y_test]):
-                temp = get_result(model, X, y, metrics, multi_average)
-                result += list(temp.values())
-
-            models.add_model(model_name, model, train_name, test_name, target_var, result, "classification")
-
-            if split_name not in st.session_state.has_models.keys():
-                st.session_state.has_models[split_name] = []
-            st.session_state.has_models[split_name].append(model_name)
-
-            all_models.update({model_name: ('Classification', dataset)})
-
-        else:
-            st.warning("Model name already exist!")
 
 
 def get_result(model, X, y, metrics, multi_average, pos_label=None):
