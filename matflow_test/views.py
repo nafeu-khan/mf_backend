@@ -30,6 +30,8 @@ from .Matflow_Main.modules.graph.histogram import Histogram
 from .Matflow_Main.modules.graph.regplot import Regplot
 from .Matflow_Main.modules.graph.scatterplot import Scatterplot
 from .Matflow_Main.modules.graph.violinplot import Violinplot
+from .Matflow_Main.modules.model.classification import classification
+from .Matflow_Main.modules.model.regression import regression
 from .Matflow_Main.modules.model.split_dataset import split_dataset
 from .Matflow_Main.modules.utils import split_xy
 from .Matflow_Main.subpage.temp import temp
@@ -295,12 +297,11 @@ def Build_model(request):
 @api_view(['GET','POST'])
 def Hyper_opti(request):
     data=json.loads(request.body)
-    print(data)
     train_data=pd.DataFrame(data.get("train"))
     test_data=pd.DataFrame(data.get("test"))
     target_var=data.get("target_var")
     X_train, y_train = split_xy(train_data, target_var)
-    X_test, y_test = split_xy(test_data, target_var)
+    # X_test, y_test = split_xy(test_data, target_var)
     type=data.get("type")
     if(type=="classifier"):
         classifier=data.get("classifier")
@@ -334,7 +335,12 @@ def Hyper_opti(request):
 @api_view(['GET','POST'])
 def Build_model(request):
     data=json.loads(request.body)
-    response = split_dataset(data)
+    print(data.keys())
+    type=data.get("type")
+    if(type== "classifier"):
+        response = classification(data)
+    else:
+        response = regression(data)
     return response
 
 @api_view(['GET','POST'])

@@ -4,13 +4,10 @@ from sklearn.model_selection import RandomizedSearchCV
 from sklearn.neural_network import MLPClassifier
 
 
-def hyperparameter_optimization(X_train, y_train):
-	do_hyperparameter_optimization = st.checkbox("Do Hyperparameter Optimization?")
-	if do_hyperparameter_optimization:
-		st.subheader("Hyperparameter Optimization Settings")
-		n_iter = st.number_input("Number of iterations for hyperparameter search", min_value=1, value=5, step=1)
-		cv = st.number_input("Number of cross-validation folds", min_value=2, value=2, step=1)
-		random_state = st.number_input("Random state for hyperparameter search", min_value=0, value=0, step=1)
+def hyperparameter_optimization(X_train, y_train,file):
+	n_iter = int(file.get(("Number of iterations for hyperparameter search")))
+	cv = int(file.get(("Number of cross-validation folds")))
+	random_state = int(file.get(("Random state for hyperparameter search")))
 
 	if "perceptron_best_param" not in st.session_state:
 		st.session_state.perceptron_best_param = {

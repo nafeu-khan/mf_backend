@@ -8,12 +8,9 @@ from sklearn.tree import DecisionTreeClassifier
 
 
 def hyperparameter_optimization(X_train, y_train,file):
-    # do_hyperparameter_optimization = st.checkbox("Do Hyperparameter Optimization?")
-    # if do_hyperparameter_optimization:
-    st.subheader("Hyperparameter Optimization Settings")
-    n_iter = st.number_input("Number of iterations for hyperparameter search", min_value=1, value=5, step=1)
-    cv = st.number_input("Number of cross-validation folds", min_value=2, value=2, step=1)
-    random_state = st.number_input("Random state for hyperparameter search", min_value=0, value=0, step=1)
+    n_iter = int(file.get("Number of iterations for hyperparameter search"))
+    cv = int(file.get("Number of cross-validation folds", min_value=2, value=2, step=1))
+    random_state = int(file.get("Random state for hyperparameter search", min_value=0, value=0, step=1))
 
     param_dist = {
         "criterion": ["gini", "entropy"],
@@ -21,20 +18,13 @@ def hyperparameter_optimization(X_train, y_train,file):
         "min_samples_split": [2, 5, 10, 20],
         "min_samples_leaf": [2, 4, 8, 10],
         "random_state": [random_state]
-
     }
     model = DecisionTreeClassifier()
-    # with st.spinner('Doing hyperparameter optimization...'):
-
     clf = RandomizedSearchCV(model, param_distributions=param_dist, n_iter=n_iter, cv=cv,
                              random_state=random_state)
-    # st.spinner("Fitting the model...")
     clf.fit(X_train, y_train)
-
     cv_results = clf.cv_results_
-
     param_names = list(cv_results['params'][0].keys())
-
     # Create a list of dictionaries with the parameter values and accuracy score for each iteration
     results_list = []
     for i in range(len(cv_results['params'])):
@@ -45,9 +35,7 @@ def hyperparameter_optimization(X_train, y_train,file):
         results_list.append(param_dict)
 
     results_df = pd.DataFrame(results_list)
-
     results_df = results_df.sort_values(by=['accuracy'], ascending=False)
-
     best_param = clf.best_params_
     return JsonResponse(best_param)
 

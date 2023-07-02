@@ -1,7 +1,7 @@
 import streamlit as st
 import pickle
-from modules.utils import split_xy
-from modules.regressor import linear_regression, ridge_regression, lasso_regression, decision_tree_regression, random_forest_regression
+from ...modules.utils import split_xy
+from ...modules.regressor import linear_regression, ridge_regression, lasso_regression, decision_tree_regression, random_forest_regression
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 
 
