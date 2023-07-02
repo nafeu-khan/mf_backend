@@ -31,6 +31,7 @@ from .Matflow_Main.modules.graph.regplot import Regplot
 from .Matflow_Main.modules.graph.scatterplot import Scatterplot
 from .Matflow_Main.modules.graph.violinplot import Violinplot
 from .Matflow_Main.modules.model.split_dataset import split_dataset
+from .Matflow_Main.modules.utils import split_xy
 from .Matflow_Main.subpage.temp import temp
 from .Matflow_Main.subpage.time_series import  time_series
 from .Matflow_Main.subpage.time_series_analysis import  time_series_analysis
@@ -294,21 +295,41 @@ def Build_model(request):
 @api_view(['GET','POST'])
 def Hyper_opti(request):
     data=json.loads(request.body)
-    classifier=data.get("classifier")
-    X_train=data.get("x_train")
-    y_train=data.get("y_train")
-    if(classifier=="K-Nearest Neighbors"):
-        response= knn.hyperparameter_optimization(X_train, y_train,data)
-    elif(classifier=="Support Vector Machine"):
-        response= svm.hyperparameter_optimization(X_train, y_train,data)
-    elif(classifier=="Logistic Regression"):
-        response= log_reg.hyperparameter_optimization(X_train, y_train,data)
-    elif(classifier=="Decision Tree Classification"):
-        response= decision_tree.hyperparameter_optimization(X_train, y_train,data)
-    elif(classifier=="Random Forest Classification"):
-        response = random_forest.hyperparameter_optimization(X_train, y_train, data)
-    elif(classifier=="Multilayer Perceptron"):
-        response = perceptron.hyperparameter_optimization(X_train, y_train, data)
+    print(data)
+    train_data=pd.DataFrame(data.get("train"))
+    test_data=pd.DataFrame(data.get("test"))
+    target_var=data.get("target_var")
+    X_train, y_train = split_xy(train_data, target_var)
+    X_test, y_test = split_xy(test_data, target_var)
+    type=data.get("type")
+    if(type=="classifier"):
+        classifier=data.get("classifier")
+        if(classifier=="K-Nearest Neighbors"):
+            response= knn.hyperparameter_optimization(X_train, y_train,data)
+        elif(classifier=="Support Vector Machine"):
+            response= svm.hyperparameter_optimization(X_train, y_train,data)
+        elif(classifier=="Logistic Regression"):
+            response= log_reg.hyperparameter_optimization(X_train, y_train,data)
+        elif(classifier=="Decision Tree Classification"):
+            response= decision_tree.hyperparameter_optimization(X_train, y_train,data)
+        elif(classifier=="Random Forest Classification"):
+            response = random_forest.hyperparameter_optimization(X_train, y_train, data)
+        elif(classifier=="Multilayer Perceptron"):
+            response = perceptron.hyperparameter_optimization(X_train, y_train, data)
+    else :
+        classifier = data.get("regressor")
+        if (classifier == "K-Nearest Neighbors"):
+            response = knn.hyperparameter_optimization(X_train, y_train, data)
+        elif (classifier == "Support Vector Machine"):
+            response = svm.hyperparameter_optimization(X_train, y_train, data)
+        elif (classifier == "Logistic Regression"):
+            response = log_reg.hyperparameter_optimization(X_train, y_train, data)
+        elif (classifier == "Decision Tree Classification"):
+            response = decision_tree.hyperparameter_optimization(X_train, y_train, data)
+        elif (classifier == "Random Forest Classification"):
+            response = random_forest.hyperparameter_optimization(X_train, y_train, data)
+        elif (classifier == "Multilayer Perceptron"):
+            response = perceptron.hyperparameter_optimization(X_train, y_train, data)
     return response
 @api_view(['GET','POST'])
 def Build_model(request):

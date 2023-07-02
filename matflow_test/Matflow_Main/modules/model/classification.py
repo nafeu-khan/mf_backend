@@ -1,10 +1,7 @@
-
 from django.http import JsonResponse
-
 from ...modules.utils import split_xy
 from ...modules.classifier import knn, svm, log_reg, decision_tree, random_forest, perceptron
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
-
 
 def classification(file):
     # train_name = dataset['train_name']
@@ -14,15 +11,11 @@ def classification(file):
     target_var = file.get("target_var")
     X_train, y_train = split_xy(train_data, target_var)
     X_test, y_test = split_xy(test_data, target_var)
-
-
     try:
         X_train, X_test = X_train.drop(target_var, axis=1), X_test.drop(target_var, axis=1)
     except:
         pass
-
     classifier = file.get("model_classifier")
-
     # model_name = col2.text_input(
     #     "Model Name",
     #     classifiers[classifier],
