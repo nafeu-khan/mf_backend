@@ -33,38 +33,45 @@ def classification(file):
     target_nunique = y_train.nunique()
     if target_nunique > 2:
         multi_average = file.get("Multiclass Average")
+        print(f"multi = {multi_average}")
     else:
         multi_average = "binary"
 
     model.fit(X_train, y_train)
     selected_metrics = get_result(model, X_test, y_test, multi_average)
-    return JsonResponse(selected_metrics)
 
-def get_result(model, X, y, multi_average, pos_label=None):
+    metrics = ["Accuracy", "Precision", "Recall", "F1-Score"]
+    result = []
+    i=0
+    for X, y in zip([X_train, X_test], [y_train, y_test]):
+        list2 = get_result(model, X, y, metrics, multi_average)
+        if(i==0):
+            list1=get_result(model, X, y, metrics, multi_average)
+        i+=1
+
+    merged_list = {
+        f"Train {key}": value
+        for key, value in list1.items()
+    }
+
+    merged_list.update({
+        f"Test {key}": value
+        for key, value in list2.items()
+    })
+
+    obj={
+        "metrics": selected_metrics,   #4
+        "metrics_table":merged_list     #8
+    }
+    return JsonResponse(obj)
+
+def get_result(model, X, y, multi_average):
+    multi_average="micro"
     y_pred = model.predict(X)
     metric_dict = {}
-    try:
-        pos_label = y[1]
-    except:
-        pass
-    # calculate accuracy
-    try:
-        metric_dict["Accuracy"] = accuracy_score(y, y_pred)
-    except ValueError:
-        metric_dict["Precision"] = "-"
-        # calculate precision
-    try:
-        metric_dict["Precision"] = precision_score(y, y_pred, average=multi_average, pos_label=pos_label)
-    except ValueError:
-        metric_dict["Precision"] = "-"
-    # calculate recall
-    try:
-        metric_dict["Recall"] = recall_score(y, y_pred, average=multi_average, pos_label=pos_label)
-    except ValueError:
-        metric_dict["Recall"] = "-"
-    # calculate F1-score
-    try:
-        metric_dict["F1-Score"] = f1_score(y, y_pred, average=multi_average, pos_label=pos_label)
-    except ValueError:
-        metric_dict["F1-Score"] = "-"
+    metric_dict["Accuracy"] = accuracy_score(y, y_pred)
+    metric_dict["Precision"] = precision_score(y, y_pred, average=multi_average)
+    metric_dict["Recall"] = recall_score(y, y_pred, average=multi_average)
+    metric_dict["F1-Score"] = f1_score(y, y_pred, average=multi_average)
     return metric_dict
+

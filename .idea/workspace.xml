@@ -5,13 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c617f45b-4bc5-4052-81c6-2d12815f7126" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/regressor/svr.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Matflow/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/Matflow/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/decision_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/decision_tree.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/knn.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/knn.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/log_reg.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/log_reg.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/perceptron.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/perceptron.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/random_forest.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/random_forest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/svm.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/svm.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/classification.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/classification.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/regression.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/regression.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/split_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/split_dataset.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/utils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/matflow_test/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -53,15 +57,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/pyhton_project/react/matflow backend github/matflow_test/Matflow_Main/subpage&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "D:/pyhton_project/react/matflow backend github/matflow_test/Matflow_Main/modules/regressor"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\pyhton_project\react\matflow backend github\matflow_test\Matflow_Main\modules\regressor" />
       <recent name="D:\pyhton_project\react\matflow backend github\matflow_test\Matflow_Main\subpage" />
       <recent name="D:\pyhton_project\react\matflow backend github\matflow_test\Matflow_Main" />
       <recent name="D:\pyhton_project\react\matflow backend github\matflow_test\Matflow_Main\modules\graph" />
