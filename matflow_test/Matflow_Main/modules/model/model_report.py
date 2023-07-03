@@ -1,27 +1,25 @@
+import io
 import streamlit as st
 import pandas as pd
+import seaborn as sns
 import matplotlib.pyplot as plt
+import plotly.graph_objects as go
+import plotly.io as pio
+from django.http import HttpResponse
+from django.http import JsonResponse
+import base64
 
-
-def model_report(split_dataset_name, models):
-    result_df = pd.DataFrame()
-    for i in st.session_state.has_models[split_dataset_name]:
-        result_df = pd.concat([result_df, models.get_result(i)], ignore_index=True)
-
-    col1, col2 = st.columns(2)
-    display_type = col1.selectbox(
-        "Display Type",
-        ["Table", "Graph"]
-    )
-
-    if display_type == "Table":
-        col2.markdown("#")
-        include_data = col2.checkbox("Include Data")
-        report_table(result_df, include_data)
-    else:
-        report_graph(result_df, col2)
-
-
+def model_report(file):
+    print(4242)
+    print(file)
+    print(2)
+    result_df = pd.DataFrame(file.get("file"))
+    # display_type =file.get( "Display Type")
+    # if display_type == "Table":
+    #     include_data = file.get("Include Data")
+    #     report_table(result_df, include_data)
+    # else:
+    report_graph(result_df,file)
 def report_table(result_df, include_data):
     cols = result_df.columns
     if not include_data:
@@ -56,20 +54,19 @@ def report_table(result_df, include_data):
         )
     st.dataframe(result_df[cols])
 
-def report_graph(data, col):
-    model_data = data.drop(columns=['Train Data', 'Test Data', 'Model Name'])
+def report_graph(data, file):
+    model_data=data
+    try:
+        model_data = data.drop(columns=['Train Data', 'Test Data', 'Model Name'])
+    except:
+        model_data=data
+        pass
+    print(model_data)
     cmap = plt.cm.get_cmap('Set3', len(model_data))
     result_df = model_data
     column=pd.DataFrame()
-    orientation = st.selectbox('Select Orientation', ['Vertical', 'Horizontal'])
-    for i in range(2):
-        st.write('#')
-    display_result = st.radio(
-        "Display Result",
-        ["All", "Train", "Test", "Custom"],
-        index=2,
-        horizontal=True
-    )
+    orientation = file.get("Select Orientation")
+    display_result = file.get("Display Result")
     if display_result == "All":
         column = model_data
 
@@ -82,18 +79,9 @@ def report_graph(data, col):
         column = model_data[colms]
 
     elif display_result == "Custom":
-        try:
-            selected_columns = st.multiselect(
-                "Columns",
-                model_data.columns,
-                []
-            )
-            if len(selected_columns) > 0:
-                column = model_data[selected_columns]
-            else :
-                st.warning("Please select at least one column")
-        except ValueError:
-            st.warning("Please select at least one column")
+        selected_columns =file.get("Columns")
+        if len(selected_columns) > 0:
+            column = model_data[selected_columns]
 
     if orientation == 'Vertical':
         fig, ax = plt.subplots(nrows=1, ncols=len(column.columns), figsize=(16,8))
@@ -123,5 +111,23 @@ def report_graph(data, col):
         fig.subplots_adjust(top=0.85 + 0.05 * len(data))
 
     plt.tight_layout()
-    st.pyplot(fig)
+    image_stream = io.BytesIO()
     plt.close(fig)
+    image_stream.seek(0)
+
+    # Encode the image stream as base64
+    image_base64 = base64.b64encode(image_stream.getvalue()).decode('utf-8')
+
+    # Create the Plotly graph with the base64-encoded image and increase size
+    graph = go.Figure(go.Image(source=f'data:image/png;base64,{image_base64}'))
+    graph.update_layout(font=dict(family="Arial", size=12), width=1000, height=800,
+                        # xaxis=dict(editable=True),yaxis=dict(editable=True)
+                        )
+    # Convert the graph to HTML and send as a response
+    html_content = pio.to_html(graph, full_html=False)
+    response = HttpResponse(content_type='text/html')
+    response.write(html_content)
+
+    # Return the graph JSON data
+    graph_json = graph.to_json()
+    return JsonResponse(graph_json, safe=False)
