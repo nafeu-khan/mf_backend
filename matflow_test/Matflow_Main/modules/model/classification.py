@@ -38,15 +38,15 @@ def classification(file):
         multi_average = "binary"
 
     model.fit(X_train, y_train)
-    selected_metrics = get_result(model, X_test, y_test, multi_average,pos_label=None)
+    selected_metrics = get_result(model, X_test, y_test, multi_average)
 
     metrics = ["Accuracy", "Precision", "Recall", "F1-Score"]
     result = []
     i=0
     for X, y in zip([X_train, X_test], [y_train, y_test]):
-        list2 = get_result(model, X, y, metrics, multi_average,pos_label=None)
+        list2 = get_result(model, X, y, metrics, multi_average)
         if(i==0):
-            list1=get_result(model, X, y, metrics, multi_average,pos_label=None)
+            list1=get_result(model, X, y, metrics, multi_average)
         i+=1
 
     merged_list = {
