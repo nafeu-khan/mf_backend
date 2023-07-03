@@ -19,7 +19,7 @@ def model_report(file):
     #     include_data = file.get("Include Data")
     #     report_table(result_df, include_data)
     # else:
-    report_graph(result_df,file)
+    return report_graph(result_df,file)
 def report_table(result_df, include_data):
     cols = result_df.columns
     if not include_data:
@@ -83,9 +83,10 @@ def report_graph(data, file):
         if len(selected_columns) > 0:
             column = model_data[selected_columns]
 
+    fig, ax = plt.subplots(nrows=1, ncols=len(column.columns), figsize=(16,8))
+    fig.subplots_adjust(hspace=0.5, wspace=0.5)
+
     if orientation == 'Vertical':
-        fig, ax = plt.subplots(nrows=1, ncols=len(column.columns), figsize=(16,8))
-        fig.subplots_adjust(hspace=0.5, wspace=0.5)
 
         for i, col in enumerate(column.columns):
             for j, row in enumerate(column.iterrows()):
@@ -98,8 +99,6 @@ def report_graph(data, file):
         fig.subplots_adjust(top=0.85 + 0.05 * len(data))
 
     elif orientation == 'Horizontal':
-        fig, ax = plt.subplots(nrows=len(model_data.columns), ncols=1, figsize=(10,8+len(model_data.columns)))
-        fig.subplots_adjust(hspace=0.5, wspace=0.5)
         for i, col in enumerate(model_data.columns):
             for j, row in enumerate(model_data.iterrows()):
                 # Create the bar plot for the current column
@@ -112,6 +111,7 @@ def report_graph(data, file):
 
     plt.tight_layout()
     image_stream = io.BytesIO()
+    plt.savefig(image_stream, format='png', bbox_inches='tight')
     plt.close(fig)
     image_stream.seek(0)
 
@@ -127,7 +127,8 @@ def report_graph(data, file):
     html_content = pio.to_html(graph, full_html=False)
     response = HttpResponse(content_type='text/html')
     response.write(html_content)
-
+    print(5)
     # Return the graph JSON data
     graph_json = graph.to_json()
+    print(graph_json)
     return JsonResponse(graph_json, safe=False)

@@ -350,6 +350,8 @@ def Build_model(request):
 def model_evaluation(request):
     data=json.loads(request.body)
     response = model_report(data)
+    print("in view")
+    print(response)
     return response
 
 @api_view(['GET','POST'])
