@@ -38,15 +38,15 @@ def classification(file):
         multi_average = "binary"
 
     model.fit(X_train, y_train)
-    selected_metrics = get_result(model, X_test, y_test, multi_average)
+    selected_metrics = get_result(model, X_test, y_test, multi_average,pos_label=None)
 
     metrics = ["Accuracy", "Precision", "Recall", "F1-Score"]
     result = []
     i=0
     for X, y in zip([X_train, X_test], [y_train, y_test]):
-        list2 = get_result(model, X, y, metrics, multi_average)
+        list2 = get_result(model, X, y, metrics, multi_average,pos_label=None)
         if(i==0):
-            list1=get_result(model, X, y, metrics, multi_average)
+            list1=get_result(model, X, y, metrics, multi_average,pos_label=None)
         i+=1
 
     merged_list = {
@@ -65,8 +65,8 @@ def classification(file):
     }
     return JsonResponse(obj)
 
-def get_result(model, X, y, multi_average):
-    multi_average="micro"
+def get_result(model, X, y, multi_average,pos_label=None):
+    # multi_average="micro"
     y_pred = model.predict(X)
     metric_dict = {}
     metric_dict["Accuracy"] = accuracy_score(y, y_pred)

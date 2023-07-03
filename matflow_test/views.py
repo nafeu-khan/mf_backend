@@ -31,6 +31,7 @@ from .Matflow_Main.modules.graph.regplot import Regplot
 from .Matflow_Main.modules.graph.scatterplot import Scatterplot
 from .Matflow_Main.modules.graph.violinplot import Violinplot
 from .Matflow_Main.modules.model.classification import classification
+from .Matflow_Main.modules.model.model_report import model_report
 from .Matflow_Main.modules.model.regression import regression
 from .Matflow_Main.modules.model.split_dataset import split_dataset
 from .Matflow_Main.modules.regressor import linear_regression, ridge_regression, lasso_regression, \
@@ -324,17 +325,17 @@ def Hyper_opti(request):
     else :
         regressor = data.get("regressor")
         if regressor == "Linear Regression":
-            response = linear_regression.linear_regression(X_train, y_train)
+            response = linear_regression.linear_regression(X_train, y_train,data)
         elif regressor == "Ridge Regression":
-            response = ridge_regression.ridge_regression(X_train, y_train)
+            response = ridge_regression.ridge_regression(X_train, y_train,data)
         elif regressor == "Lasso Regression":
-            response = lasso_regression.lasso_regression(X_train, y_train)
+            response = lasso_regression.lasso_regression(X_train, y_train,data)
         elif regressor == "Decision Tree Regression":
-            response = decision_tree_regression.decision_tree_regressor(X_train, y_train)
+            response = decision_tree_regression.decision_tree_regressor(X_train, y_train,data)
         elif regressor == "Random Forest Regression":
-            response = random_forest_regression.random_forest_regressor(X_train, y_train)
+            response = random_forest_regression.random_forest_regressor(X_train, y_train,data)
         elif regressor == "Support Vector Regressor":
-            response = svr.support_vector_regressor(X_train, y_train)
+            response = svr.support_vector_regressor(X_train, y_train,data)
     return response
 @api_view(['GET','POST'])
 def Build_model(request):
@@ -344,6 +345,11 @@ def Build_model(request):
         response = classification(data)
     else:
         response = regression(data)
+    return response
+@api_view(['GET','POST'])
+def model_evaluation(request):
+    data=json.loads(request.body)
+    response = model_report(data)
     return response
 
 @api_view(['GET','POST'])
