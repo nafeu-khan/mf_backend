@@ -7,6 +7,8 @@ from sklearn.svm import SVC
 
 
 def hyperparameter_optimization(X_train, y_train,file):
+    print(file)
+    print(file.keys())
     n_iter = int(file.get("Number of iterations for hyperparameter search"))
     cv = int(file.get("Number of cross-validation folds"))
     random_state = int(file.get("Random state for hyperparameter search"))
@@ -40,16 +42,13 @@ def hyperparameter_optimization(X_train, y_train,file):
 
 
 def svm(X_train, y_train,file):
-    best_params = hyperparameter_optimization(X_train, y_train,file)
-
   #("Model Settings")
-
-    C =file.get("C")
-    kernel =file.get("Kernel")
-
-    tol = file.get("Tolerance (ε)")
-    gamma = file.get("Gamma")
-    degree =file.get("Polinomial Degree")
+    print(file.keys())
+    C =int(file.get("C"))
+    kernel =file.get("kernel")
+    tol = float(file.get("tol"))
+    gamma = file.get("gamma")
+    degree =int(file.get("degree"))
     model = SVC(C=C, kernel=kernel, degree=degree, gamma=gamma, tol=tol)
 
     return model
