@@ -37,6 +37,7 @@ from .Matflow_Main.modules.model.split_dataset import split_dataset
 from .Matflow_Main.modules.regressor import linear_regression, ridge_regression, lasso_regression, \
     decision_tree_regression, random_forest_regression, svr
 from .Matflow_Main.modules.utils import split_xy
+from .Matflow_Main.subpage.Reverse_ML import reverse_ml
 from .Matflow_Main.subpage.temp import temp
 from .Matflow_Main.subpage.time_series import  time_series
 from .Matflow_Main.subpage.time_series_analysis import  time_series_analysis
@@ -363,6 +364,11 @@ def Time_series(request):
 def Time_series_analysis(request):
     data=json.loads(request.body)
     response = time_series_analysis(data)
+    return response
+@api_view(['GET','POST'])
+def Reverse_ml(request):
+    data=json.loads(request.body)
+    response = reverse_ml(data)
     return response
 
 

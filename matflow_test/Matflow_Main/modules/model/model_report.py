@@ -10,16 +10,13 @@ from django.http import JsonResponse
 import base64
 
 def model_report(file):
-    print(4242)
-    print(file)
-    print(2)
     result_df = pd.DataFrame(file.get("file"))
     # display_type =file.get( "Display Type")
     # if display_type == "Table":
     #     include_data = file.get("Include Data")
     #     report_table(result_df, include_data)
     # else:
-    return report_graph(result_df,file)
+    return  report_graph(result_df,file)
 def report_table(result_df, include_data):
     cols = result_df.columns
     if not include_data:
@@ -61,7 +58,6 @@ def report_graph(data, file):
     except:
         model_data=data
         pass
-    print(model_data)
     cmap = plt.cm.get_cmap('Set3', len(model_data))
     result_df = model_data
     column=pd.DataFrame()
