@@ -5,9 +5,11 @@ from ...modules.classifier import knn, svm, log_reg, decision_tree, random_fores
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
 def classification(file):
+    print(file)
     train_data = pd.DataFrame(file.get("train"))
     test_data = pd.DataFrame(file.get("test"))
     target_var = file.get("target_var")
+    print(f"train= \n{train_data} \n {test_data} trgt var= {target_var}")
     X_train, y_train = split_xy(train_data, target_var)
     X_test, y_test = split_xy(test_data, target_var)
     try:
@@ -29,18 +31,19 @@ def classification(file):
         model = perceptron.perceptron(X_train, y_train,file)
 
     # metrics = file.get("metric_list")
-
     target_nunique = y_train.nunique()
+    # print(target_nunique,type(target_nunique))
     if target_nunique > 2:
         multi_average = file.get("Multiclass Average")
-        print(f"multi = {multi_average}")
+        # print(f"multi = {multi_average}")
     else:
         multi_average = "binary"
 
     model.fit(X_train, y_train)
-    selected_metrics = get_result(model, X_test, y_test, multi_average)
-
     metrics = ["Accuracy", "Precision", "Recall", "F1-Score"]
+    selected_metrics = get_result(model, X_test, y_test,metrics, multi_average)
+
+
     result = []
     i=0
     for X, y in zip([X_train, X_test], [y_train, y_test]):
@@ -65,8 +68,8 @@ def classification(file):
     }
     return JsonResponse(obj)
 
-def get_result(model, X, y, multi_average,pos_label=None):
-    # multi_average="micro"
+def get_result(model, X, y, metrics,multi_average,pos_label=None):
+
     y_pred = model.predict(X)
     metric_dict = {}
     metric_dict["Accuracy"] = accuracy_score(y, y_pred)
