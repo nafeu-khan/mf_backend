@@ -90,7 +90,7 @@ def report_graph(data, file):
         for i, col in enumerate(column.columns):
             for j, row in enumerate(column.iterrows()):
                 # Create the bar plot for the current column
-                ax[i].bar(j, row[1][i], color=cmap(j), label=list(data['Model Name'].values)[j])
+                ax[i].bar(j, row[1][i], color=cmap(j), label=list(data['name'].values)[j])
                 ax[i].set_xticklabels([])
                 ax[i].set_xlabel(col)
         ax[0].set_ylabel("Value")
@@ -103,7 +103,7 @@ def report_graph(data, file):
         for i, col in enumerate(model_data.columns):
             for j, row in enumerate(model_data.iterrows()):
                 # Create the bar plot for the current column
-                ax[i].barh(j, row[1][i], color=cmap(j), label=list(data['Model Name'].values)[j])
+                ax[i].barh(j, row[1][i], color=cmap(j), label=list(data['name'].values)[j])
                 ax[i].set_yticklabels([])
                 ax[i].set_ylabel(col)
         ax[-1].set_xlabel("Value")
