@@ -38,14 +38,11 @@ def hyperparameter_optimization(X_train, y_train,file):
     return JsonResponse(obj)
 
 def lasso_regression(X_train,y_train,file):
-    alpha = int(file.get("Alpha"))
-    fit_intercept = file.get("Fit Intercept")
-    normalize = file.get("Normalize")
-    max_iter = int(file.get("Max Iterations"))
-    selection = file.get("Selection")
-
+    alpha = int(file.get("alpha"))
+    fit_intercept = file.get("fit_intercept")
+    # normalize = file.get("Normalize")
+    max_iter = int(file.get("max_iter"))
+    selection = file.get("selection")
     model = Lasso(alpha=alpha, fit_intercept=fit_intercept, max_iter=max_iter,
                       selection=selection)
-
-
     return model

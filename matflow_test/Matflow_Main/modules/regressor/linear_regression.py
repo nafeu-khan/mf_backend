@@ -26,11 +26,15 @@ def hyperparameter_optimization(X_train, y_train,file):
         "result": table,    #table
         "param": best_params     #parameter
     }
+    print(f"hello = {obj}")
     return JsonResponse(obj)
 
 def linear_regression(X_train,y_train,file):
-    fit_intercept = file.get("Fit Intercept")
+    fit_intercept = bool(file.get("Fit Intercept"))
+    print(file.get("Fit Intercept"))
+    print(fit_intercept)
     normalize = file.get("Normalize")
-    n_jobs = int(file.get("Number of Jobs"))
+
+    n_jobs = int(file.get("Number of jobs"))
     model = LinearRegression(fit_intercept=fit_intercept, n_jobs=n_jobs)
     return model

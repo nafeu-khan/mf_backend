@@ -36,13 +36,15 @@ def hyperparameter_optimization(X_train, y_train,file):
     return JsonResponse(obj)
 
 def support_vector_regressor(X_train, y_train,file):
-    kernel = file.get("Kernel")
-    C = file.get( "C")
-    epsilon = file.get("Epsilon")
+    print(file.keys())
+    kernel = file.get("kernel")
+    print(kernel)
+    C = float(file.get("C"))
+    print(C)
+    epsilon = float(file.get("epsilon"))
     model = SVR(
             kernel=kernel,
             C=C,
             epsilon=epsilon
     )
-
     return model

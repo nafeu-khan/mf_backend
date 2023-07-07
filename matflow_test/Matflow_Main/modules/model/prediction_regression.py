@@ -10,7 +10,7 @@ import plotly.io as pio
 from ...modules import utils
 from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
 
-def prediction_regression(dataset, models,model_opt,file):
+def prediction_regression(file):
     target_var = file.get( "Target Variable")
     data = file.get("file")
     X, y = utils.split_xy(data, target_var)

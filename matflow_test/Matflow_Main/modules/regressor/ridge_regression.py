@@ -35,11 +35,11 @@ def hyperparameter_optimization(X_train, y_train,file):
 
 
 def ridge_regression(X_train, y_train,file):
-    alpha =int(file.get("Alpha"))
-    fit_intercept = file.get("Fit Intercept")
-    normalize = file.get("Normalize")
-    max_iter =int(file.get("Max Iterations"))
-    solver = file.get("Solver")
+    alpha =int(file.get("alpha"))
+    fit_intercept = file.get("fit_intercept")
+    # normalize = file.get("normalize")
+    max_iter =int(file.get("max_iter"))
+    solver = file.get("solver")
     model = Ridge(alpha=alpha, fit_intercept=fit_intercept, max_iter=max_iter,
                       solver=solver)
     return model
