@@ -33,9 +33,7 @@ def hyperparameter_optimization(X_train, y_train,file):
         results_list.append(param_dict)
     results_df = pd.DataFrame(results_list)
     results_df = results_df.sort_values(by=['accuracy'], ascending=False)
-    print(results_df)
     best_param = clf.best_params_
-    print(f"best = \n{best_param}")
     obj={
         "result": results_df,
         "param": best_param

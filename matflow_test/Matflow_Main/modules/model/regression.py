@@ -41,15 +41,15 @@ def regression(file):
     #     )
 
     if regressor == "Linear Regression":
-        model = linear_regression.linear_regression(X_train, y_train)
+        model = linear_regression.linear_regression(X_train, y_train,file)
     elif regressor == "Ridge Regression":
-        model = ridge_regression.ridge_regression(X_train, y_train)
+        model = ridge_regression.ridge_regression(X_train, y_train,file)
     elif regressor == "Lasso Regression":
-        model = lasso_regression.lasso_regression(X_train, y_train)
+        model = lasso_regression.lasso_regression(X_train, y_train,file)
     elif regressor == "Decision Tree Regression":
-        model = decision_tree_regression.decision_tree_regressor(X_train, y_train)
+        model = decision_tree_regression.decision_tree_regressor(X_train, y_train,file)
     elif regressor == "Random Forest Regression":
-        model = random_forest_regression.random_forest_regressor(X_train, y_train)
+        model = random_forest_regression.random_forest_regressor(X_train, y_train,file)
 
 
     try:
