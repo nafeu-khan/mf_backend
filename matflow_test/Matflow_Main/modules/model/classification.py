@@ -3,7 +3,8 @@ from django.http import JsonResponse
 from ...modules.utils import split_xy
 from ...modules.classifier import knn, svm, log_reg, decision_tree, random_forest, perceptron
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
-
+import json
+import numpy as np
 def classification(file):
     print(file)
     train_data = pd.DataFrame(file.get("train"))
@@ -62,7 +63,7 @@ def classification(file):
         f"Test {key}": value
         for key, value in list2.items()
     })
-
+    y_prediction=json.dumps(y_prediction.tolist())
     obj={
         "metrics": selected_metrics,   #4
         "metrics_table":merged_list,     #8
@@ -71,7 +72,6 @@ def classification(file):
     return JsonResponse(obj)
 
 def get_result(model, X, y, metrics,multi_average,pos_label=None):
-
     y_pred = model.predict(X)
     metric_dict = {}
     metric_dict["Accuracy"] = accuracy_score(y, y_pred)
