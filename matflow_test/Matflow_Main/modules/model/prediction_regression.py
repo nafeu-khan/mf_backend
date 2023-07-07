@@ -5,10 +5,10 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from statsmodels.graphics.gofplots import qqplot
 
-from modules import utils
+from ...modules import utils
 from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
 
-def prediction(dataset, models,model_opt):
+def prediction_regression(dataset, models,model_opt):
     show = False
     col1, col2, col3 = st.columns(3)
 

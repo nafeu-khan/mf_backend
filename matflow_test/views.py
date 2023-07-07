@@ -33,6 +33,7 @@ from .Matflow_Main.modules.graph.violinplot import Violinplot
 from .Matflow_Main.modules.model.classification import classification
 from .Matflow_Main.modules.model.model_report import model_report
 from .Matflow_Main.modules.model.prediction_classification import prediction_classification
+from .Matflow_Main.modules.model.prediction_regression import prediction_regression
 from .Matflow_Main.modules.model.regression import regression
 from .Matflow_Main.modules.model.split_dataset import split_dataset
 from .Matflow_Main.modules.regressor import linear_regression, ridge_regression, lasso_regression, \
@@ -357,9 +358,13 @@ def model_evaluation(request):
 @api_view(['GET','POST'])
 def model_prediction(request):
     data=json.loads(request.body)
-    response = prediction_classification(data)
+    type=data.get("type")
+    print(type)
+    if(type=="regressor"):
+        response=prediction_regression(data)
+    else:
+        response = prediction_classification(data)
     return response
-
 @api_view(['GET','POST'])
 def Time_series(request):
     data=json.loads(request.body)

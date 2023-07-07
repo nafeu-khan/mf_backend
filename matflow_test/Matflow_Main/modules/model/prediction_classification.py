@@ -24,11 +24,11 @@ import base64
 import json
 
 def prediction_classification(file):
-    print(file)
     print(file.keys())
     # data_opt = file.get("Select Data")
     target_var = file.get("Target Variable")
-    model_opt=file.get("model")
+    model_opt=file.get("regressor")
+    print(model_opt)
     data = pd.DataFrame(file.get("file"))
     y_pred = file.get("y_pred")
     X, y = utils.split_xy(data, target_var)
@@ -99,17 +99,17 @@ def show_result(y, y_pred, result_opt, multi_average,X,model_name):
 
     elif result_opt == "Actual vs. Predicted":
         graph_header = "Actual vs. Predicted Values"
-        x_range = np.arange(len(y))  # Convert range to a numpy array
+        x_range = np.arange(len(y))
         fig = go.Figure()
-        fig.add_trace(go.Scatter(x=x_range, y=y, mode='lines', name='Actual'))
-        fig.add_trace(go.Scatter(x=x_range, y=y_pred, mode='lines', name='Predicted'))
+        fig.add_trace(go.Scatter(x=x_range, y=y, mode='lines', name='Actual',line=dict(color='blue')))
+        fig.add_trace(go.Scatter(x=x_range, y=y_pred, mode='lines', name='Predicted',line=dict(color='red')))
         fig.update_layout(
             title=graph_header,
             xaxis=dict(title='Index'),
             yaxis=dict(title='Value')
         )
         fig_json = pio.to_json(fig)
-        response_data = {'fig': fig_json}
+        response_data = {'graph': fig_json}
         return JsonResponse(response_data)
 
     elif result_opt == "Precision-Recall Curve":
@@ -131,174 +131,96 @@ def show_result(y, y_pred, result_opt, multi_average,X,model_name):
             )
 
             fig_json = pio.to_json(fig)
-            response_data = {'fig': fig_json}
+            response_data = {'graph': fig_json}
             return JsonResponse(response_data)
 
     elif result_opt == "ROC Curve":
-
         if y.nunique() > 2:
-
             label_encoder = LabelEncoder()
-
             label_encoder.fit(y)
-
             y = label_encoder.transform(y)
-
             classes = label_encoder.classes_
-
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
-
             min_max_scaler = MinMaxScaler()
-
             X_train_norm = min_max_scaler.fit_transform(X_train)
-
             X_test_norm = min_max_scaler.fit_transform(X_test)
-
-            if model_name == "RF_Classification":
-
+            print(model_name)
+            if model_name == "Random Forest Classification":
                 RF = OneVsRestClassifier(RandomForestClassifier(max_features=0.2))
-
                 RF.fit(X_train_norm, y_train)
 
                 y_pred = RF.predict(X_test_norm)
 
                 pred_prob = RF.predict_proba(X_test_norm)
 
-            elif model_name == "MLP_Classification":
-
+            elif model_name == "Multilayer Perceptron":
                 mlp = MLPClassifier(hidden_layer_sizes=(100, 50))
-
                 mlp.fit(X_train_norm, y_train)
-
                 y_pred = mlp.predict(X_test_norm)
-
                 pred_prob = mlp.predict_proba(X_test_norm)
-
-            elif model_name == "KNN_Classification":
-
+            elif model_name == "K-Nearest Neighbors":
                 k = 5
-
                 knn = KNeighborsClassifier(n_neighbors=k)
-
                 knn.fit(X_train_norm, y_train)
-
                 y_pred = knn.predict(X_test_norm)
-
                 pred_prob = knn.predict_proba(X_test_norm)
-
-            elif model_name == "SVM_Classification":
-
+            elif model_name == "Support Vector Machine":
                 svm = OneVsRestClassifier(SVC(kernel='linear', probability=True))
-
                 svm.fit(X_train_norm, y_train)
-
                 y_pred = svm.predict(X_test_norm)
-
                 pred_prob = svm.predict_proba(X_test_norm)
-
-            elif model_name == "LR_Classification":
-
+            elif model_name == "Logistic Regression":
                 lr = OneVsRestClassifier(LogisticRegression(solver='lbfgs'))
-
                 lr.fit(X_train_norm, y_train)
-
                 y_pred = lr.predict(X_test_norm)
-
                 pred_prob = lr.predict_proba(X_test_norm)
-
-            elif model_name == "DT_Classification":
-
+            elif model_name == "Decision Tree Classification":
                 dt = OneVsRestClassifier(DecisionTreeClassifier())
-
                 dt.fit(X_train_norm, y_train)
-
                 y_pred = dt.predict(X_test_norm)
-
                 pred_prob = dt.predict_proba(X_test_norm)
-
             else:
-
-                raise ValueError("Invalid model name specified.")
-
+               raise ValueError("Invalid model name specified.")
             y_test_binarized = label_binarize(y_test, classes=np.unique(y_test))
-
             fpr = {}
-
             tpr = {}
-
             roc_auc = dict()
-
             n_class = classes.shape[0]
-
             for i in range(n_class):
                 fpr[i], tpr[i], _ = roc_curve(y_test_binarized[:, i], pred_prob[:, i])
-
                 roc_auc[i] = auc(fpr[i], tpr[i])
-
             fig = go.Figure()
-
             for i in range(n_class):
                 fig.add_trace(
                     go.Scatter(x=fpr[i], y=tpr[i], mode='lines', name='%s vs Rest (AUC=%0.2f)' % (classes[i], roc_auc[i])))
-
             fig.add_shape(
-
                 type='line', line=dict(dash='dash'), x0=0, y0=0, x1=1, y1=1
-
             )
-
             fig.update_layout(
-
                 title='Multiclass ROC curve',
-
                 xaxis=dict(title='False Positive Rate'),
-
                 yaxis=dict(title='True Positive Rate')
-
             )
-
             # Convert fig to JSON-compatible format
-
             fig_json = pio.to_json(fig)
-
             # Create a JSON response with the fig_json
-
-            response_data = {'fig': fig_json}
-
+            response_data = {'graph': fig_json}
             return JsonResponse(response_data)
-
-
         else:
-
             y_encoded = le.fit_transform(y)
-
             y_pred_encoded = le.transform(y_pred)
-
             fpr, tpr, _ = roc_curve(y_encoded.ravel(), y_pred_encoded.ravel())
-
             fig = go.Figure(data=go.Scatter(x=fpr, y=tpr, mode='lines'))
-
             fig.update_layout(
-
                 title='ROC Curve',
-
                 xaxis=dict(title='False Positive Rate'),
-
                 yaxis=dict(title='True Positive Rate')
-
             )
-
             # Convert fig to JSON-compatible format
-
             fig_json = pio.to_json(fig)
-
             # Create a JSON response with the fig_json
-
-            response_data = {'fig': fig_json}
-
+            response_data = {'graph': fig_json}
             return JsonResponse(response_data)
-
-
 def actvspred(y, y_pred, graph_header):
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=list(range(len(y))), y=y, mode='lines', name='Actual', line=dict(color='blue')))
@@ -306,11 +228,8 @@ def actvspred(y, y_pred, graph_header):
     fig.update_layout(
         title=graph_header,
         xaxis=dict(title='Index'),
-        yaxis=dict(title='Value')
-    )
-    # Convert the graph to JSON
+        yaxis=dict(title='Value'))
     graph_json = fig.to_json()
-    # Return the graph JSON data as a JsonResponse
     return graph_json
 # def show_multiclass(y, y_pred):
 #
