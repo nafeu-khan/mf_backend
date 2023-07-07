@@ -38,7 +38,11 @@ def hyperparameter_optimization(X_train, y_train,file):
     results_df = pd.DataFrame(results_list)
     results_df = results_df.sort_values(by=['accuracy'], ascending=False)
     best_param = clf.best_params_
-    return JsonResponse(best_param)
+    obj = {
+        "result": results_df,
+        "param": best_param
+    }
+    return JsonResponse(obj)
 
 
 def random_forest(X_train, y_train,file):
