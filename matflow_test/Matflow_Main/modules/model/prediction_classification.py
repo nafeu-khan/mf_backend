@@ -24,7 +24,6 @@ import base64
 import json
 
 def prediction_classification(file):
-    print(file.keys())
     # data_opt = file.get("Select Data")
     target_var = file.get("Target Variable")
     model_opt=file.get("regressor")
@@ -96,7 +95,6 @@ def show_result(y, y_pred, result_opt, multi_average,X,model_name):
         fig_json = pio.to_json(fig)
         response_data = {'graph': fig_json}
         return JsonResponse(response_data)
-
     elif result_opt == "Actual vs. Predicted":
         graph_header = "Actual vs. Predicted Values"
         x_range = np.arange(len(y))

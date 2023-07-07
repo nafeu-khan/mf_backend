@@ -47,7 +47,6 @@ def classification(file):
     selected_metrics = get_result(model, X_test, y_test,metrics, multi_average)
 
 
-    result = []
     i=0
     for X, y in zip([X_train, X_test], [y_train, y_test]):
         list2 = get_result(model, X, y, metrics, multi_average)

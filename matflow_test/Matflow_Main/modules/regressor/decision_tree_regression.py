@@ -10,7 +10,6 @@ def hyperparameter_optimization(X_train, y_train,file):
     cv = int(file.get("Number of cross-validation folds"))
     random_state = int(file.get("Random state for hyperparameter search"))
 
-
     param_dist = {
         "max_depth": [3, 5, 10, 15, 20, None],
         "min_samples_split": [2, 5, 10],
@@ -21,9 +20,6 @@ def hyperparameter_optimization(X_train, y_train,file):
     }
     model = DecisionTreeRegressor()
 
-    for i in range(100):
-        time.sleep(0.1)
-        st.spinner(f"Running iteration {i + 1} of {n_iter}...")
     clf = RandomizedSearchCV(model, param_distributions=param_dist, n_iter=n_iter, cv=cv,
                              random_state=random_state)
     clf.fit(X_train, y_train)
@@ -32,12 +28,12 @@ def hyperparameter_optimization(X_train, y_train,file):
     rows = []
     for param in best_params:
         rows.append([param, best_params[param]])
-    # st.table(pd.DataFrame(rows, columns=['Parameter', 'Value']))
-
-    # return clf.best_estimator_
-
-    best_param = clf.best_params_
-    return JsonResponse(best_param)
+    table = pd.DataFrame(rows, columns=['Parameter', 'Value'])
+    obj = {
+        "result": table,  # table
+        "param": best_params  # parameter
+    }
+    return JsonResponse(obj)
 
 
 def decision_tree_regressor(X_train, y_train,file):

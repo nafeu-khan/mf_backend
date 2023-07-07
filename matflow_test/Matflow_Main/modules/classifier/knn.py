@@ -11,8 +11,6 @@ def hyperparameter_optimization(X_train, y_train,file):
     n_iter = int(file.get("Number of iterations for hyperparameter search"))
     cv = int(file.get("Number of cross-validation folds"))
     random_state = int(file.get("Random state for hyperparameter search"))
-    print(f"Xtrain= \n {X_train} \n test= \n{y_train}\n")
-    print(f"n_it= {n_iter} cv={cv}  r s= {random_state}")
     param_dist = {
         "n_neighbors": [3, 5, 10, 15, 20, 25],
         "weights": ["uniform", "distance"],
@@ -36,7 +34,11 @@ def hyperparameter_optimization(X_train, y_train,file):
     print(results_df)
     best_param = clf.best_params_
     print(f"best = \n{best_param}")
-    return JsonResponse(best_param)
+    obj={
+        "result": results_df,
+        "param": best_param
+    }
+    return JsonResponse(obj)
 
 
 def knn(X_train, y_train,file):
