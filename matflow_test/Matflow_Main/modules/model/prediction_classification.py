@@ -41,8 +41,6 @@ def prediction_classification(file):
         # binary case
         return show_result(y, y_pred, result_opt, "binary",X,model_opt)
 
-
-
 def show_result(y, y_pred, result_opt, multi_average,X,model_name):
     # global pred_prob
     le = LabelEncoder()
@@ -57,7 +55,6 @@ def show_result(y, y_pred, result_opt, multi_average,X,model_name):
         result = metric_dict.get(result_opt)
         new_value = result.to_dict(orient="records")
         return JsonResponse(new_value, safe=False)
-
     elif result_opt == "Target Value":
         result = pd.DataFrame({
             "Actual": y,
@@ -74,7 +71,6 @@ def show_result(y, y_pred, result_opt, multi_average,X,model_name):
     elif result_opt == "Classification Report":
         result = classification_report(y, y_pred)
         return JsonResponse(result, safe=False)
-
     elif result_opt == "Confusion Matrix":
         cm = confusion_matrix(y, y_pred)
         fig = go.Figure(data=go.Heatmap(
