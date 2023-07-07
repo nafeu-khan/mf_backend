@@ -298,16 +298,19 @@ def show_result(y, y_pred, result_opt, multi_average,X,model_name):
 
             return JsonResponse(response_data)
 
+
 def actvspred(y, y_pred, graph_header):
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=list(range(len(y))), y=y, mode='lines', name='Actual'))
-    fig.add_trace(go.Scatter(x=list(range(len(y_pred))), y=y_pred, mode='lines', name='Predicted'))
+    fig.add_trace(go.Scatter(x=list(range(len(y))), y=y, mode='lines', name='Actual', line=dict(color='blue')))
+    fig.add_trace(go.Scatter(x=list(range(len(y_pred))), y=y_pred, mode='lines', name='Predicted', line=dict(color='red')))
     fig.update_layout(
         title=graph_header,
         xaxis=dict(title='Index'),
         yaxis=dict(title='Value')
     )
+    # Convert the graph to JSON
     graph_json = fig.to_json()
+    # Return the graph JSON data as a JsonResponse
     return graph_json
 # def show_multiclass(y, y_pred):
 #
