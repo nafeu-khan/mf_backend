@@ -11,7 +11,6 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 from ...modules import utils
-from ...modules.classes.model import Models
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, classification_report,confusion_matrix, roc_curve, precision_recall_curve, auc, average_precision_score
 import io
@@ -31,8 +30,8 @@ def prediction_classification(file):
     target_var = file.get("Target Variable")
     model_opt=file.get("model")
     data = pd.DataFrame(file.get("file"))
-    X, y = utils.split_xy(data, target_var)
     y_pred = file.get("y_pred")
+    X, y = utils.split_xy(data, target_var)
     result_opt = file.get("Result")
     if y.nunique() > 2:
         # multiclass case (denied)
@@ -65,8 +64,10 @@ def show_result(y, y_pred, result_opt, multi_average,X,model_name):
             "Predicted": y_pred
         })
         graph=actvspred(y, y_pred,"")
+        result_json = result.to_json(orient="records")
+        result_dict = json.loads(result_json)
         obj={
-                "table":st.dataframe(result),
+                "table":result_dict,
                 "graph":graph
         }
         return JsonResponse(obj, safe=False)

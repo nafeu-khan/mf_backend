@@ -6,11 +6,11 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 import json
 import numpy as np
 def classification(file):
-    print(file)
+    print(file.keys())
+    data = pd.DataFrame(file.get("file"))
     train_data = pd.DataFrame(file.get("train"))
     test_data = pd.DataFrame(file.get("test"))
     target_var = file.get("target_var")
-    print(f"train= \n{train_data} \n {test_data} trgt var= {target_var}")
     X_train, y_train = split_xy(train_data, target_var)
     X_test, y_test = split_xy(test_data, target_var)
     try:
@@ -41,7 +41,8 @@ def classification(file):
         multi_average = "binary"
 
     model.fit(X_train, y_train)
-    y_prediction=model.predict(X_test)
+    X, y = split_xy(data, target_var)
+    y_prediction=model.predict(X)
     metrics = ["Accuracy", "Precision", "Recall", "F1-Score"]
     selected_metrics = get_result(model, X_test, y_test,metrics, multi_average)
 
