@@ -3,63 +3,46 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
+from django.http import JsonResponse
 from statsmodels.graphics.gofplots import qqplot
-
+import plotly.graph_objects as go
+import plotly.io as pio
 from ...modules import utils
 from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
 
-def prediction_regression(dataset, models,model_opt):
-    show = False
-    col1, col2, col3 = st.columns(3)
+def prediction_regression(dataset, models,model_opt,file):
 
-    data_opt = col1.selectbox(
-        "Select Data",
-        dataset.list_name()
-    )
+    target_var = file.get( "Target Variable")
+    data = file.get("file")
+    X, y = utils.split_xy(data, target_var)
+    y_pred = file.get("y_pred")
 
-    target_var = col2.selectbox(
-        "Target Variable",
-        models.target_var
-    )
-
-    if st.checkbox("Show Result"):
-        data = dataset.get_data(data_opt)
-        X, y = utils.split_xy(data, target_var)
-        y_pred = models.get_prediction(model_opt, X)
-
-        col1, col2 = st.columns(2)
-        result_opt = col1.selectbox(
-            "Result",
-            ["Target Value", "R2 Score", "MAE", "MSE", "RMSE", "Regression Line Plot","Actual vs. Predicted",
-             "Residuals vs. Predicted", "Histogram of Residuals", "QQ Plot", "Box Plot of Residuals"]
-        )
-
-        show_result(y, y_pred, result_opt)
+    result_opt = file.get("Result")
+    show_result(y, y_pred, result_opt)
 
 def show_result(y, y_pred, result_opt):
-
-
     if result_opt == "Target Value":
-        c1,c2=st.columns(2)
-        with c1:
-            graph_header = st.text_input("Enter graph header", "Actual vs. Predicted Values")
-        st.markdown("#")
+        graph_header = st.text_input("Enter graph header", "Actual vs. Predicted Values")
+
         result = pd.DataFrame({
             "Actual": y,
             "Predicted": y_pred
         })
-        st.markdown("#")
-        col1, col2 = st.columns(2)
-        with col1:
-            st.dataframe(result)
-        with col2:
-            fig, ax = plt.subplots(figsize=(8, 6))
-            ax = sns.lineplot(x=range(len(y)), y=y, label="Actual")
-            ax = sns.lineplot(x=range(len(y_pred)), y=y_pred, label="Predicted")
-            ax.set_xlabel("Index")
-            ax.set_ylabel("Value")
-            ax.set_title(graph_header)
-            st.pyplot(fig)
+        result=result.to_json(orient="records")
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(x=list(range(len(y))), y=y, mode='lines', name='Actual'))
+        fig.add_trace(go.Scatter(x=list(range(len(y_pred))), y=y_pred, mode='lines', name='Predicted'))
+        fig.update_layout(
+            title=graph_header,
+            xaxis=dict(title='Index'),
+            yaxis=dict(title='Value')
+        )
+        graph_json = fig.to_json()
+        obj= {
+            "table": result,
+            "graph":graph_json
+        }
+        return JsonResponse (obj)
 
     elif result_opt == "R2 Score":
         result = r2_score(y, y_pred)

@@ -304,8 +304,6 @@ def Build_model(request):
 @api_view(['GET','POST'])
 def Hyper_opti(request):
     data=json.loads(request.body)
-    print(data)
-    print(data.keys())
     train_data=pd.DataFrame(data.get("train"))
     test_data=pd.DataFrame(data.get("test"))
     target_var=data.get("target_var")

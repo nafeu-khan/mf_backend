@@ -29,6 +29,7 @@ def hyperparameter_optimization(X_train, y_train,file):
     for param in best_params:
         rows.append([param, best_params[param]])
     table = pd.DataFrame(rows, columns=['Parameter', 'Value'])
+    table=table.to_dict(orient="records")
     obj = {
         "result": table,  # table
         "param": best_params  # parameter

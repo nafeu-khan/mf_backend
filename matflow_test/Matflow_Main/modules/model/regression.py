@@ -13,8 +13,6 @@ from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 
 def regression(file):
     dataset=pd.DataFrame(file.get("file"))
-    train_name=file.get('train')
-    test_name=dataset['test_name']
     train_data = pd.DataFrame(file.get("train"))
     test_data = pd.DataFrame(file.get("test"))
     target_var = file.get("target_var")

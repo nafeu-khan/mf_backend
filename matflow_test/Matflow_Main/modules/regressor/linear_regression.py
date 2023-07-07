@@ -1,3 +1,5 @@
+import json
+
 import pandas as pd
 import streamlit as st
 from django.http import JsonResponse
@@ -6,8 +8,6 @@ from sklearn.model_selection import GridSearchCV
 
 
 def hyperparameter_optimization(X_train, y_train,file):
-    print(file)
-    print(file.keys())
     cv = int(file.get("Number of cross-validation folds"))
     random_state = int(file.get("Random state for hyperparameter search"))
     param_grid = {
@@ -21,6 +21,7 @@ def hyperparameter_optimization(X_train, y_train,file):
     for param in best_params:
         rows.append([param, best_params[param]])
     table=pd.DataFrame(rows, columns=['Parameter', 'Value'])
+    table=table.to_dict(orient="records")
     obj = {
         "result": table,    #table
         "param": best_params     #parameter
