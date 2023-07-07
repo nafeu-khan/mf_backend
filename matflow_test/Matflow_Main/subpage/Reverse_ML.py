@@ -85,8 +85,5 @@ def reverse_ml(file):
     prediction_table = pd.DataFrame(
         {'Target Variable': target_variables, 'Predicted Value': prediction.flatten()})
 
-
     new_value =prediction_table .to_dict(orient="records")
-    print(new_value)
-    print(prediction_table)
     return JsonResponse(new_value, safe=False)

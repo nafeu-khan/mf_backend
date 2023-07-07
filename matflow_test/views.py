@@ -32,6 +32,7 @@ from .Matflow_Main.modules.graph.scatterplot import Scatterplot
 from .Matflow_Main.modules.graph.violinplot import Violinplot
 from .Matflow_Main.modules.model.classification import classification
 from .Matflow_Main.modules.model.model_report import model_report
+from .Matflow_Main.modules.model.prediction_classification import prediction_classification
 from .Matflow_Main.modules.model.regression import regression
 from .Matflow_Main.modules.model.split_dataset import split_dataset
 from .Matflow_Main.modules.regressor import linear_regression, ridge_regression, lasso_regression, \
@@ -292,6 +293,7 @@ def Cluster(request):
 def Split(request):
     data=json.loads(request.body)
     response = split_dataset(data)
+    print(response)
     return response
 @api_view(['GET','POST'])
 def Build_model(request):
@@ -351,8 +353,11 @@ def Build_model(request):
 def model_evaluation(request):
     data=json.loads(request.body)
     response = model_report(data)
-    print("in view")
-    print(response)
+    return response
+@api_view(['GET','POST'])
+def model_prediction(request):
+    data=json.loads(request.body)
+    response = prediction_classification(data)
     return response
 
 @api_view(['GET','POST'])

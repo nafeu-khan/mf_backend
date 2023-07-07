@@ -1,8 +1,6 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import seaborn as sns
-import matplotlib.pyplot as plt
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.neural_network import MLPClassifier
@@ -12,74 +10,43 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
-
-from modules import utils
+from ...modules import utils
+from ...modules.classes.model import Models
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, classification_report,confusion_matrix, roc_curve, precision_recall_curve, auc, average_precision_score
+import io
+import seaborn as sns
+import matplotlib.pyplot as plt
+import plotly.graph_objects as go
+import plotly.io as pio
+from django.http import HttpResponse
+from django.http import JsonResponse
+import base64
+import json
 
+def prediction_classification(file):
+    print(file)
+    print(file.keys())
+    # data_opt = file.get("Select Data")
+    target_var = file.get("Target Variable")
+    model_opt=file.get("model")
+    data = pd.DataFrame(file.get("file"))
+    X, y = utils.split_xy(data, target_var)
+    y_pred = file.get("y_pred")
+    result_opt = file.get("Result")
+    if y.nunique() > 2:
+        # multiclass case (denied)
+        # show_multiclass(y,y_pred)
+        return  show_result(y, y_pred, result_opt, None,X,model_opt)
+    else:
+        # binary case
+        return show_result(y, y_pred, result_opt, "binary",X,model_opt)
 
-def prediction(dataset, models,model_opt):
-    col1, col2, col3 = st.columns(3)
-
-    data_opt = col1.selectbox(
-        "Select Data",
-        dataset.list_name()
-    )
-    target_var = col2.selectbox(
-        "Target Variable",
-        models.target_var
-    )
-
-    if st.checkbox("Show Result"):
-        data = dataset.get_data(data_opt)
-        X, y = utils.split_xy(data, target_var)
-        y_pred = models.get_prediction(model_opt, X)
-
-        col1, col2 = st.columns(2)
-        result_opt = col1.selectbox(
-            "Result",
-            ["Target Value", "Accuracy", "Precision", "Recall", "F1-Score",
-             "Classification Report", "Confusion Matrix", "Actual vs. Predicted",
-             "Precision-Recall Curve", "ROC Curve"]
-
-        )
-
-        # try:
-        #     if y.nunique() > 2:
-        #         multi_average = col2.selectbox(
-        #             "Multiclass Average",
-        #             ["micro", "macro", "weighted"],
-        #             key="prediction_multi_average"
-        #         )
-        #     else:
-        #         multi_average = "binary"
-        #
-        #     show_result(y, y_pred, result_opt, multi_average)
-        #
-        # except ValueError as e:
-        #     st.warning(str(e))
-        #
-        # except TypeError as e:
-        #     st.warning(str(e))
-        try:
-            if y.nunique() > 2:
-                # multiclass case (denied)
-                # show_multiclass(y,y_pred)
-                show_result(y, y_pred, result_opt, None,X,model_opt)
-            else:
-                # binary case
-                show_result(y, y_pred, result_opt, "binary",X,model_opt)
-        except ValueError as e:
-            st.warning(str(e))
-
-        except TypeError as e:
-            st.warning(str(e))
 
 
 def show_result(y, y_pred, result_opt, multi_average,X,model_name):
     # global pred_prob
     le = LabelEncoder()
-
     if result_opt in ["Accuracy", "Precision", "Recall", "F1-Score"]:
         metric_dict = {
             "Accuracy": accuracy_score(y, y_pred),
@@ -89,110 +56,85 @@ def show_result(y, y_pred, result_opt, multi_average,X,model_name):
         }
 
         result = metric_dict.get(result_opt)
-        st.metric(result_opt, result)
+        new_value = result.to_dict(orient="records")
+        return JsonResponse(new_value, safe=False)
 
     elif result_opt == "Target Value":
-        # col=st.columns(1)
-        graph_header = st.text_input("Enter graph header", "Actual vs. Predicted Values")
-        st.markdown("#")
         result = pd.DataFrame({
             "Actual": y,
             "Predicted": y_pred
         })
-        col1,col2=st.columns(2)
-
-        with col1:
-            st.dataframe(result)
-        with col2:
-            actvspred(y,y_pred,graph_header)
-
+        graph=actvspred(y, y_pred,"")
+        obj={
+                "table":st.dataframe(result),
+                "graph":graph
+        }
+        return JsonResponse(obj, safe=False)
     elif result_opt == "Classification Report":
         result = classification_report(y, y_pred)
-
-        st.text("`" + result)
+        return JsonResponse(result, safe=False)
 
     elif result_opt == "Confusion Matrix":
         cm = confusion_matrix(y, y_pred)
-
-        fig, ax = plt.subplots()
-        ax = sns.heatmap(
-            cm, annot=True,
-            fmt='.4g',
-            xticklabels=np.unique(y_pred),
-            yticklabels=np.unique(y_pred)
+        fig = go.Figure(data=go.Heatmap(
+            z=cm,
+            x=np.unique(y_pred),
+            y=np.unique(y_pred),
+            colorscale='Viridis',
+            text=cm,
+            hovertemplate='Actual: %{y}<br>Predicted: %{x}<br>Count: %{text}<extra></extra>'
+        ))
+        fig.update_layout(
+            title=result_opt,
+            xaxis=dict(title="Predicted Label", automargin=True),
+            yaxis=dict(title="Actual Label", automargin=True)
         )
-
-        ax.set_title(result_opt)
-        ax.set_xlabel("Predicted Label")
-        ax.set_ylabel("Actual Label")
-
-        st.pyplot(fig)
+        fig.update_layout(
+            autosize=False,
+            width=600,
+            height=600,
+            margin=dict(l=50, r=50, b=50, t=50),
+            template="plotly_white"
+        )
+        fig_json = pio.to_json(fig)
+        response_data = {'fig': fig_json}
+        return JsonResponse(response_data)
 
     elif result_opt == "Actual vs. Predicted":
-        actvspred(y,y_pred,graph_header="Actual vs. Predicted Values")
+        graph_header="Actual vs. Predicted Values"
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(x=range(len(y)), y=y, mode='lines', name='Actual'))
+        fig.add_trace(go.Scatter(x=range(len(y_pred)), y=y_pred, mode='lines', name='Predicted'))
+        fig.update_layout(
+            title=graph_header,
+            xaxis=dict(title='Index'),
+            yaxis=dict(title='Value')
+        )
+        fig_json = pio.to_json(fig)
+        response_data = {'fig': fig_json}
+        return JsonResponse(response_data)
+
     elif result_opt == "Precision-Recall Curve":
         if y.nunique() > 2:
-            # st.warning("Precision-Recall curve is not supported for multiclass classification")
-
-            label_encoder = LabelEncoder()
-            label_encoder.fit(y)
-            y = label_encoder.transform(y)
-            classes = label_encoder.classes_
-
-            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
-
-            min_max_scaler = MinMaxScaler()
-            X_train_norm = min_max_scaler.fit_transform(X_train)
-            X_test_norm = min_max_scaler.fit_transform(X_test)
-
-            RF = OneVsRestClassifier(RandomForestClassifier(max_features=0.2))
-            RF.fit(X_train_norm, y_train)
-            y_pred = RF.predict(X_test_norm)
-            pred_prob = RF.predict_proba(X_test_norm)
-
-            y_test_binarized = label_binarize(y_test, classes=np.unique(y_test))
-
-            precision = {}
-            recall = {}
-            average_precision = dict()
-
-            n_class = classes.shape[0]
-
-            for i in range(n_class):
-                precision[i], recall[i], _ = precision_recall_curve(y_test_binarized[:, i], pred_prob[:, i])
-                average_precision[i] = average_precision_score(y_test_binarized[:, i], pred_prob[:, i])
-
-                plt.plot(recall[i], precision[i], linestyle='--',
-                         label='%s (AP=%0.2f)' % (classes[i], average_precision[i]))
-
-            plt.xlim([0, 1])
-            plt.ylim([0, 1.05])
-            plt.title('Multiclass Precision-Recall curve')
-            plt.xlabel('Recall')
-            plt.ylabel('Precision')
-            plt.legend(loc='lower left')
-            plt.show()
-            st.pyplot(plt.gcf())
-
-            return
+            return JsonResponse({'error': 'Precision-Recall curve is not supported for multiclass classification'})
         else:
-            # encode y and y_pred
+            # Encode y and y_pred
             y_encoded = le.fit_transform(y)
             y_pred_encoded = le.transform(y_pred)
 
             precision, recall, _ = precision_recall_curve(y_encoded.ravel(), y_pred_encoded.ravel())
 
-            fig, ax = plt.subplots()
+            fig = go.Figure(data=go.Scatter(x=recall, y=precision, mode='lines'))
 
-            sns.lineplot(x=recall, y=precision, ax=ax)
+            fig.update_layout(
+                title='Precision-Recall Curve',
+                xaxis=dict(title='Recall'),
+                yaxis=dict(title='Precision')
+            )
 
-            ax.set_xlabel("Recall")
-
-            ax.set_ylabel("Precision")
-
-            ax.set_title("Precision-Recall Curve")
-
-            st.pyplot(fig)
+            fig_json = pio.to_json(fig)
+            response_data = {'fig': fig_json}
+            return JsonResponse(response_data)
 
     elif result_opt == "ROC Curve":
         if y.nunique() > 2:
@@ -363,9 +305,25 @@ def actvspred(y,y_pred,graph_header):
     ax = sns.lineplot(x=range(len(y_pred)), y=y_pred, label="Predicted")
     ax.set_xlabel("Index")
     ax.set_ylabel("Value")
-    ax.set_title(graph_header)
-    st.pyplot(fig)
+    ax.set_title("actual vs prediction")
     plt.close((fig))
+    image_stream = io.BytesIO()
+    image_stream.seek(0)
+    # Encode the image stream as base64
+    image_base64 = base64.b64encode(image_stream.getvalue()).decode('utf-8')
+    # Create the Plotly graph with the base64-encoded image and increase size
+    graph = go.Figure(go.Image(source=f'data:image/png;base64,{image_base64}'))
+    graph.update_layout(font=dict(family="Arial", size=12), width=1000, height=800,
+                        # xaxis=dict(editable=True),yaxis=dict(editable=True)
+                        )
+    # Convert the graph to HTML and send as a response
+    html_content = pio.to_html(graph, full_html=False)
+    response = HttpResponse(content_type='text/html')
+    response.write(html_content)
+
+    # Return the graph JSON data
+    graph_json = graph.to_json()
+    return graph_json
 
 # def show_multiclass(y, y_pred):
 #

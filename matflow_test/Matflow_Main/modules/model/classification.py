@@ -40,6 +40,7 @@ def classification(file):
         multi_average = "binary"
 
     model.fit(X_train, y_train)
+    y_prediction=model.predict(X_test)
     metrics = ["Accuracy", "Precision", "Recall", "F1-Score"]
     selected_metrics = get_result(model, X_test, y_test,metrics, multi_average)
 
@@ -64,7 +65,8 @@ def classification(file):
 
     obj={
         "metrics": selected_metrics,   #4
-        "metrics_table":merged_list     #8
+        "metrics_table":merged_list,     #8
+        "y_pred" : y_prediction
     }
     return JsonResponse(obj)
 
