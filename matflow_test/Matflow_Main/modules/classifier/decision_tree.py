@@ -46,7 +46,6 @@ def hyperparameter_optimization(X_train, y_train,file):
 def decision_tree(X_train, y_train,file):
     # best_param = hyperparameter_optimization(X_train, y_train,file)
     max_depth = None
-    print(file.keys())
     criterion = file.get( "criterion")
     min_samples_split = file.get("min_samples_split")
     min_samples_leaf = file.get("min_samples_leaf")

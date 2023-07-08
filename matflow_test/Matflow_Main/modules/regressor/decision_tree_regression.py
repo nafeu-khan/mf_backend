@@ -15,7 +15,7 @@ def hyperparameter_optimization(X_train, y_train,file):
         "min_samples_split": [2, 5, 10],
         "min_samples_leaf": [1, 2, 4],
         "max_features": ["sqrt", "log2", None],
-        "criterion": ["mse", "friedman_mse", "mae"],
+        "criterion": ["absolute_error", 'friedman_mse', 'poisson', 'squared_error'],
         "random_state": [random_state],
     }
     model = DecisionTreeRegressor()
@@ -37,8 +37,6 @@ def hyperparameter_optimization(X_train, y_train,file):
     return JsonResponse(obj)
 
 def decision_tree_regressor(X_train, y_train,file):
-    print(file.keys())
-    print(file.get("criterion"))
     criterion = file.get("criterion")
     min_samples_split =int(file.get("min_samples_split"))
     min_samples_leaf = int(file.get( "min_samples_leaf"))
