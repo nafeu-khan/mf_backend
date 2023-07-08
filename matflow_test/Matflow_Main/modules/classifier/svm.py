@@ -7,7 +7,6 @@ from sklearn.svm import SVC
 
 
 def hyperparameter_optimization(X_train, y_train,file):
-    print(file)
     print(file.keys())
     n_iter = int(file.get("Number of iterations for hyperparameter search"))
     cv = int(file.get("Number of cross-validation folds"))
@@ -43,6 +42,7 @@ def hyperparameter_optimization(X_train, y_train,file):
         "result": results_df,
         "param": best_param
     }
+    print(obj)
     return JsonResponse(obj)
 
 

@@ -8,8 +8,8 @@ from sklearn.tree import DecisionTreeClassifier
 
 def hyperparameter_optimization(X_train, y_train,file):
     n_iter = int(file.get("Number of iterations for hyperparameter search"))
-    cv = int(file.get("Number of cross-validation folds", min_value=2, value=2, step=1))
-    random_state = int(file.get("Random state for hyperparameter search", min_value=0, value=0, step=1))
+    cv = int(file.get("Number of cross-validation folds"))
+    random_state = int(file.get("Random state for hyperparameter search"))
     param_dist = {
         "criterion": ["gini", "entropy"],
         "max_depth": [None, 1, 2, 3, 4, 5, 10, 20, 50, 100],
@@ -45,22 +45,21 @@ def hyperparameter_optimization(X_train, y_train,file):
 
 def decision_tree(X_train, y_train,file):
     # best_param = hyperparameter_optimization(X_train, y_train,file)
-
     max_depth = None
-    criterion = file.get( "Criterion")
-    min_samples_split = file.get("Min. Samples Split")
-    min_samples_leaf = file.get("Min. Samples Leaf")
+    print(file.keys())
+    criterion = file.get( "criterion")
+    min_samples_split = file.get("min_samples_split")
+    min_samples_leaf = file.get("min_samples_leaf")
 
-    auto_max_depth = True
-    if auto_max_depth:
-        max_depth = None
-    else:
-        max_depth =file.get( "Max Depth")
+    # auto_max_depth = True
+    # if auto_max_depth:
+    #     max_depth = None
+    # else:
+    max_depth =file.get( "max_depth")
 
-    random_state = file.get("Random State")
+    random_state = file.get("random_state")
 
-    max_depth = None if auto_max_depth else max_depth
-
+    max_depth = None if max_depth==None else max_depth
     model = DecisionTreeClassifier(criterion=criterion, max_depth=max_depth, min_samples_split=min_samples_split,
          min_samples_leaf=min_samples_leaf, random_state=random_state)
 
