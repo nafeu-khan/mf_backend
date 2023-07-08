@@ -36,40 +36,26 @@ def hyperparameter_optimization(X_train, y_train,file):
     }
     return JsonResponse(obj)
 
-
 def decision_tree_regressor(X_train, y_train,file):
-
-
-    max_depth = None
-    col1, col2, col3 = st.columns(3)
-    criterion = file.get("Criterion")
-
-    min_samples_split =file.get("Min. Samples Split")
-
-    min_samples_leaf = file.get( "Min. Samples Leaf")
-
-    auto_max_depth = file.get("auto_max_depth")
-    if auto_max_depth:
-        max_depth = col1.text_input(
-            "Max Depth",
-            None,
-            key="dtr_max_depth_none",
-            disabled=True
-        )
-    else:
-        max_depth = file.get("Max Depth")
-
-    random_state = file.get("Random State")
-
-    max_depth = None if auto_max_depth else max_depth
-    from sklearn.tree import DecisionTreeRegressor
-
-    try:
-        model = DecisionTreeRegressor(criterion=criterion, max_depth=max_depth, min_samples_split=min_samples_split,
+    print(file.keys())
+    print(file.get("criterion"))
+    criterion = file.get("criterion")
+    min_samples_split =int(file.get("min_samples_split"))
+    min_samples_leaf = int(file.get( "min_samples_leaf"))
+    # auto_max_depth = file.get("none")
+    # if auto_max_depth:
+    #     max_depth = col1.text_input(
+    #         "Max Depth",
+    #         None,
+    #         key="dtr_max_depth_none",
+    #         disabled=True
+    #     )
+    # else:
+    max_depth = file.get("max_depth")
+    random_state = file.get("random_state")
+    max_depth = None if max_depth==None else max_depth
+    model = DecisionTreeRegressor(criterion=criterion, max_depth=max_depth, min_samples_split=min_samples_split,
                                       min_samples_leaf=min_samples_leaf, random_state=random_state)
-    except ValueError as e:
-        print(f"Error creating DecisionTreeRegressor: {str(e)}")
-    except:
-        print("Unexpected error creating DecisionTreeRegressor")
+
 
     return model

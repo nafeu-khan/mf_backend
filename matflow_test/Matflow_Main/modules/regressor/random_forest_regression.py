@@ -10,7 +10,6 @@ def hyperparameter_optimization(X_train, y_train,file):
     n_iter = int(file.get("Number of iterations for hyperparameter search"))
     cv = int(file.get("Number of cross-validation folds"))
     random_state = int(file.get("Random state for hyperparameter search"))
-
     param_dist = {
         "n_estimators": [10, 50, 100],
         "criterion": ["friedman_mse", "squared_error", "absolute_error", "poisson"],
@@ -35,18 +34,18 @@ def hyperparameter_optimization(X_train, y_train,file):
         "param": best_params  # parameter
     }
     return JsonResponse(obj)
-
-
 def random_forest_regressor(X_train, y_train,file):
+    print(file.keys())
+    n_estimators = int(file.get("n_estimators"))
+    max_features = file.get("max_features")
+    min_samples_split = int(file.get("min_samples_split"))
+    # print(file.get("max_depth"))
+    max_depth = int(file.get("max_depth"))
+    # random_state = int(file.get("Random state"))
+    min_samples_leaf = int(file.get("min_samples_leaf"))
+    n_jobs= int(file.get("n_jobs"))
 
-    n_estimators = int(file.get("Number of trees"))
-    max_features = file.get("Max features")
-    min_samples_split = int(file.get("Min. samples split"))
-    max_depth = int(file.get("Max depth"))
-    random_state = int(file.get("Random state"))
-    min_samples_leaf = int(file.get("Min. samples leaf"))
     model = RandomForestRegressor(n_estimators=n_estimators, max_depth=max_depth, max_features=max_features,
-                                      min_samples_split=min_samples_split, min_samples_leaf=min_samples_leaf,
-                                      random_state=random_state)
+                                      min_samples_split=min_samples_split, min_samples_leaf=min_samples_leaf,n_jobs=n_jobs)
 
     return model

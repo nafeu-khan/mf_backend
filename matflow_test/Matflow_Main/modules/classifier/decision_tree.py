@@ -10,7 +10,6 @@ def hyperparameter_optimization(X_train, y_train,file):
     n_iter = int(file.get("Number of iterations for hyperparameter search"))
     cv = int(file.get("Number of cross-validation folds", min_value=2, value=2, step=1))
     random_state = int(file.get("Random state for hyperparameter search", min_value=0, value=0, step=1))
-
     param_dist = {
         "criterion": ["gini", "entropy"],
         "max_depth": [None, 1, 2, 3, 4, 5, 10, 20, 50, 100],
@@ -35,6 +34,7 @@ def hyperparameter_optimization(X_train, y_train,file):
 
     results_df = pd.DataFrame(results_list)
     results_df = results_df.sort_values(by=['accuracy'], ascending=False)
+    results_df=results_df.to_dict(orient="records")
     best_param = clf.best_params_
     obj = {
         "result": results_df,

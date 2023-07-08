@@ -304,9 +304,12 @@ def Build_model(request):
 @api_view(['GET','POST'])
 def Hyper_opti(request):
     data=json.loads(request.body)
+    print(data.keys())
     train_data=pd.DataFrame(data.get("train"))
     test_data=pd.DataFrame(data.get("test"))
     target_var=data.get("target_var")
+    print(target_var)
+    # print(f"{train_data.head} {test_data.head} {target_var}")
     X_train, y_train = split_xy(train_data, target_var)
     X_test, y_test = split_xy(test_data, target_var)
     type=data.get("type")
@@ -337,6 +340,7 @@ def Hyper_opti(request):
         elif regressor == "Random Forest Regression":
             response = random_forest_regression.hyperparameter_optimization(X_train, y_train,data)
         elif regressor == "Support Vector Regressor":
+            print("in svr")
             response = svr.hyperparameter_optimization(X_train, y_train,data)
     return response
 @api_view(['GET','POST'])

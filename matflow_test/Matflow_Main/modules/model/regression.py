@@ -1,11 +1,6 @@
 import json
-
 import pandas as pd
-import streamlit as st
-import pickle
-
 from django.http import JsonResponse
-
 from ..regressor import svr
 from ...modules.utils import split_xy
 from ...modules.regressor import linear_regression, ridge_regression, lasso_regression, decision_tree_regression, random_forest_regression
@@ -34,7 +29,6 @@ def regression(file):
     }
     metrics= ["R-Squared", "Mean Absolute Error", "Mean Squared Error", "Root Mean Squared Error"]
     regressor = file.get("regressor")
-    print(regressor)
     if regressor == "Linear Regression":
         model = linear_regression.linear_regression(X_train, y_train,file)
     elif regressor == "Ridge Regression":
@@ -58,7 +52,6 @@ def regression(file):
         if (i == 0):
             list1 = get_result(model, X, y, metrics)
             i += 1
-    print(2)
     merged_list = {
         f"Train {key}": value
         for key, value in list1.items()

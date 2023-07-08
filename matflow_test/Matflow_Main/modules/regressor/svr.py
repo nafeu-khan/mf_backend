@@ -8,13 +8,10 @@ from sklearn.model_selection import RandomizedSearchCV
 
 
 def hyperparameter_optimization(X_train, y_train,file):
-    cv = int(file.get("Number of cross-validation folds"))
-    best_param = {
-            "kernel": "rbf",
-            "C": 1.0,
-            "epsilon": 0.1
-    }
+    print(file.keys())
+    print("svr")
 
+    cv = int(file.get("Number of cross-validation folds"))
     param_dist = {
         "kernel": ["linear", "rbf", "poly", "sigmoid"],
         "C": [0.1, 1.0, 10.0],
@@ -33,6 +30,7 @@ def hyperparameter_optimization(X_train, y_train,file):
         "result": table,  # table
         "param": best_params  # parameter
     }
+    print(obj)
     return JsonResponse(obj)
 
 def support_vector_regressor(X_train, y_train,file):
