@@ -8,8 +8,6 @@ from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 
 
 def hyperparameter_optimization(X_train, y_train,file):
-    print(file.keys())
-
     n_iter = int(file.get("Number of iterations for hyperparameter search"))
     cv = int(file.get("Number of cross-validation folds"))
     random_state = int(file.get("Random state for hyperparameter search"))
@@ -50,5 +48,4 @@ def knn(X_train, y_train,file):
     metric =file.get( "metric")
 
     model = KNeighborsClassifier(n_neighbors=n_neighbors, weights=weights, metric=metric)
-
     return model

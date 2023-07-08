@@ -1,10 +1,8 @@
 import pandas as pd
-import streamlit as st
 from django.http import JsonResponse
 
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import RandomizedSearchCV
-
 
 def hyperparameter_optimization(X_train, y_train,file):
     n_iter = int(file.get("Number of iterations for hyperparameter search"))
@@ -50,17 +48,12 @@ def hyperparameter_optimization(X_train, y_train,file):
 
 
 def log_reg(X_train, y_train,file):
-   #("Model Settings")
-    print(file)
-    print(file.keys())
     penalty =file.get("penalty")
     solver = file.get("solver")
     C = float(file.get("C"))
     max_iter = int(file.get("max_iter"))
     tol =float(file.get("tol"))
-
     random_state =int(file.get("random_state"))
-
     model = LogisticRegression(penalty=penalty, C=C, tol=tol, solver=solver, max_iter=max_iter,
                                    random_state=random_state)
 

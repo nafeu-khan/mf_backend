@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import seaborn as sns
+import scipy.stats as stats
 import matplotlib.pyplot as plt
 from django.http import JsonResponse
 from statsmodels.graphics.gofplots import qqplot
@@ -12,15 +13,15 @@ from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
 
 def prediction_regression(file):
     target_var = file.get( "Target Variable")
-    data = file.get("file")
+    data = pd.DataFrame(file.get("file"))
     X, y = utils.split_xy(data, target_var)
     y_pred = file.get("y_pred")
     result_opt = file.get("Result")
-    show_result(y, y_pred, result_opt)
+    return show_result(y, y_pred, result_opt)
 
 def show_result(y, y_pred, result_opt):
     if result_opt == "Target Value":
-        graph_header = st.text_input("Enter graph header", "Actual vs. Predicted Values")
+        graph_header =  "Actual vs. Predicted Values"
         result = pd.DataFrame({
             "Actual": y,
             "Predicted": y_pred
@@ -64,7 +65,8 @@ def show_result(y, y_pred, result_opt):
             yaxis=dict(title='Value')
         )
         graph_json = fig.to_json()
-        return JsonResponse(graph_json)
+        response_data = {'graph': graph_json}
+        return JsonResponse(response_data)
     elif result_opt == "Residuals vs. Predicted":
         residuals = y - y_pred
         fig = go.Figure()
@@ -76,7 +78,8 @@ def show_result(y, y_pred, result_opt):
             title='Residuals vs. Predicted Values'
         )
         graph_json = fig.to_json()
-        return JsonResponse(graph_json)
+        response_data = {'graph': graph_json}
+        return JsonResponse(response_data)
 
     elif result_opt == "Histogram of Residuals":
         residuals = y - y_pred
@@ -87,18 +90,24 @@ def show_result(y, y_pred, result_opt):
             yaxis=dict(title="Frequency")
         )
         graph_json = fig.to_json()
-        return JsonResponse( graph_json)
+        response_data = {'graph': graph_json}
+        return JsonResponse(response_data)
 
     elif result_opt == "QQ Plot":
         residuals = y - y_pred
+        # Generate the QQ plot data
+        line = stats.probplot(residuals, dist="norm")
         fig = go.Figure()
-        _, ax = qqplot(residuals, line='s')
-        ax.set_xlabel("Theoretical Quantiles")
-        ax.set_ylabel("Sample Quantiles")
-        ax.set_title("Normal Q-Q Plot of Residuals")
-        fig = pio.to_plotly(fig)
-        graph_json = fig.to_json()
-        return JsonResponse({'graph': graph_json})
+        fig.add_trace(go.Scatter(x=line[0], y=line[1], mode='lines', name='Reference Line'))
+        fig.add_trace(go.Scatter(x=residuals, y=line[0], mode='markers', name='Residuals'))
+        fig.update_layout(
+            xaxis_title="Theoretical Quantiles",
+            yaxis_title="Sample Quantiles",
+            title="Normal Q-Q Plot of Residuals"
+        )
+        fig_json = pio.to_json(fig)
+        return JsonResponse({'graph': fig_json})
+
     elif result_opt == "Box Plot of Residuals":
         residuals = y - y_pred
         fig = go.Figure()
@@ -108,7 +117,8 @@ def show_result(y, y_pred, result_opt):
             title='Box Plot of Residuals'
         )
         graph_json = fig.to_json()
-        return JsonResponse({graph_json})
+        response_data = {'graph': graph_json}
+        return JsonResponse(response_data)
     elif result_opt == "Regression Line Plot":
         fig = go.Figure()
         fig.add_trace(go.Scatter(x=y, y=y_pred, mode='markers', name='Prediction'))
@@ -120,5 +130,6 @@ def show_result(y, y_pred, result_opt):
         regression_line = go.Scatter(x=y, y=y_pred, mode='lines', name='Regression Line')
         fig.add_trace(regression_line)
         graph_json = fig.to_json()
-        return JsonResponse( graph_json)
+        response_data = {'graph': graph_json}
+        return JsonResponse(response_data)
 

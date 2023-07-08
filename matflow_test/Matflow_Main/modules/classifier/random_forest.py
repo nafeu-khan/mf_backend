@@ -48,8 +48,6 @@ def hyperparameter_optimization(X_train, y_train,file):
 
 
 def random_forest(X_train, y_train,file):
-    print(file)
-    print(file.keys())
     # max_depth =file.get['max_depth']
     n_estimators = int(file.get("n_estimators"))
 

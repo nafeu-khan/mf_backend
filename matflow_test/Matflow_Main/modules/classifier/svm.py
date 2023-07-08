@@ -1,13 +1,10 @@
 import pandas as pd
-import streamlit as st
 from django.http import JsonResponse
 from sklearn.model_selection import RandomizedSearchCV
-
 from sklearn.svm import SVC
 
 
 def hyperparameter_optimization(X_train, y_train,file):
-    print(file.keys())
     n_iter = int(file.get("Number of iterations for hyperparameter search"))
     cv = int(file.get("Number of cross-validation folds"))
     random_state = int(file.get("Random state for hyperparameter search"))
@@ -42,13 +39,11 @@ def hyperparameter_optimization(X_train, y_train,file):
         "result": results_df,
         "param": best_param
     }
-    print(obj)
     return JsonResponse(obj)
 
 
 def svm(X_train, y_train,file):
   #("Model Settings")
-    print(file.keys())
     C =int(file.get("C"))
     kernel =file.get("kernel")
     tol = float(file.get("tol"))

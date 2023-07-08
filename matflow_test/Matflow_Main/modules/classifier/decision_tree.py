@@ -40,7 +40,6 @@ def hyperparameter_optimization(X_train, y_train,file):
         "result": results_df,
         "param": best_param
     }
-    print(obj)
     return JsonResponse(obj)
 
 

@@ -46,8 +46,7 @@ def hyperparameter_optimization(X_train, y_train,file):
 	return JsonResponse(obj)
 
 def perceptron(X_train, y_train,file):
-	print(file)
-	print(file.keys())
+
 	#("Model Settings")
 	hidden_size = int(file.get("hidden_layer_sizes"))
 
