@@ -6,14 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="c617f45b-4bc5-4052-81c6-2d12815f7126" name="Changes" comment="&quot;mdl rprt&quot;">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/decision_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/decision_tree.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/knn.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/knn.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/log_reg.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/log_reg.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/perceptron.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/perceptron.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/random_forest.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/random_forest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/svm.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/classifier/svm.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Matflow/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/Matflow/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/dataframe/correlation.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/dataframe/correlation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/prediction_classification.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/prediction_classification.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/prediction_regression.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/prediction_regression.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/regressor/svr.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/regressor/svr.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/regressor/random_forest_regression.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/regressor/random_forest_regression.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matflow_test/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

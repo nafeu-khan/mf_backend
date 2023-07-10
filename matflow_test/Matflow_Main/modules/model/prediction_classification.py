@@ -25,6 +25,7 @@ import json
 
 def prediction_classification(file):
     # data_opt = file.get("Select Data")
+    print(file.keys())
     target_var = file.get("Target Variable")
     model_opt=file.get("regressor")
     print(model_opt)

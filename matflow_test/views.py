@@ -10,7 +10,7 @@ from rest_framework import status
 from django.contrib.auth.models import User
 
 from .Matflow_Main.modules.classifier import knn, svm, log_reg, decision_tree, random_forest, perceptron
-from .Matflow_Main.modules.dataframe.correlation import display_pair
+from .Matflow_Main.modules.dataframe.correlation import  display_heatmap
 from .Matflow_Main.modules.feature.append import append
 from .Matflow_Main.modules.feature.change_dtype import Change_dtype
 from .Matflow_Main.modules.feature.change_fieldname import change_field_name
@@ -117,6 +117,14 @@ def display_correlation_featurePair(request):
     df=display_pair(correlation_data,bg_gradient,feature1,feature2,high,drop,absol)
     data = df.to_json(orient='records')
     return JsonResponse({'data': data})
+@api_view(['GET','POST'])
+def display_correlation_heatmap(request):
+    data = json.loads(request.body)
+    correlation_data =pd.DataFrame(data.get('file'))
+    response= display_heatmap(correlation_data,)
+    return response
+
+
 
 @api_view(['GET','POST'])
 def eda_barplot(request):
