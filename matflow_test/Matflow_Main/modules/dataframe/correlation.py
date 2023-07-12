@@ -81,8 +81,6 @@ def display_heatmap(correlation_data):
     annot = True
     correlation_data=pd.DataFrame(correlation_data)
     correlation_data = correlation_data.drop(correlation_data.columns[-1], axis=1)
-    print(correlation_data.shape)
-    print(correlation_data.head())
     fig = go.Figure(data=go.Heatmap(
         z=correlation_data.round(2),
         x=correlation_data.columns,
