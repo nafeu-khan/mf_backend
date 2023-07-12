@@ -71,9 +71,57 @@ import plotly.graph_objects as go
 import plotly.io as pio
 from django.http import JsonResponse
 
+# def display_heatmap(correlation_data):
+#     decimal = float(0)
+#     annot=True
+#     if annot:
+#         decimal = 3  # Default decimal value
+#         # You can add a user input for the decimal value if desired
+#
+#     fig = go.Figure(data=go.Heatmap(
+#         z=correlation_data.round(2),
+#         x=correlation_data.columns,
+#         y=correlation_data.columns,
+#         colorscale='Viridis',
+#         colorbar=dict(title='Correlation'),
+#         hovertemplate='Value: %{z:.2f}<extra></extra>'  # Format for the hover text
+#     ))
+#
+#     fig.update_layout(
+#         title='Feature Correlation Heatmap',
+#         xaxis=dict(title='Features'),
+#         yaxis=dict(title='Features'),
+#         hovermode='closest'  # Set hovermode to 'closest' to show the closest data point value
+#     )
+#     # Add annotations if desired
+#     if annot:
+#         for i in range(len(correlation_data.columns)):
+#             for j in range(len(correlation_data.columns)):
+#                 x = correlation_data.columns[j],
+#                 y = correlation_data.columns[i],
+#                 if isinstance(x,str) or isinstance(y,str):
+#                     fig.add_annotation(
+#                         x=correlation_data.columns[j],
+#                         y=correlation_data.columns[i],
+#                         text=f'{float(correlation_data.iloc[i, j]):.{int(decimal)}f}',
+#                         showarrow=False,
+#                         font=dict(color='white' if float(correlation_data.iloc[i, j]) > 0.5 else 'black')
+#                     )
+#                 else:
+#                     continue
+#
+#     fig_json = pio.to_json(fig)
+#     return JsonResponse({'graph': fig_json})
+
+
+
+import numpy as np
+
 def display_heatmap(correlation_data):
-    decimal = 0
-    annot=False
+    decimal = float(0)
+    correlation_data = correlation_data.set_index(correlation_data.columns[0])
+    correlation_data.index = correlation_data.index.set_names(None)
+    annot=True
     if annot:
         decimal = 3  # Default decimal value
         # You can add a user input for the decimal value if desired
@@ -83,29 +131,37 @@ def display_heatmap(correlation_data):
         x=correlation_data.columns,
         y=correlation_data.columns,
         colorscale='Viridis',
-        colorbar=dict(title='Correlation')
+        colorbar=dict(title='Correlation'),
+        hovertemplate='Value: %{z:.2f}<extra></extra>'  # Format for the hover text
     ))
 
     fig.update_layout(
         title='Feature Correlation Heatmap',
         xaxis=dict(title='Features'),
-        yaxis=dict(title='Features')
+        yaxis=dict(title='Features'),
+        hovermode='closest'  # Set hovermode to 'closest' to show the closest data point value
     )
-
     # Add annotations if desired
     if annot:
         for i in range(len(correlation_data.columns)):
             for j in range(len(correlation_data.columns)):
-                fig.add_annotation(
-                    x=correlation_data.columns[j],
-                    y=correlation_data.columns[i],
-                    text=f'{float(correlation_data.iloc[i, j]):.{decimal}f}',
-                    showarrow=False,
-                    font=dict(color='white' if float(correlation_data.iloc[i, j]) > 0.5 else 'black')
-                )
+                value = correlation_data.iloc[i, j]
+                if isinstance(value, (int, float, np.number)):
+                    x = correlation_data.columns[j],
+                    y = correlation_data.columns[i],
+                    fig.add_annotation(
+                        x=correlation_data.columns[j],
+                        y=correlation_data.columns[i],
+                        text=f'{float(value):.{int(decimal)}f}',
+                        showarrow=False,
+                        font=dict(color='white' if float(value) > 0.5 else 'black')
+                    )
 
     fig_json = pio.to_json(fig)
-    return JsonResponse({'graph': fig_json})
+    return JsonResponse( fig_json)
+
+
+
 
 #
 # def display_pair(correlation_data, bg_gradient,feature1,feature2,higher_than,drop_perfect,convert_abs):
