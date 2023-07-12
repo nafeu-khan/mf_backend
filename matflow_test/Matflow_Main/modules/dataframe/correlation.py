@@ -9,78 +9,80 @@ import numpy as np
 
 from ...modules import utils
 
-def correlation(data):
-	st.title("Feature Correlation")
+# def correlation(data):
+# 	st.title("Feature Correlation")
+#
+# 	num_var = utils.get_numerical(data)
+# 	col1, col2 = st.columns([8,2])
+#
+# 	col2.markdown("#")
+# 	select_all = col2.checkbox("Select all", True, key="correlation_select_all")
+#
+# 	if select_all:
+# 		correlation_var = col1.multiselect(
+# 				"Columns",
+# 				num_var,
+# 				num_var,
+# 				key="correlation_var"
+# 			)
+# 	else:
+# 		correlation_var = col1.multiselect(
+# 				"Columns",
+# 				num_var,
+# 				key="correlation_var"
+# 			)
+#
+# 	col1, col2, col3 = st.columns([4,4,2.02])
+# 	correlation_method = col1.selectbox(
+# 			"Method",
+# 			["pearson", "kendall", "spearman"],
+# 			key="correlation_method"
+# 		)
+#
+# 	display_type = col2.selectbox(
+# 			"Display Type",
+# 			["Table", "Heatmap", "Feature Pair"],
+# 			key="correlation_display_type"
+# 		)
+#
+# 	if correlation_var:
+# 		if display_type == "Table":
+# 			col3.markdown("#")
+# 			bg_gradient = col3.checkbox("Gradient", key="correlation_bg_gradient")
+# 		elif display_type == "Heatmap":
+# 			col3.markdown("#")
+# 			annot = col3.checkbox("Annotate", key="correlation_annot")
+# 		else:
+# 			col3.markdown("#")
+# 			bg_gradient = col3.checkbox("Gradient", key="correlation_bg_gradient")
+#
+#
+#
+# 		correlation_data = data[correlation_var].corr(correlation_method)
+# 		if display_type == "Table":
+# 			display_table(correlation_data, bg_gradient)
+# 		elif display_type == "Heatmap":
+# 			display_heatmap(correlation_data, annot)
+# 		else:
+# 			display_pair(correlation_data, bg_gradient)
+#
+# def display_table(correlation_data, bg_gradient):
+# 	if bg_gradient:
+# 		st.dataframe(correlation_data.style.background_gradient())
+# 	else:
+# 		st.dataframe(correlation_data)
 
-	num_var = utils.get_numerical(data)
-	col1, col2 = st.columns([8,2])
 
-	col2.markdown("#")
-	select_all = col2.checkbox("Select all", True, key="correlation_select_all")
+import numpy as np
 
-	if select_all:
-		correlation_var = col1.multiselect(
-				"Columns",
-				num_var,
-				num_var,
-				key="correlation_var"
-			)
-	else:
-		correlation_var = col1.multiselect(
-				"Columns",
-				num_var,
-				key="correlation_var"
-			)
-
-	col1, col2, col3 = st.columns([4,4,2.02])
-	correlation_method = col1.selectbox(
-			"Method",
-			["pearson", "kendall", "spearman"],
-			key="correlation_method"
-		)
-
-	display_type = col2.selectbox(
-			"Display Type",
-			["Table", "Heatmap", "Feature Pair"],
-			key="correlation_display_type"
-		)
-
-	if correlation_var:
-		if display_type == "Table":
-			col3.markdown("#")
-			bg_gradient = col3.checkbox("Gradient", key="correlation_bg_gradient")
-		elif display_type == "Heatmap":
-			col3.markdown("#")
-			annot = col3.checkbox("Annotate", key="correlation_annot")
-		else:
-			col3.markdown("#")
-			bg_gradient = col3.checkbox("Gradient", key="correlation_bg_gradient")
-
-
-
-		correlation_data = data[correlation_var].corr(correlation_method)
-		if display_type == "Table":
-			display_table(correlation_data, bg_gradient)
-		elif display_type == "Heatmap":
-			display_heatmap(correlation_data, annot)
-		else:
-			display_pair(correlation_data, bg_gradient)
-
-def display_table(correlation_data, bg_gradient):
-	if bg_gradient:
-		st.dataframe(correlation_data.style.background_gradient())
-	else:
-		st.dataframe(correlation_data)
 
 def display_heatmap(correlation_data):
     decimal = 3
-    correlation_data = correlation_data.set_index(correlation_data.columns[0])
-    correlation_data.index = correlation_data.index.set_names(None)
-    annot=False
-    if annot:
-        decimal = 3  # Default decimal value
-        # You can add a user input for the decimal value if desired
-
+    annot = True
+    correlation_data=pd.DataFrame(correlation_data)
+    correlation_data = correlation_data.drop(correlation_data.columns[-1], axis=1)
+    print(correlation_data.shape)
+    print(correlation_data.head())
     fig = go.Figure(data=go.Heatmap(
         z=correlation_data.round(2),
         x=correlation_data.columns,
@@ -96,27 +98,24 @@ def display_heatmap(correlation_data):
         yaxis=dict(title='Features'),
         hovermode='closest'  # Set hovermode to 'closest' to show the closest data point value
     )
+
     # Add annotations if desired
     if annot:
         for i in range(len(correlation_data.columns)):
             for j in range(len(correlation_data.columns)):
-                value = correlation_data.iloc[i, j]
+                value = correlation_data.iloc[j, i]  # Access value at (j, i) instead of (i, j)
                 if isinstance(value, (int, float, np.number)):
-                    x = correlation_data.columns[j],
-                    y = correlation_data.columns[i],
                     fig.add_annotation(
-                        x=correlation_data.columns[j],
-                        y=correlation_data.columns[i],
-                        text=f'{float(value):.{int(decimal)}f}',
+                        x=correlation_data.columns[i],
+                        y=correlation_data.columns[j],
+                        text=f'{float(value):.{decimal}f}',
                         showarrow=False,
                         font=dict(color='white' if float(value) > 0.5 else 'black')
                     )
 
     fig_json = pio.to_json(fig)
-    return JsonResponse( fig_json,safe=False)
-
-
-
+    fig.show()
+    return JsonResponse(fig_json, safe=False)
 
 
 def display_pair(correlation_data, bg_gradient,feature1,feature2,higher_than,drop_perfect,convert_abs):
