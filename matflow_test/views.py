@@ -10,7 +10,7 @@ from rest_framework import status
 from django.contrib.auth.models import User
 
 from .Matflow_Main.modules.classifier import knn, svm, log_reg, decision_tree, random_forest, perceptron
-from .Matflow_Main.modules.dataframe.correlation import  display_heatmap
+from .Matflow_Main.modules.dataframe.correlation import display_heatmap, display_pair
 from .Matflow_Main.modules.feature.append import append
 from .Matflow_Main.modules.feature.change_dtype import Change_dtype
 from .Matflow_Main.modules.feature.change_fieldname import change_field_name
@@ -121,7 +121,7 @@ def display_correlation_featurePair(request):
 def display_correlation_heatmap(request):
     data = json.loads(request.body)
     correlation_data =pd.DataFrame(data.get('file'))
-    response= display_heatmap(correlation_data,)
+    response= display_heatmap(correlation_data)
     return response
 
 
@@ -374,6 +374,15 @@ def model_prediction(request):
         response=prediction_regression(data)
     else:
         response = prediction_classification(data)
+    return response
+import pickle
+from django.http import HttpResponse
+
+@api_view(['GET','POST'])
+def download_model(model):
+    model_binary = pickle.dumps(model)
+    response = HttpResponse(model_binary, content_type='application/octet-stream')
+    response['Content-Disposition'] = f'attachment; filename="model_name".pkl"'
     return response
 @api_view(['GET','POST'])
 def Time_series(request):
