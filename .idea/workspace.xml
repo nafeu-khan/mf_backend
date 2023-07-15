@@ -4,16 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c617f45b-4bc5-4052-81c6-2d12815f7126" name="Changes" comment="&quot;mdl rprt&quot;">
-      <change afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/subpage/model_deployment.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Matflow/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/Matflow/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/dataframe/correlation.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/dataframe/correlation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/classification.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/classification.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/prediction_classification.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/prediction_classification.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/regression.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/Matflow_Main/modules/model/regression.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/matflow_test/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/matflow_test/views.py" afterDir="false" />
-    </list>
+    <list default="true" id="c617f45b-4bc5-4052-81c6-2d12815f7126" name="Changes" comment="&quot;mdl rprt&quot;" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
