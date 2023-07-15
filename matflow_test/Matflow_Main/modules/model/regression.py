@@ -65,7 +65,8 @@ def regression(file):
     obj={
         "metrics": selected_metrics,   #4
         "metrics_table":merged_list,     #8
-        "y_pred" : y_prediction
+        "y_pred" : y_prediction,
+        "model_deploy": model
     }
     return JsonResponse(obj)
 

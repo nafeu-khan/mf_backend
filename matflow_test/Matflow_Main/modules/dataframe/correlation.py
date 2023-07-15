@@ -94,7 +94,8 @@ def display_heatmap(correlation_data):
         title='Feature Correlation Heatmap',
         xaxis=dict(title='Features'),
         yaxis=dict(title='Features'),
-        hovermode='closest'  # Set hovermode to 'closest' to show the closest data point value
+        hovermode='closest', # Set hovermode to 'closest' to show the closest data point value
+        width=1000, height=800,
     )
 
     # Add annotations if desired
@@ -112,7 +113,6 @@ def display_heatmap(correlation_data):
                     )
 
     fig_json = pio.to_json(fig)
-    fig.show()
     return JsonResponse(fig_json, safe=False)
 
 

@@ -25,10 +25,8 @@ import json
 
 def prediction_classification(file):
     # data_opt = file.get("Select Data")
-    print(file.keys())
     target_var = file.get("Target Variable")
     model_opt=file.get("regressor")
-    print(model_opt)
     data = pd.DataFrame(file.get("file"))
     y_pred = file.get("y_pred")
     X, y = utils.split_xy(data, target_var)
@@ -143,7 +141,6 @@ def show_result(y, y_pred, result_opt, multi_average,X,model_name):
             min_max_scaler = MinMaxScaler()
             X_train_norm = min_max_scaler.fit_transform(X_train)
             X_test_norm = min_max_scaler.fit_transform(X_test)
-            print(model_name)
             if model_name == "Random Forest Classification":
                 RF = OneVsRestClassifier(RandomForestClassifier(max_features=0.2))
                 RF.fit(X_train_norm, y_train)

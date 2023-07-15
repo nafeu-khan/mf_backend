@@ -80,8 +80,9 @@ def login(request):
     login(request, user)
 
     return Response({'message': 'User logged in successfully.'}, status=status.HTTP_200_OK)
-def test_page(request):
-    return render(request, 'index.html')
+# @api_view(['GET', 'POST'])
+# def test_page(request):
+#     return HttpResponse("hello")
 @api_view(['GET', 'POST'])
 def display_group(request):
     data = json.loads(request.body)
@@ -123,9 +124,6 @@ def display_correlation_heatmap(request):
     correlation_data =pd.DataFrame(data.get('file'))
     response= display_heatmap(correlation_data)
     return response
-
-
-
 @api_view(['GET','POST'])
 def eda_barplot(request):
     data = json.loads(request.body)
@@ -377,13 +375,41 @@ def model_prediction(request):
     return response
 import pickle
 from django.http import HttpResponse
-
 @api_view(['GET','POST'])
 def download_model(model):
     model_binary = pickle.dumps(model)
     response = HttpResponse(model_binary, content_type='application/octet-stream')
     response['Content-Disposition'] = f'attachment; filename="model_name".pkl"'
     return response
+@api_view(['GET','POST'])
+def deploy_data(request):
+    file = json.loads(request.body)
+    dataset = pd.DataFrame(file.get("model_name"))
+    train_data = pd.DataFrame(file.get('train'))
+    target_var = dataset['target_var']
+
+    col_names_all = []
+    for i in train_data.columns:
+        if i == target_var:
+            continue
+        col_names_all.append(i)
+    #
+    # if rad == 'All Columns':
+    #     col_names = col_names_all
+    # else:
+    #     col_names = st.multiselect('Custom Columns', col_names_all, help='Other values will be 0 as default value')
+    col_names = file.get("col_names")
+    correlations = train_data[col_names + [target_var]].corr()[target_var]
+    result=[]
+    for i in col_names:
+        threshold = train_data[i].abs().max()
+        result += threshold
+        arrow, threshold = ('**:green[↑]**', threshold) if correlations[i] >= 0 else ('**:red[↓]**', -threshold)
+        space = '&nbsp;' * 150
+        # st.number_input(i + space + str(threshold) + ' ' + arrow, value=threshold, key=i)
+    response = result
+    return response
+
 @api_view(['GET','POST'])
 def Time_series(request):
     data=json.loads(request.body)
