@@ -4,6 +4,7 @@ from ...modules.utils import split_xy
 from ...modules.classifier import knn, svm, log_reg, decision_tree, random_forest, perceptron
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 import json
+import pickle
 import numpy as np
 def classification(file):
     print(file.keys())
@@ -64,6 +65,7 @@ def classification(file):
         for key, value in list2.items()
     })
     y_prediction=json.dumps(y_prediction.tolist())
+    model= pickle.dumps(model)
     obj={
         "metrics": selected_metrics,   #4
         "metrics_table":merged_list,     #8

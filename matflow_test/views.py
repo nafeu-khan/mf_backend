@@ -376,7 +376,8 @@ def model_prediction(request):
 import pickle
 from django.http import HttpResponse
 @api_view(['GET','POST'])
-def download_model(model):
+def download_model(file):
+    model = pickle.loads(file.get("model"))
     model_binary = pickle.dumps(model)
     response = HttpResponse(model_binary, content_type='application/octet-stream')
     response['Content-Disposition'] = f'attachment; filename="model_name".pkl"'
@@ -384,32 +385,36 @@ def download_model(model):
 @api_view(['GET','POST'])
 def deploy_data(request):
     file = json.loads(request.body)
-    dataset = pd.DataFrame(file.get("model_name"))
     train_data = pd.DataFrame(file.get('train'))
-    target_var = dataset['target_var']
-
+    target_var = file.get('target_var')
     col_names_all = []
     for i in train_data.columns:
         if i == target_var:
             continue
         col_names_all.append(i)
-    #
-    # if rad == 'All Columns':
-    #     col_names = col_names_all
-    # else:
-    #     col_names = st.multiselect('Custom Columns', col_names_all, help='Other values will be 0 as default value')
     col_names = file.get("col_names")
     correlations = train_data[col_names + [target_var]].corr()[target_var]
     result=[]
     for i in col_names:
         threshold = train_data[i].abs().max()
-        result += threshold
-        arrow, threshold = ('**:green[↑]**', threshold) if correlations[i] >= 0 else ('**:red[↓]**', -threshold)
-        space = '&nbsp;' * 150
-        # st.number_input(i + space + str(threshold) + ' ' + arrow, value=threshold, key=i)
+        result += threshold if correlations[i] >= 0 else (-threshold)
     response = result
     return response
-
+@api_view(['GET','POST'])
+def deploy_result(request):
+    file = json.loads(request.body)
+    model=pickle.loads(file.get("model"))
+    train_data = pd.DataFrame(file.get('train'))
+    col_names_all = train_data.columns
+    result=file.get("result")
+    col_names = file.get("col_names")
+    X = [result[i] if i in col_names else 0 for i in col_names_all]
+    # prediction = model.get_prediction(model_name, [X])
+    prediction = model.predict(X)
+    obj = {
+        'pred': prediction[0],
+    }
+    return JsonResponse(obj)
 @api_view(['GET','POST'])
 def Time_series(request):
     data=json.loads(request.body)

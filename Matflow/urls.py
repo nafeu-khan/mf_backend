@@ -22,7 +22,7 @@ from matflow_test.views import login, signup, display_group, display_correlation
     eda_scatterplot, eda_regplot, eda_lineplot, eda_customplot, feature_creation, Alter_field, changeDtype, \
     merge_dataset, Encoding, Scaling, Drop_row, Drop_column, Append, Cluster, Split, Time_series, Time_series_analysis, \
     Hyper_opti, Build_model, model_evaluation, Reverse_ml, model_prediction, display_correlation_heatmap, \
-    download_model, deploy_data
+    download_model, deploy_data, deploy_result
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -61,6 +61,7 @@ urlpatterns = [
     path('api/model_prediction/', model_prediction, name='dropping'),
     path('api/download_model/', download_model, name='download_model'),
     path('api/reverseml/', Reverse_ml, name='dropping'),
-    path('api/deploy_data',deploy_data,name="deploy_data")
+    path('api/deploy_data',deploy_data,name="deploy_data"),
+    path('api/deploy_result', deploy_result, name="deploy_result")
 
 ]

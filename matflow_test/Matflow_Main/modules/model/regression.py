@@ -1,4 +1,6 @@
 import json
+import pickle
+
 import pandas as pd
 from django.http import JsonResponse
 from ..regressor import svr
@@ -62,6 +64,7 @@ def regression(file):
         for key, value in list2.items()
     })
     y_prediction=json.dumps(y_prediction.tolist())
+    model= pickle.dumps(model)
     obj={
         "metrics": selected_metrics,   #4
         "metrics_table":merged_list,     #8
