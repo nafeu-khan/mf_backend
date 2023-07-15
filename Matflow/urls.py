@@ -28,7 +28,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/signup/', signup, name='signup'),
     path('api/login/', login, name='login'),
-    path('api',test_page),
     path('api/display_group/', display_group, name='display-api'),
     path('api/display_correlation/', display_correlation, name='display-api'),
     path('api/display_correlation_featurePair/', display_correlation_featurePair, name='display-api'),
