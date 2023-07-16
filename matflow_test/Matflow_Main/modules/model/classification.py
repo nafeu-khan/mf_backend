@@ -1,3 +1,5 @@
+import base64
+
 import pandas as pd
 from django.http import JsonResponse
 from ...modules.utils import split_xy
@@ -66,6 +68,7 @@ def classification(file):
     })
     y_prediction=json.dumps(y_prediction.tolist())
     model= pickle.dumps(model)
+    model = base64.b64encode(model).decode('utf-8')
     obj={
         "metrics": selected_metrics,   #4
         "metrics_table":merged_list,     #8
