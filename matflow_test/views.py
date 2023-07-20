@@ -1,3 +1,4 @@
+import base64
 import json
 import pandas as pd
 import numpy as np
@@ -399,8 +400,6 @@ def deploy_data(request):
     target_var = file.get('target_var')
     col_names_all = [col for col in train_data.columns if col != target_var]
     col_names = train_data.columns.tolist()
-    # print(train_data)
-    print(col_names)
     correlations = train_data[col_names_all + [target_var]].corr()[target_var]
 
     result = []
@@ -418,17 +417,29 @@ def deploy_data(request):
 @api_view(['GET','POST'])
 def deploy_result(request):
     file = json.loads(request.body)
-    model=pickle.loads(file.get("model"))
+    model_bytes = base64.b64decode(file.get("model_deploy"))
+    model = pickle.loads(model_bytes)
+
     train_data = pd.DataFrame(file.get('train'))
+    # print(train_data)
     col_names_all = train_data.columns
     result=file.get("result")
-    col_names = file.get("col_names")
-    X = [result[i] if i in col_names else 0 for i in col_names_all]
+    col_names=[]
+    for i in col_names_all:
+        if i != 'crim' and i!='id':
+            col_names.append(i)
+    #
+
+    X = [result[i] if i in col_names and i!= 'crim' else 0 for i in col_names]
     # prediction = model.get_prediction(model_name, [X])
-    prediction = model.predict(X)
+    # print(X)
+    # X = np.array(X).reshape(1, -1)
+    # print(X)
+    prediction = model.predict([X])
     obj = {
         'pred': prediction[0],
     }
+    print(f"obj = {obj}")
     return JsonResponse(obj)
 @api_view(['GET','POST'])
 def Time_series(request):
