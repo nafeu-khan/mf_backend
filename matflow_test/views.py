@@ -399,13 +399,16 @@ def deploy_data(request):
     target_var = file.get('target_var')
     col_names_all = [col for col in train_data.columns if col != target_var]
     col_names = train_data.columns.tolist()
+    # print(train_data)
+    print(col_names)
     correlations = train_data[col_names_all + [target_var]].corr()[target_var]
 
     result = []
     for col in col_names_all:
         threshold = train_data[col].abs().max()
         data_type = 'int' if np.issubdtype(train_data[col].dtype, np.integer) else 'float'
-        result.append({"value": float(threshold) if data_type == 'float' else int(threshold), "data_type": data_type})
+        threshold = float(threshold) if correlations[col] >= 0 else float(-threshold)
+        result.append({"col": col, "value": float(threshold) if data_type == 'float' else int(threshold), "data_type": data_type})
 
     response = {"result": result}
     return JsonResponse(response)
