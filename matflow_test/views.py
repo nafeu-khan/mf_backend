@@ -392,7 +392,7 @@ def deploy_data(request):
         if i == target_var:
             continue
         col_names_all.append(i)
-    col_names = file.get("col_names")
+    col_names = train_data.columns.to_list()
     correlations = train_data[col_names + [target_var]].corr()[target_var]
     result=[]
     for i in col_names:
