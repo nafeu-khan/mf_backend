@@ -30,6 +30,7 @@ def regression(file):
         "Decision Tree Regression": "DT",
         "Random Forest Regression": "RF"
     }
+    print(f"reg e ={X_train.columns}")
     metrics= ["R-Squared", "Mean Absolute Error", "Mean Squared Error", "Root Mean Squared Error"]
     regressor = file.get("regressor")
     if regressor == "Linear Regression":

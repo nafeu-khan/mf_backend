@@ -419,27 +419,24 @@ def deploy_result(request):
     file = json.loads(request.body)
     model_bytes = base64.b64decode(file.get("model_deploy"))
     model = pickle.loads(model_bytes)
-
+    result = file.get("result")
     train_data = pd.DataFrame(file.get('train'))
-    # print(train_data)
-    col_names_all = train_data.columns
-    result=file.get("result")
+    col_names_all = []
     col_names=[]
-    for i in col_names_all:
+    for i in train_data.columns:
+        if i!="crim":
+            col_names_all.append(i)
         if i != 'crim' and i!='id':
             col_names.append(i)
     #
-
-    X = [result[i] if i in col_names and i!= 'crim' else 0 for i in col_names]
+    X = [result[i] if i in col_names  else 0 for i in col_names_all]
     # prediction = model.get_prediction(model_name, [X])
-    # print(X)
-    # X = np.array(X).reshape(1, -1)
-    # print(X)
+    print(X)
+
     prediction = model.predict([X])
     obj = {
         'pred': prediction[0],
     }
-    print(f"obj = {obj}")
     return JsonResponse(obj)
 @api_view(['GET','POST'])
 def Time_series(request):
