@@ -401,13 +401,12 @@ def deploy_data(request):
     col_names = train_data.columns.tolist()
     correlations = train_data[col_names_all + [target_var]].corr()[target_var]
 
-    # Create a list to store the threshold values
     result = []
     for col in col_names_all:
         threshold = train_data[col].abs().max()
-        result.append(int(threshold) if correlations[col] >= 0 else int(-threshold))
+        data_type = 'int' if np.issubdtype(train_data[col].dtype, np.integer) else 'float'
+        result.append({"value": float(threshold) if data_type == 'float' else int(threshold), "data_type": data_type})
 
-    # Return the response as a JSON object
     response = {"result": result}
     return JsonResponse(response)
 
