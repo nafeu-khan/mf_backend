@@ -61,7 +61,7 @@ urlpatterns = [
     path('api/model_prediction/', model_prediction, name='dropping'),
     path('api/download_model/', download_model, name='download_model'),
     path('api/reverseml/', Reverse_ml, name='dropping'),
-    path('api/deploy_data',deploy_data,name="deploy_data"),
-    path('api/deploy_result', deploy_result, name="deploy_result")
+    path('api/deploy_data/',deploy_data,name="deploy_data"),
+    path('api/deploy_result/', deploy_result, name="deploy_result")
 
 ]

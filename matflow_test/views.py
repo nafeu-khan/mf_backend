@@ -382,24 +382,37 @@ def download_model(file):
     response = HttpResponse(model_binary, content_type='application/octet-stream')
     response['Content-Disposition'] = f'attachment; filename="model_name".pkl"'
     return response
-@api_view(['GET','POST'])
+
+
+
+
+import json
+import pandas as pd
+import numpy as np
+from django.http import JsonResponse
+from rest_framework.decorators import api_view
+
+@api_view(['GET', 'POST'])
 def deploy_data(request):
     file = json.loads(request.body)
     train_data = pd.DataFrame(file.get('train'))
     target_var = file.get('target_var')
-    col_names_all = []
-    for i in train_data.columns:
-        if i == target_var:
-            continue
-        col_names_all.append(i)
-    col_names = train_data.columns.to_list()
-    correlations = train_data[col_names + [target_var]].corr()[target_var]
-    result=[]
-    for i in col_names:
-        threshold = train_data[i].abs().max()
-        result += threshold if correlations[i] >= 0 else (-threshold)
-    response = result
-    return response
+    col_names_all = [col for col in train_data.columns if col != target_var]
+    col_names = train_data.columns.tolist()
+    correlations = train_data[col_names_all + [target_var]].corr()[target_var]
+
+    # Create a list to store the threshold values
+    result = []
+    for col in col_names_all:
+        threshold = train_data[col].abs().max()
+        result.append(int(threshold) if correlations[col] >= 0 else int(-threshold))
+
+    # Return the response as a JSON object
+    response = {"result": result}
+    return JsonResponse(response)
+
+
+
 @api_view(['GET','POST'])
 def deploy_result(request):
     file = json.loads(request.body)
