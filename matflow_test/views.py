@@ -421,14 +421,17 @@ def deploy_result(request):
     model = pickle.loads(model_bytes)
     result = file.get("result")
     train_data = pd.DataFrame(file.get('train'))
+    target_var=file.get('target_var')
+    print(result)
+    print(target_var)
     col_names_all = []
     col_names=[]
     for i in train_data.columns:
-        if i!="crim":
+        if i!=target_var:
             col_names_all.append(i)
-        if i != 'crim' and i!='id':
-            col_names.append(i)
-    #
+    col_names.extend(result.keys())
+    print(col_names)
+    print(col_names_all)
     X = [result[i] if i in col_names  else 0 for i in col_names_all]
     # prediction = model.get_prediction(model_name, [X])
     print(X)
