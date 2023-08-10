@@ -17,19 +17,21 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from matflow_test.views import login, signup, display_group, test_page, display_correlation, eda_barplot, \
+from matflow_test.views import login, signup, display_group, display_correlation, eda_barplot, \
     display_correlation_featurePair, eda_pieplot, eda_boxplot, eda_countplot, eda_histogram, eda_violinplot, \
     eda_scatterplot, eda_regplot, eda_lineplot, eda_customplot, feature_creation, Alter_field, changeDtype, \
-    merge_dataset, Encoding, Scaling, Drop_row, Drop_column, Append, Cluster, Split, Time_series, Time_series_analysis
+    merge_dataset, Encoding, Scaling, Drop_row, Drop_column, Append, Cluster, Split, Time_series, Time_series_analysis, \
+    Hyper_opti, Build_model, model_evaluation, Reverse_ml, model_prediction, display_correlation_heatmap, \
+    download_model, deploy_data, deploy_result
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/signup/', signup, name='signup'),
     path('api/login/', login, name='login'),
-    path('',test_page),
     path('api/display_group/', display_group, name='display-api'),
     path('api/display_correlation/', display_correlation, name='display-api'),
     path('api/display_correlation_featurePair/', display_correlation_featurePair, name='display-api'),
+    path('api/display_correlation_heatmap/', display_correlation_heatmap, name='display_correlation_heatmap'),
     path('api/eda_barplot/', eda_barplot, name='bar-api'),
     path('api/eda_countplot/', eda_countplot, name='count-api'),
     path('api/eda_boxplot/', eda_boxplot, name='eda-api'),
@@ -51,7 +53,15 @@ urlpatterns = [
     path('api/append/', Append, name='dropping'),
     path('api/cluster/', Cluster, name='dropping'),
     path('api/split_dataset/', Split, name='dropping'),
+    path('api/build_model/', Build_model, name='dropping'),
     path('api/time_series/', Time_series, name='dropping'),
     path('api/time_series_analysis/', Time_series_analysis, name='dropping'),
+    path('api/hyperparameter_optimization/', Hyper_opti, name='dropping'),
+    path('api/model_evaluation/', model_evaluation, name='dropping'),
+    path('api/model_prediction/', model_prediction, name='dropping'),
+    path('api/download_model/', download_model, name='download_model'),
+    path('api/reverseml/', Reverse_ml, name='dropping'),
+    path('api/deploy_data/',deploy_data,name="deploy_data"),
+    path('api/deploy_result/', deploy_result, name="deploy_result")
 
 ]

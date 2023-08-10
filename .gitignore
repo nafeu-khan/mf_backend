@@ -1,0 +1,7 @@
+# Ignore compiled binaries
+*.exe
+*.dll
+
+# Ignore IDE workspace files
+.idea/
+.xml

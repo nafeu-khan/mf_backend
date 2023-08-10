@@ -59,7 +59,6 @@ def get_nunique(data, column=None):
 def split_xy(data, target_var):
     X = data.drop(target_var, axis=1)
     y = data[target_var]
-
     return X, y
 
 

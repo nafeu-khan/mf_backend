@@ -1,3 +1,4 @@
+import base64
 import json
 import pandas as pd
 import numpy as np
@@ -8,7 +9,9 @@ from django.http import JsonResponse
 from django.contrib.auth import authenticate, login
 from rest_framework import status
 from django.contrib.auth.models import User
-from .Matflow_Main.modules.dataframe.correlation import display_pair
+
+from .Matflow_Main.modules.classifier import knn, svm, log_reg, decision_tree, random_forest, perceptron
+from .Matflow_Main.modules.dataframe.correlation import display_heatmap, display_pair
 from .Matflow_Main.modules.feature.append import append
 from .Matflow_Main.modules.feature.change_dtype import Change_dtype
 from .Matflow_Main.modules.feature.change_fieldname import change_field_name
@@ -28,7 +31,16 @@ from .Matflow_Main.modules.graph.histogram import Histogram
 from .Matflow_Main.modules.graph.regplot import Regplot
 from .Matflow_Main.modules.graph.scatterplot import Scatterplot
 from .Matflow_Main.modules.graph.violinplot import Violinplot
+from .Matflow_Main.modules.model.classification import classification
+from .Matflow_Main.modules.model.model_report import model_report
+from .Matflow_Main.modules.model.prediction_classification import prediction_classification
+from .Matflow_Main.modules.model.prediction_regression import prediction_regression
+from .Matflow_Main.modules.model.regression import regression
 from .Matflow_Main.modules.model.split_dataset import split_dataset
+from .Matflow_Main.modules.regressor import linear_regression, ridge_regression, lasso_regression, \
+    decision_tree_regression, random_forest_regression, svr
+from .Matflow_Main.modules.utils import split_xy
+from .Matflow_Main.subpage.Reverse_ML import reverse_ml
 from .Matflow_Main.subpage.temp import temp
 from .Matflow_Main.subpage.time_series import  time_series
 from .Matflow_Main.subpage.time_series_analysis import  time_series_analysis
@@ -69,8 +81,9 @@ def login(request):
     login(request, user)
 
     return Response({'message': 'User logged in successfully.'}, status=status.HTTP_200_OK)
-def test_page(request):
-    return render(request, 'index.html')
+# @api_view(['GET', 'POST'])
+# def test_page(request):
+#     return HttpResponse("hello")
 @api_view(['GET', 'POST'])
 def display_group(request):
     data = json.loads(request.body)
@@ -106,7 +119,12 @@ def display_correlation_featurePair(request):
     df=display_pair(correlation_data,bg_gradient,feature1,feature2,high,drop,absol)
     data = df.to_json(orient='records')
     return JsonResponse({'data': data})
-
+@api_view(['GET','POST'])
+def display_correlation_heatmap(request):
+    data = json.loads(request.body)
+    correlation_data =pd.DataFrame(data.get('file'))
+    response= display_heatmap(correlation_data)
+    return response
 @api_view(['GET','POST'])
 def eda_barplot(request):
     data = json.loads(request.body)
@@ -283,7 +301,146 @@ def Cluster(request):
 def Split(request):
     data=json.loads(request.body)
     response = split_dataset(data)
+    print(response)
     return response
+@api_view(['GET','POST'])
+def Build_model(request):
+    data=json.loads(request.body)
+    response = split_dataset(data)
+    return response
+@api_view(['GET','POST'])
+def Hyper_opti(request):
+    data=json.loads(request.body)
+    print(data.keys())
+    train_data=pd.DataFrame(data.get("train"))
+    test_data=pd.DataFrame(data.get("test"))
+    target_var=data.get("target_var")
+    print(target_var)
+    # print(f"{train_data.head} {test_data.head} {target_var}")
+    X_train, y_train = split_xy(train_data, target_var)
+    X_test, y_test = split_xy(test_data, target_var)
+    type=data.get("type")
+    if(type=="classifier"):
+        classifier=data.get("classifier")
+        if(classifier=="K-Nearest Neighbors"):
+            response= knn.hyperparameter_optimization(X_train, y_train,data)
+        elif(classifier=="Support Vector Machine"):
+            response= svm.hyperparameter_optimization(X_train, y_train,data)
+        elif(classifier=="Logistic Regression"):
+            response= log_reg.hyperparameter_optimization(X_train, y_train,data)
+        elif(classifier=="Decision Tree Classification"):
+            response= decision_tree.hyperparameter_optimization(X_train, y_train,data)
+        elif(classifier=="Random Forest Classification"):
+            response = random_forest.hyperparameter_optimization(X_train, y_train, data)
+        elif(classifier=="Multilayer Perceptron"):
+            response = perceptron.hyperparameter_optimization(X_train, y_train, data)
+    else :
+        regressor = data.get("regressor")
+        if regressor == "Linear Regression":
+            response = linear_regression.hyperparameter_optimization(X_train, y_train,data)
+        elif regressor == "Ridge Regression":
+            response = ridge_regression.hyperparameter_optimization(X_train, y_train,data)
+        elif regressor == "Lasso Regression":
+            response = lasso_regression.hyperparameter_optimization(X_train, y_train,data)
+        elif regressor == "Decision Tree Regression":
+            response = decision_tree_regression.hyperparameter_optimization(X_train, y_train,data)
+        elif regressor == "Random Forest Regression":
+            response = random_forest_regression.hyperparameter_optimization(X_train, y_train,data)
+        elif regressor == "Support Vector Regressor":
+            print("in svr")
+            response = svr.hyperparameter_optimization(X_train, y_train,data)
+    return response
+@api_view(['GET','POST'])
+def Build_model(request):
+    data=json.loads(request.body)
+    type=data.get("type")
+    if(type== "classifier"):
+        response = classification(data)
+    else:
+        response = regression(data)
+    return response
+@api_view(['GET','POST'])
+def model_evaluation(request):
+    data=json.loads(request.body)
+    response = model_report(data)
+    return response
+@api_view(['GET','POST'])
+def model_prediction(request):
+    data=json.loads(request.body)
+    type=data.get("type")
+    print(type)
+    if(type=="regressor"):
+        response=prediction_regression(data)
+    else:
+        response = prediction_classification(data)
+    return response
+import pickle
+from django.http import HttpResponse
+@api_view(['GET','POST'])
+def download_model(file):
+    model = pickle.loads(file.get("model"))
+    model_binary = pickle.dumps(model)
+    response = HttpResponse(model_binary, content_type='application/octet-stream')
+    response['Content-Disposition'] = f'attachment; filename="model_name".pkl"'
+    return response
+
+
+
+
+import json
+import pandas as pd
+import numpy as np
+from django.http import JsonResponse
+from rest_framework.decorators import api_view
+
+@api_view(['GET', 'POST'])
+def deploy_data(request):
+    file = json.loads(request.body)
+    train_data = pd.DataFrame(file.get('train'))
+    target_var = file.get('target_var')
+    col_names_all = [col for col in train_data.columns if col != target_var]
+    col_names = train_data.columns.tolist()
+    correlations = train_data[col_names_all + [target_var]].corr()[target_var]
+
+    result = []
+    for col in col_names_all:
+        threshold = train_data[col].abs().max()
+        data_type = 'int' if np.issubdtype(train_data[col].dtype, np.integer) else 'float'
+        threshold = float(threshold) if correlations[col] >= 0 else float(-threshold)
+        result.append({"col": col, "value": float(threshold) if data_type == 'float' else int(threshold), "data_type": data_type})
+
+    response = {"result": result}
+    return JsonResponse(response)
+
+
+
+@api_view(['GET','POST'])
+def deploy_result(request):
+    file = json.loads(request.body)
+    model_bytes = base64.b64decode(file.get("model_deploy"))
+    model = pickle.loads(model_bytes)
+    result = file.get("result")
+    train_data = pd.DataFrame(file.get('train'))
+    target_var=file.get('target_var')
+    print(result)
+    print(target_var)
+    col_names_all = []
+    col_names=[]
+    for i in train_data.columns:
+        if i!=target_var:
+            col_names_all.append(i)
+    col_names.extend(result.keys())
+    print(col_names)
+    print(col_names_all)
+    X = [result[i] if i in col_names  else 0 for i in col_names_all]
+    # prediction = model.get_prediction(model_name, [X])
+    print(X)
+
+    prediction = model.predict([X])
+    obj = {
+        'pred': prediction[0],
+    }
+    return JsonResponse(obj)
 @api_view(['GET','POST'])
 def Time_series(request):
     data=json.loads(request.body)
@@ -294,7 +451,11 @@ def Time_series_analysis(request):
     data=json.loads(request.body)
     response = time_series_analysis(data)
     return response
-
+@api_view(['GET','POST'])
+def Reverse_ml(request):
+    data=json.loads(request.body)
+    response = reverse_ml(data)
+    return response
 
 
 

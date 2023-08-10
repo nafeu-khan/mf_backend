@@ -71,7 +71,6 @@ def time_series(file):
     selected_start = min_date_range
     selected_end =  max_date_range
 
-
     # Filter the data based on the selected range
     filtered_data = data.loc[selected_start:selected_end]
     # filtered_data = data.loc[(data.index >= min_date_range) & (data.index <= max_date_range)]
@@ -95,28 +94,13 @@ def time_series(file):
         fig.update_layout(legend=dict(x=0, y=1, bgcolor='rgba(255, 255, 255, 0.5)'))
         # Set axis labels
         fig.update_layout(xaxis_title="Time", yaxis_title="Value")
-        fig.show()
+        fig.update_layout(width=1000, height=800)
         # Save the plot to a BytesIO stream
         image_stream = io.BytesIO()
         plt.savefig(image_stream, format='png', bbox_inches='tight')
         # plt.close(fig)
-        image_stream.seek(0)
 
-        # Encode the image stream as base64
-        image_base64 = base64.b64encode(image_stream.getvalue()).decode('utf-8')
-
-        # Create the Plotly graph with the base64-encoded image and increase size
-        graph = go.Figure(go.Image(source=f'data:image/png;base64,{image_base64}'))
-        graph.update_layout(font=dict(family="Arial", size=12), width=1000, height=800,
-                            # xaxis=dict(editable=True),yaxis=dict(editable=True)
-                            )
-        # Convert the graph to HTML and send as a response
-        html_content = pio.to_html(graph, full_html=False)
-        response = HttpResponse(content_type='text/html')
-        response.write(html_content)
-        # Return the graph JSON data
-        # graph_json = graph.to_json()
-        graph_json = fig.to_dict()
+        graph_json = pio.to_json(fig.to_dict())
 
         object = {
             "graph": graph_json,

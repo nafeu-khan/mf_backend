@@ -41,5 +41,3 @@ The project has one endpoint that receives a request and returns a response:
 
 - Django
 - Django REST framework
-
-ahnaf

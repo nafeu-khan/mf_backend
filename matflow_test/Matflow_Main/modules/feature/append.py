@@ -10,6 +10,5 @@ def append (file):
     temp2 = tmp.append(data)
     temp2 = temp2.reset_index()
 
-    new_value =temp2 .to_dict(orient="records")
-
+    new_value =temp2 .to_json(orient="records")
     return JsonResponse(new_value, safe=False)
