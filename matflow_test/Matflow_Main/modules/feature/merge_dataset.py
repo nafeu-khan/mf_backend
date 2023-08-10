@@ -1,12 +1,9 @@
-
 import pandas as pd
 from django.http import JsonResponse
-
 
 def merge_df(file):
     # merge_name = file.get('select_dataset_you_wanna_merge_with')
     # file_name = file.get('new_dataset_name')
-    print(file.keys())
     how =file.get('how')
     left_on = file.get("left_dataframe")
     right_on = file.get("right_dataframe")
