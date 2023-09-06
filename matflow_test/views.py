@@ -392,13 +392,25 @@ def deploy_data(request):
     col_names = train_data.columns.tolist()
     # correlations = train_data[col_names_all + [target_var]].corr()[target_var]
     correlations = train_data[col_names_all + [target_var]].corr(numeric_only=True)[target_var]
+    df_correlations = pd.DataFrame(correlations)
+    df_correlations['Threshold'] = ''
     result = []
     for col in col_names_all:
         threshold = train_data[col].abs().max()
         data_type = 'int' if np.issubdtype(train_data[col].dtype, np.integer) else 'float'
         threshold = float(threshold) if correlations[col] >= 0 else float(-threshold)
         result.append({"col": col, "value": float(threshold) if data_type == 'float' else int(threshold), "data_type": data_type})
-    response = {"result": result}
+        df_correlations.at[col, 'Threshold'] = threshold
+
+    df_correlations = df_correlations.drop(df_correlations.index[-1])
+    df_correlations = df_correlations.rename(columns={target_var: f'Correlation({target_var})'})
+    df_correlations = df_correlations.rename_axis("Name of Features", axis="index")
+    df_correlations = df_correlations.reset_index().to_dict(orient='records')
+
+    response = {"result": result,
+                'dataframe': df_correlations
+                }
+
     return JsonResponse(response)
 
 @api_view(['GET','POST'])
@@ -409,19 +421,15 @@ def deploy_result(request):
     result = file.get("result")
     train_data = pd.DataFrame(file.get('train'))
     target_var=file.get('target_var')
-    print(result)
-    print(target_var)
     col_names_all = []
     col_names=[]
     for i in train_data.columns:
         if i!=target_var:
             col_names_all.append(i)
     col_names.extend(result.keys())
-    print(col_names)
-    print(col_names_all)
+
     X = [result[i] if i in col_names  else 0 for i in col_names_all]
     # prediction = model.get_prediction(model_name, [X])
-    print(X)
 
     prediction = model.predict([X])
     obj = {

@@ -1,12 +1,10 @@
 import pandas as pd
-import streamlit as st
 from django.http import JsonResponse
 
 
 def model_deployment(file):
     model_name = file.get("model_name")
     # dataset = pd.DataFrame(file.get("model_name"))
-
     model = file.get("models")
     # train_data_name = pd.DataFrame(file.get('train_name'))
     # test_data_name=dataset['test_name']
