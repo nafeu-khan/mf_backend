@@ -1,11 +1,11 @@
-
+import pandas as pd
 from django.http import JsonResponse
 
 from ...modules import utils
 from ...modules.classes import imputer
 
 def imputation(file, data_opt):
-	data=file.get("data")
+	data=pd.Dataframe(file.get("data"))
 	num_var = utils.get_numerical(data)
 	null_var = utils.get_null(data)
 	if null_var != []:
