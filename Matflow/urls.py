@@ -36,6 +36,9 @@ urlpatterns = [
     path('api/drop_column/', Drop_column, name='dropping'),
     path('api/drop_rows/', Drop_row, name='dropping'),
     path('api/append/', Append, name='dropping'),
+    path('api/imputation_data1', Append, name='dropping'),
+    path('api/append/', Append, name='dropping'),
+
     path('api/cluster/', Cluster, name='dropping'),
     path('api/split_dataset/', Split, name='dropping'),
     path('api/build_model/', Build_model, name='dropping'),

@@ -267,7 +267,7 @@ def Alter_field(request):
 @api_view(['GET','POST'])
 def imputation_data1(request):
     file=json.loads(request.body)
-    data=pd.DataFrame(file.get('data'))
+    data=pd.DataFrame(file.get('file'))
     # num_var = utils.get_numerical(data)
     null_var = utils.get_null(data)
     low_cardinality = utils.get_low_cardinality(data, add_hypen=True)
