@@ -275,7 +275,8 @@ def imputation_data1(request):
         'null_var' : null_var,
         'group_by': low_cardinality
     }
-    return response
+    return JsonResponse(response, safe=False)
+
 @api_view(['GET','POST'])
 def imputation_data2(request):
     file=json.loads(request.body)
@@ -299,7 +300,8 @@ def imputation_data2(request):
         'mode' : mode,
         'category': category
     }
-    return response
+    return JsonResponse(response, safe=False)
+
 
 @api_view(['GET', 'POST'])
 def imputation_result(request):
@@ -316,7 +318,9 @@ def imputation_result(request):
     response = {
         "dataset": new_value
     }
-    return response
+    return JsonResponse(response, safe=False)
+
+
 @api_view(['GET','POST'])
 def merge_dataset(request):
     data=json.loads(request.body)
