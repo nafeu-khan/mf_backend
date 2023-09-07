@@ -263,7 +263,21 @@ def Alter_field(request):
     data=json.loads(request.body)
     response = change_field_name(data)
     return response
-
+@api_view(['GET','POST'])
+def feature_selection(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        dataset = data['dataset']
+        table_name = data['table_name']
+        target_var = data['target_var']
+        method = data['method']
+        selected_features_df = feature_selection.feature_selection(dataset, table_name, target_var, method)
+        response_data = {
+            'selected_features': selected_features_df.to_dict(orient='records')
+        }
+        return JsonResponse(response_data)
+    else:
+        return JsonResponse({'error': 'Invalid request method'})
 @api_view(['GET','POST'])
 def imputation_data1(request):
     file=json.loads(request.body)
@@ -271,12 +285,10 @@ def imputation_data1(request):
     # num_var = utils.get_numerical(data)
     null_var = utils.get_null(data)
     low_cardinality = utils.get_low_cardinality(data, add_hypen=True)
-
     response = {
         'null_var' : null_var,
         'group_by': low_cardinality
     }
-    print (response)
     return JsonResponse(response, safe=False)
 
 @api_view(['GET','POST'])
@@ -284,23 +296,18 @@ def imputation_data2(request):
     file=json.loads(request.body)
     data=pd.DataFrame(file.get('file'))
     var=file.get('Select_columns')
-    print(f"variable =     {var}")
-
     num_var = utils.get_numerical(data)
     category=''
-    mode=''
-    max_val=0
+    mode=None
+    max_val=None
     if var in num_var:
         category='numerical'
-        print(var)
         max_val = abs(data[var]).max()
     else:
         category= 'categorical'
-        print(var)
         mode = data[var].mode().to_dict()
     null_var = utils.get_null(data)
     low_cardinality = utils.get_low_cardinality(data, add_hypen=True)
-
     response = {
         'null_var': null_var,
         'group_by': low_cardinality,
@@ -308,28 +315,30 @@ def imputation_data2(request):
         'mode' : mode,
         'category': category
     }
-    print(response)
     return JsonResponse(response, safe=False)
 
 
 @api_view(['GET', 'POST'])
 def imputation_result(request):
     file = json.loads(request.body)
-    data=pd.Dataframe(file.get('file'))
+    data=pd.DataFrame(file.get('file'))
+    strat,fill_group ,constant=None, None,None
     strat=file.get('strategy')
     fill_group=file.get('fill_group')
     var=file.get("Select_columns")
     constant=file.get('constant')
+    print(f"{strat} {fill_group} {var} {constant}")
     fill_group = None if (fill_group == "-") else fill_group
+    print(f"{fill_group}")
     imp = imputer.Imputer(strategy=strat, columns=[var], fill_value=constant, group_col=fill_group)
     new_value = imp.fit_transform(data)
     new_value=new_value.reset_index().to_dict(orient='records')
     response = {
         "dataset": new_value
     }
+    print("datset new")
     print(response)
     return JsonResponse(response, safe=False)
-
 
 @api_view(['GET','POST'])
 def merge_dataset(request):
