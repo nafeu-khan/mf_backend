@@ -7,7 +7,7 @@ from matflow_test.views import login, signup, display_group, display_correlation
     eda_scatterplot, eda_regplot, eda_lineplot, eda_customplot, feature_creation, Alter_field, changeDtype, \
     merge_dataset, Encoding, Scaling, Drop_row, Drop_column, Append, Cluster, Split, Time_series, Time_series_analysis, \
     Hyper_opti, Build_model, model_evaluation, Reverse_ml, model_prediction, display_correlation_heatmap, \
-    download_model, deploy_data, deploy_result
+    download_model, deploy_data, deploy_result, imputation_data1, imputation_data2, imputation_result
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -36,7 +36,10 @@ urlpatterns = [
     path('api/drop_column/', Drop_column, name='dropping'),
     path('api/drop_rows/', Drop_row, name='dropping'),
     path('api/append/', Append, name='dropping'),
-    path('api/imputation_data1', Append, name='dropping'),
+    path('api/imputation_data1', imputation_data1, name='imputation_data1'),
+    path('api/imputation_data2', imputation_data2, name='imputation_data2'),
+    path('api/imputation_result', imputation_result, name='imputation_result'),
+
     path('api/append/', Append, name='dropping'),
 
     path('api/cluster/', Cluster, name='dropping'),
