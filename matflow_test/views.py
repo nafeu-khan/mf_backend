@@ -283,16 +283,20 @@ def imputation_data1(request):
 def imputation_data2(request):
     file=json.loads(request.body)
     data=pd.DataFrame(file.get('file'))
-    var=file.get('select_columns')
+    var=file.get('Select_columns')
+    print(f"variable =     {var}")
+
     num_var = utils.get_numerical(data)
     category=''
     mode=None
     max_val=None
     if var in num_var:
         category='numerical'
+        print(var)
         max_val = abs(data[var]).max()
     else:
         category= 'categorical'
+        print(var)
         mode = data[var].mode()
     null_var = utils.get_null(data)
     low_cardinality = utils.get_low_cardinality(data, add_hypen=True)
