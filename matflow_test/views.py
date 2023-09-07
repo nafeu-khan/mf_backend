@@ -271,10 +271,12 @@ def imputation_data1(request):
     # num_var = utils.get_numerical(data)
     null_var = utils.get_null(data)
     low_cardinality = utils.get_low_cardinality(data, add_hypen=True)
+
     response = {
         'null_var' : null_var,
         'group_by': low_cardinality
     }
+    print (response)
     return JsonResponse(response, safe=False)
 
 @api_view(['GET','POST'])
@@ -282,14 +284,16 @@ def imputation_data2(request):
     file=json.loads(request.body)
     data=pd.DataFrame(file.get('file'))
     var=file.get('select_columns')
-    max_val = abs(data[var]).max()
-    mode = data[var].mode()
     num_var = utils.get_numerical(data)
     category=''
+    mode=None
+    max_val=None
     if var in num_var:
         category='numerical'
+        max_val = abs(data[var]).max()
     else:
         category= 'categorical'
+        mode = data[var].mode()
     null_var = utils.get_null(data)
     low_cardinality = utils.get_low_cardinality(data, add_hypen=True)
 
@@ -300,6 +304,7 @@ def imputation_data2(request):
         'mode' : mode,
         'category': category
     }
+    print(response)
     return JsonResponse(response, safe=False)
 
 
@@ -318,6 +323,7 @@ def imputation_result(request):
     response = {
         "dataset": new_value
     }
+    print(response)
     return JsonResponse(response, safe=False)
 
 
