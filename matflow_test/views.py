@@ -288,8 +288,8 @@ def imputation_data2(request):
 
     num_var = utils.get_numerical(data)
     category=''
-    mode=None
-    max_val=None
+    mode=''
+    max_val=0
     if var in num_var:
         category='numerical'
         print(var)
@@ -297,7 +297,7 @@ def imputation_data2(request):
     else:
         category= 'categorical'
         print(var)
-        mode = data[var].mode()
+        mode = data[var].mode().to_dict()
     null_var = utils.get_null(data)
     low_cardinality = utils.get_low_cardinality(data, add_hypen=True)
 
