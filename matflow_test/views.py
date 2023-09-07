@@ -9,6 +9,8 @@ from django.contrib.auth import authenticate, login
 from rest_framework import status
 from django.contrib.auth.models import User
 
+from .Matflow_Main.modules import utils
+from .Matflow_Main.modules.classes import imputer
 from .Matflow_Main.modules.classifier import knn, svm, log_reg, decision_tree, random_forest, perceptron
 from .Matflow_Main.modules.dataframe.correlation import display_heatmap, display_pair
 from .Matflow_Main.modules.feature.append import append
@@ -261,6 +263,60 @@ def Alter_field(request):
     data=json.loads(request.body)
     response = change_field_name(data)
     return response
+
+@api_view(['GET','POST'])
+def imputation_data1(request):
+    file=json.loads(request.body)
+    data=pd.DataFrame(file.get('data'))
+    # num_var = utils.get_numerical(data)
+    null_var = utils.get_null(data)
+    low_cardinality = utils.get_low_cardinality(data, add_hypen=True)
+    response = {
+        'null_var' : null_var,
+        'group_by': low_cardinality
+    }
+    return response
+@api_view(['GET','POST'])
+def imputation_data2(request):
+    file=json.loads(request.body)
+    data=pd.DataFrame(file.get('data'))
+    var=file.get('select_columns')
+    max_val = abs(data[var]).max()
+    mode = data[var].mode()
+    num_var = utils.get_numerical(data)
+    category=''
+    if var in num_var:
+        category='numerical'
+    else:
+        category= 'categorical'
+    null_var = utils.get_null(data)
+    low_cardinality = utils.get_low_cardinality(data, add_hypen=True)
+
+    response = {
+        'null_var': null_var,
+        'group_by': low_cardinality,
+        'max_val': max_val,
+        'mode' : mode,
+        'category': category
+    }
+    return response
+
+@api_view(['GET', 'POST'])
+def imputation_result(request):
+    file = json.loads(request.body)
+    data=pd.Dataframe(file.get('data'))
+    strat=file.get('strategy')
+    fill_group=file.get('fill_group')
+    var=file.get("Select_columns")
+    constant=file.get('constant')
+    fill_group = None if (fill_group == "-") else fill_group
+    imp = imputer.Imputer(strategy=strat, columns=[var], fill_value=constant, group_col=fill_group)
+    new_value = imp.fit_transform(data)
+    new_value=new_value.reset_index().to_dict(orient='records')
+    response = {
+        "dataset": new_value
+    }
+    return response
 @api_view(['GET','POST'])
 def merge_dataset(request):
     data=json.loads(request.body)
@@ -300,7 +356,6 @@ def Cluster(request):
 def Split(request):
     data=json.loads(request.body)
     response = split_dataset(data)
-    print(response)
     return response
 @api_view(['GET','POST'])
 def Build_model(request):
@@ -310,11 +365,9 @@ def Build_model(request):
 @api_view(['GET','POST'])
 def Hyper_opti(request):
     data=json.loads(request.body)
-    print(data.keys())
     train_data=pd.DataFrame(data.get("train"))
     test_data=pd.DataFrame(data.get("test"))
     target_var=data.get("target_var")
-    print(target_var)
     # print(f"{train_data.head} {test_data.head} {target_var}")
     X_train, y_train = split_xy(train_data, target_var)
     X_test, y_test = split_xy(test_data, target_var)
@@ -346,7 +399,6 @@ def Hyper_opti(request):
         elif regressor == "Random Forest Regression":
             response = random_forest_regression.hyperparameter_optimization(X_train, y_train,data)
         elif regressor == "Support Vector Regressor":
-            print("in svr")
             response = svr.hyperparameter_optimization(X_train, y_train,data)
     return response
 @api_view(['GET','POST'])
@@ -367,7 +419,6 @@ def model_evaluation(request):
 def model_prediction(request):
     data=json.loads(request.body)
     type=data.get("type")
-    print(type)
     if(type=="regressor"):
         response=prediction_regression(data)
     else:
@@ -451,18 +502,6 @@ def Reverse_ml(request):
     data=json.loads(request.body)
     response = reverse_ml(data)
     return response
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

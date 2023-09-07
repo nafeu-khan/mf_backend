@@ -10,8 +10,6 @@ def imputation(file, data_opt):
 	null_var = utils.get_null(data)
 	if null_var != []:
 		var = file.get("Select columns")
-		add_pipeline = file.get("add_to_pipeline")
-
 		if var in num_var:
 			strat, fill_group, constant = impute_num(data, var, file)
 		else:
