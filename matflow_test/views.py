@@ -279,7 +279,7 @@ def imputation_data1(request):
 @api_view(['GET','POST'])
 def imputation_data2(request):
     file=json.loads(request.body)
-    data=pd.DataFrame(file.get('data'))
+    data=pd.DataFrame(file.get('file'))
     var=file.get('select_columns')
     max_val = abs(data[var]).max()
     mode = data[var].mode()
@@ -304,7 +304,7 @@ def imputation_data2(request):
 @api_view(['GET', 'POST'])
 def imputation_result(request):
     file = json.loads(request.body)
-    data=pd.Dataframe(file.get('data'))
+    data=pd.Dataframe(file.get('file'))
     strat=file.get('strategy')
     fill_group=file.get('fill_group')
     var=file.get("Select_columns")
