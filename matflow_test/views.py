@@ -322,22 +322,20 @@ def imputation_data2(request):
 def imputation_result(request):
     file = json.loads(request.body)
     data=pd.DataFrame(file.get('file'))
-    strat,fill_group ,constant=None, None,None
+    strat,fill_group ,constant=None, None,0
     strat=file.get('strategy')
     fill_group=file.get('fill_group')
     var=file.get("Select_columns")
     constant=file.get('constant')
-    print(f"{strat} {fill_group} {var} {constant}")
+    # print(f"{strat} {fill_group} {var} {constant}")
     fill_group = None if (fill_group == "-") else fill_group
-    print(f"{fill_group}")
+    # print(f"{fill_group}")
     imp = imputer.Imputer(strategy=strat, columns=[var], fill_value=constant, group_col=fill_group)
     new_value = imp.fit_transform(data)
     new_value=new_value.reset_index().to_dict(orient='records')
     response = {
         "dataset": new_value
     }
-    print("datset new")
-    print(response)
     return JsonResponse(response, safe=False)
 
 @api_view(['GET','POST'])
@@ -501,10 +499,8 @@ def deploy_result(request):
         if i!=target_var:
             col_names_all.append(i)
     col_names.extend(result.keys())
-
     X = [result[i] if i in col_names  else 0 for i in col_names_all]
     # prediction = model.get_prediction(model_name, [X])
-
     prediction = model.predict([X])
     obj = {
         'pred': prediction[0],
