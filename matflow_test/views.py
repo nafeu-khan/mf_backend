@@ -332,11 +332,19 @@ def imputation_result(request):
     # print(f"{fill_group}")
     imp = imputer.Imputer(strategy=strat, columns=[var], fill_value=constant, group_col=fill_group)
     new_value = imp.fit_transform(data)
-    new_value=new_value.reset_index().to_dict(orient='records')
+
+    # new_value=new_value.reset_index()
+    new_value=new_value.to_dict(orient='records')
+
     response = {
         "dataset": new_value
     }
-    return JsonResponse(response, safe=False)
+
+    print(data)
+    print(new_value)
+    print(type(data))
+    print(type(new_value))
+    return JsonResponse(new_value, safe=False)
 
 @api_view(['GET','POST'])
 def merge_dataset(request):

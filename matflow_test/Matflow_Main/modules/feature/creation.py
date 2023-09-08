@@ -42,11 +42,9 @@ def creation(file):
 		return add_new(data,var,add_pipeline,file)
 
 def add_new(data,var,add_pipeline,file):
-	print(data)
-	print(var)
+
 	temp = data.copy(deep=True)
 	file=file.get("data")
-	print(f"file =  \n \n {file}")
 	slt_=file.get("select_methods")
 	if slt_=='Input String':
 		value=file.get('input_string')
@@ -61,7 +59,6 @@ def add_new(data,var,add_pipeline,file):
 
 def math_operation(data, var, add_pipeline, add_or_mod,file):
 	operation =file.get("data").get("new_value_operation")
-	print(f"op = {operation} var = {var}")
 	crt = creator.Creator("Math Operation", var, operation_string=operation)
 	new_value = crt.fit_transform(data)
 	df=new_value.to_dict(orient="records")
