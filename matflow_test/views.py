@@ -327,7 +327,7 @@ def imputation_result(request):
     fill_group=file.get('fill_group')
     var=file.get("Select_columns")
     constant=file.get('constant')
-    # print(f"{strat} {fill_group} {var} {constant}")
+    print(f"{strat} {fill_group} {var} {constant}")
     fill_group = None if (fill_group == "-") else fill_group
     # print(f"{fill_group}")
     imp = imputer.Imputer(strategy=strat, columns=[var], fill_value=constant, group_col=fill_group)
@@ -344,7 +344,7 @@ def imputation_result(request):
     print(new_value)
     print(type(data))
     print(type(new_value))
-    return JsonResponse(new_value, safe=False)
+    return JsonResponse(response, safe=False)
 
 @api_view(['GET','POST'])
 def merge_dataset(request):
