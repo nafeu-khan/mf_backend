@@ -120,4 +120,4 @@ def feature_selection(file,data, target_var, method):
         response_data["graph_data"] = graph_data
 
     # Return selected features and scores as JSON-serializable response data
-    return json.dumps(response_data, indent=4)
+    return response_data

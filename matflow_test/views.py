@@ -264,6 +264,7 @@ def Alter_field(request):
     data=json.loads(request.body)
     response = change_field_name(data)
     return response
+from numpyencoder import NumpyEncoder
 @api_view(['GET','POST'])
 def feature_selection_api(request):
     if request.method == 'POST':
@@ -274,9 +275,10 @@ def feature_selection_api(request):
         method = data.get('method')
         selected_features_df = feature_selection.feature_selection(data,dataset, target_var, method)
         response_data = {
-            'selected_features': selected_features_df.to_dict(orient='records')
+            'selected_features': selected_features_df
         }
-        return JsonResponse(response_data)
+        # return JsonResponse(response_data)
+        return JsonResponse(response_data, encoder=NumpyEncoder)
     else:
         return JsonResponse({'error': 'Invalid request method'})
 @api_view(['GET','POST'])
