@@ -1,16 +1,16 @@
-import pandas as pd
 from sklearn.ensemble import ExtraTreesRegressor, ExtraTreesClassifier
 from sklearn.model_selection import cross_validate
 import numpy as np
 
+import plotly.graph_objects as go
+
+
 import pandas as pd
 from sklearn.ensemble import ExtraTreesClassifier, ExtraTreesRegressor
 from sklearn.model_selection import cross_validate
-
-
-def feature_selection(dataset, table_name, target_var, problem_type, kfold, display_opt, selected_features=None):
+def feature_selection(dataset, target_var, problem_type, kfold, display_opt, selected_features=None):
     try:
-        tab = dataset[table_name]
+        tab = dataset
         if tab.isnull().values.any():
             return ({"error": "Null values in the dataset"})
 
@@ -179,9 +179,8 @@ def feature_selection(dataset, table_name, target_var, problem_type, kfold, disp
             "df_all_result": df_all_result.to_dict(orient='index'),
             "dropped_columns": dropped_columns.to_dict(orient='index'),
             "progress_message": "Feature selection process completed!",
-            "group": feature_graph(df_result_group, df_all_result_group, problem_type, dropped_columns_group, 'group',
-                                   table_name),
-            "single": feature_graph(df_result, df_all_result, problem_type, dropped_columns, 'single', table_name)
+            "group": feature_graph(df_result_group, df_all_result_group, problem_type, dropped_columns_group, 'group'),
+            "single": feature_graph(df_result, df_all_result, problem_type, dropped_columns, 'single')
         }
 
         return (response_data)
@@ -191,14 +190,11 @@ def feature_selection(dataset, table_name, target_var, problem_type, kfold, disp
         return (error_response)
 
 
-import plotly.graph_objects as go
-
-
-def feature_graph(df_result, df_all_result, problem_type, dropped_columns, keys, table_name):
-    try:
-        table_name = table_name.split('.')[0]
-    except:
-        pass
+def feature_graph(df_result, df_all_result, problem_type, dropped_columns, keys):
+    # try:
+    #     table_name = table_name.split('.')[0]
+    # except:
+    #     pass
 
     try:
         df_result = df_result.reset_index()

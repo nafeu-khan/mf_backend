@@ -51,7 +51,8 @@ def visualize(X, y, selected_features_df):
 
     return response_data
 
-def feature_selection(file,data,table_name, target_var, method, score_func, show_graph,best_Kfeature):
+def feature_selection(file,data, target_var, method):
+    show_graph=True
     response_data = {}
 
     # Separate target variable and features
@@ -67,12 +68,16 @@ def feature_selection(file,data,table_name, target_var, method, score_func, show
     # Select feature selection method and score function based on task
     if task == 'classification':
         if method == 'SelectKBest':
+            best_Kfeature=file.get('best_Kfeature')
+            score_func = file.get('score_func')
             selector = SelectKBest(score_func=eval(score_func), k=best_Kfeature)
         else:
             estimator = RandomForestClassifier(n_estimators=100, random_state=0)
             selector = SelectFromModel(estimator=estimator)
     else:
         if method == 'SelectKBest':
+            best_Kfeature = file.get('best_Kfeature')
+            score_func = file.get('score_func')
             selector = SelectKBest(score_func=eval(score_func), k=best_Kfeature)
         else:
             estimator = RandomForestRegressor(n_estimators=100, random_state=0)
@@ -107,7 +112,7 @@ def feature_selection(file,data,table_name, target_var, method, score_func, show
         #need to catch kfold and display_opt
         kfold=file.get('k_fold')
         display_opt=file.get("display_opt")
-        custom_feature_data = customFeatureSelection.feature_selection(data, table_name, target_var, task, kfold, display_opt, selected_features=None)
+        custom_feature_data = customFeatureSelection.feature_selection(data, target_var, task, kfold, display_opt, selected_features=None)
         response_data["custom_feature_data"] = custom_feature_data
 
     if show_graph:

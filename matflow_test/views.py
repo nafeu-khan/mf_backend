@@ -268,14 +268,11 @@ def Alter_field(request):
 def feature_selection_api(request):
     if request.method == 'POST':
         data = json.loads(request.body)
-        dataset = data['dataset']
-        table_name = data['table_name']
-        target_var = data['target_var']
-        method = data['method']
-        show_graph=True
-        score_func=data['score_func']
-        best_Kfeature=data['best_Kfeature']
-        selected_features_df = feature_selection.feature_selection(data,dataset, table_name, target_var, method,score_func,show_graph,best_Kfeature)
+        dataset = pd.DataFrame(data.get('dataset'))
+        # table_name = data['table_name']
+        target_var = data.get('target_var')
+        method = data.get('method')
+        selected_features_df = feature_selection.feature_selection(data,dataset, target_var, method)
         response_data = {
             'selected_features': selected_features_df.to_dict(orient='records')
         }
