@@ -13,6 +13,7 @@ from .Matflow_Main.modules import utils
 from .Matflow_Main.modules.classes import imputer
 from .Matflow_Main.modules.classifier import knn, svm, log_reg, decision_tree, random_forest, perceptron
 from .Matflow_Main.modules.dataframe.correlation import display_heatmap, display_pair
+from .Matflow_Main.modules.feature import feature_selection
 from .Matflow_Main.modules.feature.append import append
 from .Matflow_Main.modules.feature.change_dtype import Change_dtype
 from .Matflow_Main.modules.feature.change_fieldname import change_field_name
@@ -264,7 +265,7 @@ def Alter_field(request):
     response = change_field_name(data)
     return response
 @api_view(['GET','POST'])
-def feature_selection(request):
+def feature_selection_api(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         dataset = data['dataset']
@@ -332,8 +333,7 @@ def imputation_result(request):
     # print(f"{fill_group}")
     imp = imputer.Imputer(strategy=strat, columns=[var], fill_value=constant, group_col=fill_group)
     new_value = imp.fit_transform(data)
-
-    # new_value=new_value.reset_index()
+    new_value=new_value.reset_index()
     new_value=new_value.to_dict(orient='records')
 
     response = {
