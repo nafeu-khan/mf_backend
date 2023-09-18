@@ -51,7 +51,7 @@ def visualize(X, y, selected_features_df):
 
     return response_data
 
-def feature_selection(data,table_name, target_var, method, score_func, show_graph,best_Kfeature):
+def feature_selection(file,data,table_name, target_var, method, score_func, show_graph,best_Kfeature):
     response_data = {}
 
     # Separate target variable and features
@@ -105,6 +105,8 @@ def feature_selection(data,table_name, target_var, method, score_func, show_grap
     # Call customFeatureSelection if needed
     if method == 'Best Overall Features':
         #need to catch kfold and display_opt
+        kfold=file.get('k_fold')
+        display_opt=file.get("display_opt")
         custom_feature_data = customFeatureSelection.feature_selection(data, table_name, target_var, task, kfold, display_opt, selected_features=None)
         response_data["custom_feature_data"] = custom_feature_data
 

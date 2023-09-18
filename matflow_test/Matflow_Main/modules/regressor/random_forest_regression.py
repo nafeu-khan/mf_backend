@@ -35,7 +35,6 @@ def hyperparameter_optimization(X_train, y_train,file):
     }
     return JsonResponse(obj)
 def random_forest_regressor(X_train, y_train,file):
-    print(file.keys())
     try :
         x = int(file.get("n_estimators"))
         n_estimators =x
@@ -44,9 +43,8 @@ def random_forest_regressor(X_train, y_train,file):
 
     max_features = file.get("max_features")
     min_samples_split = int(file.get("min_samples_split"))
-    # print(file.get("max_depth"))
-    max_depth = int(file.get("max_depth"))
-    # random_state = int(file.get("Random state"))
+    mx_d=file.get("max_depth")
+    max_depth = int(mx_d) if mx_d else None
     min_samples_leaf = int(file.get("min_samples_leaf"))
     n_jobs= int(file.get("n_jobs"))
 

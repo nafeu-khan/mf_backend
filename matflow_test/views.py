@@ -275,7 +275,7 @@ def feature_selection_api(request):
         show_graph=True
         score_func=data['score_func']
         best_Kfeature=data['best_Kfeature']
-        selected_features_df = feature_selection.feature_selection(dataset, table_name, target_var, method,score_func,show_graph,best_Kfeature)
+        selected_features_df = feature_selection.feature_selection(data,dataset, table_name, target_var, method,score_func,show_graph,best_Kfeature)
         response_data = {
             'selected_features': selected_features_df.to_dict(orient='records')
         }
@@ -342,11 +342,6 @@ def imputation_result(request):
     response = {
         "dataset": new_value
     }
-
-    print(data)
-    print(new_value)
-    print(type(data))
-    print(type(new_value))
     return JsonResponse(response, safe=False)
 
 @api_view(['GET','POST'])
