@@ -272,7 +272,10 @@ def feature_selection_api(request):
         table_name = data['table_name']
         target_var = data['target_var']
         method = data['method']
-        selected_features_df = feature_selection.feature_selection(dataset, table_name, target_var, method)
+        show_graph=True
+        score_func=data['score_func']
+        best_Kfeature=data['best_Kfeature']
+        selected_features_df = feature_selection.feature_selection(dataset, table_name, target_var, method,score_func,show_graph,best_Kfeature)
         response_data = {
             'selected_features': selected_features_df.to_dict(orient='records')
         }
