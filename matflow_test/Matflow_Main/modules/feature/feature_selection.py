@@ -61,11 +61,27 @@ def visualize(X, y, selected_features_df):
     ax.set_ylabel("Score")
 
     # Convert the figure to JSON-serializable data
-    buffer = io.BytesIO()
-    plt.savefig(buffer, format="png")
+    image_stream = io.BytesIO()
+    plt.savefig(image_stream, format='png', bbox_inches='tight')
     plt.close(fig)
-    buffer.seek(0)
-    response_data['bar_plot'] = base64.b64encode(buffer.read()).decode("utf-8")
+    image_stream.seek(0)
+
+    # Encode the image stream as base64
+    image_base64 = base64.b64encode(image_stream.getvalue()).decode('utf-8')
+
+    # Create the Plotly graph with the base64-encoded image and increase size
+    graph = go.Figure(go.Image(source=f'data:image/png;base64,{image_base64}'))
+    graph.update_layout(font=dict(family="Arial", size=12), width=1000, height=800,
+                        # xaxis=dict(editable=True),yaxis=dict(editable=True)
+                        )
+    # Convert the graph to HTML and send as a response
+    html_content = pio.to_html(graph, full_html=False)
+    response = HttpResponse(content_type='text/html')
+    response.write(html_content)
+
+    # Return the graph JSON data
+    graph_json = graph.to_json()
+    response_data['bar_plot'] = graph_json
 
     return response_data
 
