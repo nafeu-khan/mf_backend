@@ -11,19 +11,20 @@ import seaborn as sns
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.feature_selection import SelectKBest, f_classif, mutual_info_classif, f_regression, mutual_info_regression, \
     SelectFromModel
-from ...subpage import customFeatureSelection
+from ...subpage import customFeatureSelection, Feature_Selection_All
+
 
 def visualize(X, y, selected_features_df):
     response_data = {}
-
     if not y.dtype == 'object':
         if len(selected_features_df) >= 2:
+            # Get the two best features
+
             # Get the two best features
             feature1 = selected_features_df.iloc[0]['Feature']
             feature2 = selected_features_df.iloc[1]['Feature']
 
-            # Create a scatter plot with hue as the target variable
-            fig, ax = plt.subplots()
+            fig, ax = plt.subplots(dpi=300)
             sns.scatterplot(x=X[feature1], y=X[feature2], hue=y, ax=ax)
             ax.set_title(f"Scatter Plot of {feature1} vs. {feature2}")
             ax.set_xlabel(feature1)
@@ -34,15 +35,14 @@ def visualize(X, y, selected_features_df):
             plt.savefig(image_stream, format='png', bbox_inches='tight')
             plt.close(fig)
             image_stream.seek(0)
-            #me
+
             # Encode the image stream as base64
             image_base64 = base64.b64encode(image_stream.getvalue()).decode('utf-8')
 
             # Create the Plotly graph with the base64-encoded image and increase size
             graph = go.Figure(go.Image(source=f'data:image/png;base64,{image_base64}'))
-            graph.update_layout(font=dict(family="Arial", size=12), width=1000, height=800,
-                                # xaxis=dict(editable=True),yaxis=dict(editable=True)
-                                )
+            graph.update_layout(font=dict(family="Arial", size=12), width=1000, height=800)
+
             # Convert the graph to HTML and send as a response
             html_content = pio.to_html(graph, full_html=False)
             response = HttpResponse(content_type='text/html')
@@ -50,7 +50,7 @@ def visualize(X, y, selected_features_df):
 
             # Return the graph JSON data
             graph_json = graph.to_json()
-            response_data['scatter_plot'] = graph_json
+            response_data = {'scatter_plot': graph_json}
 
     # Create a bar plot of the selected features and their scores
     fig, ax = plt.subplots()
