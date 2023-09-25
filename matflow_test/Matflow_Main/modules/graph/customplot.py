@@ -8,8 +8,6 @@ from django.http import HttpResponse, JsonResponse
 from ...modules import utils
 
 def Custom_plot(data,x_var,y_var, hue_var):
-    print(x_var)
-    print(y_var)
     num_var = utils.get_numerical(data)
     # try:
     #     selected_features = st.session_state.selected_feature[table_name]
@@ -26,7 +24,7 @@ def Custom_plot(data,x_var,y_var, hue_var):
     #     for feature in x_var:
     #         renamed_feature = st.text_input(f"Rename '{feature}' to:", feature)
     #         feature_dict[feature] = renamed_feature
-    fig, axs = plt.subplots(1, 2, figsize=(20, max(min(len(x_var), 15), 9)))
+    fig, axs = plt.subplots(1, 2, figsize=(20, max(min(len(x_var), 15), 9)),dpi=720)
     colors = sns.color_palette('husl', (len(x_var) + 1) * (1 if hue_var == 'None' else len(data[hue_var].unique())))
     legend_colors = {}
     labels = []

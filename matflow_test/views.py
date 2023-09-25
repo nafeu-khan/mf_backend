@@ -270,7 +270,6 @@ def feature_selection_api(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         dataset = pd.DataFrame(data.get('dataset')).reset_index(drop=True)
-        print(dataset.head())
         # table_name = data['table_name']
         target_var = data.get('target_var')
         method = data.get('method')

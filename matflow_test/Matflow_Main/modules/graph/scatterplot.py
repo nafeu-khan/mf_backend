@@ -9,7 +9,7 @@ import base64
 import json
 def Scatterplot(data,x,y,hue,title):
 	if x != "-" and y != "-":
-		fig, ax = plt.subplots()
+		fig, ax = plt.subplots(dpi=720)
 		if len(title):
 			ax.set_title(title)
 		hue = None if (hue == "-") else hue

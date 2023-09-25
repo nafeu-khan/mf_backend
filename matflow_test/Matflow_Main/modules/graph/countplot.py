@@ -9,7 +9,7 @@ import base64
 import json
 def Countplot(data,var,title,hue,orient,annot):
 	if var != "-":
-		fig, ax = plt.subplots()
+		fig, ax = plt.subplots(dpi=1200)
 		if hue == "-":
 			hue = None
 		if len(title) == 0:

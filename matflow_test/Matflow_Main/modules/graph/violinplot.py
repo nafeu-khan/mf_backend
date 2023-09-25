@@ -9,7 +9,7 @@ import base64
 import json
 def Violinplot(data,cat,num,hue,orient,dodge,split,title):
 	if num != "-":
-			fig, ax = plt.subplots()
+			fig, ax = plt.subplots(dpi=720)
 
 			cat = None if (cat == "-") else cat
 			hue = None if (hue == "-") else hue

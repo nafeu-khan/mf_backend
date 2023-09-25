@@ -10,7 +10,7 @@ import json
 def Pieplot(data,var,explode,title,label,pct):
 	explode = float(explode)
 	if var != "-":
-		fig, ax = plt.subplots()
+		fig, ax = plt.subplots(dpi=720)
 		if len(title) == 0:
 			# title = f"{var} Pie Plot"
 			ax.set_title(title)

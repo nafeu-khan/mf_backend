@@ -10,7 +10,7 @@ import json
 
 def Barplot(data,cat,num,hue,orient,annotate,title):
 	errorbar=True
-	fig, ax = plt.subplots()
+	fig, ax = plt.subplots(dpi=720)
 	if cat != "-" and num != "-":
 		hue = None if (hue == "-") else hue
 		errorbar = ("ci", 95) if errorbar== True else None

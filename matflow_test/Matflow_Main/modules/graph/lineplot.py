@@ -9,7 +9,7 @@ import base64
 import json
 def Lineplot(data,x,y,hue,title,style,legend):
 	if x != "-" and y != "-":
-		fig, ax = plt.subplots()
+		fig, ax = plt.subplots(dpi=720)
 		hue = None if (hue == "-") else hue
 		style = None if (style == "-") else style
 		if len(title)>0:

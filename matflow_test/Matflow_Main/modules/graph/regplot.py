@@ -10,7 +10,7 @@ import base64
 import json
 def Regplot(data,x,y,title,sctr):
 	if x != "-" and y != "-":
-		fig, ax = plt.subplots()
+		fig, ax = plt.subplots(dpi=720)
 		if len(title):
 			ax.set_title(title)
 		ax = sns.regplot(data=data, x=x, y=y, scatter=sctr)

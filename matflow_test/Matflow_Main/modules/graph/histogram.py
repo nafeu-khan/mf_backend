@@ -16,7 +16,7 @@ def Histogram(data, var, title, hue, orient, stat, auto_bin, kde, legend):
     else:
         bins = "auto"
     if var != "-":
-        fig, ax = plt.subplots()
+        fig, ax = plt.subplots(dpi=720)
         hue = None if hue == "-" else hue
         if len(title):
             ax.set_title(title)

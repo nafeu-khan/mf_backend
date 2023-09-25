@@ -13,7 +13,7 @@ def Boxplot(data, title, cat, num, hue, orient, dodge):
     if num != "-":
         cat = None if cat == "-" else cat
         hue = None if hue == "-" else hue
-        fig, ax = plt.subplots()
+        fig, ax = plt.subplots(dpi=720)
         if len(title) == 0:
             # title = f"Boxplot of {num} by {cat}"
             # if hue:

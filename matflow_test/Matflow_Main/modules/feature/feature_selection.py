@@ -24,7 +24,7 @@ def visualize(X, y, selected_features_df):
             feature1 = selected_features_df.iloc[0]['Feature']
             feature2 = selected_features_df.iloc[1]['Feature']
 
-            fig, ax = plt.subplots(dpi=300)
+            fig, ax = plt.subplots(dpi=720)
             sns.scatterplot(x=X[feature1], y=X[feature2], hue=y, ax=ax)
             ax.set_title(f"Scatter Plot of {feature1} vs. {feature2}")
             ax.set_xlabel(feature1)
@@ -53,7 +53,7 @@ def visualize(X, y, selected_features_df):
             response_data = {'scatter_plot': graph_json}
 
     # Create a bar plot of the selected features and their scores
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(dpi=720)
     ax.bar(selected_features_df['Feature'], selected_features_df['Score'])
     ax.set_xticklabels(selected_features_df['Feature'], rotation=90)
     ax.set_title("Selected Features and Scores")
