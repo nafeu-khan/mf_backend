@@ -8,7 +8,7 @@ from matflow_test.views import login, signup, display_group, display_correlation
     merge_dataset, Encoding, Scaling, Drop_row, Drop_column, Append, Cluster, Split, Time_series, Time_series_analysis, \
     Hyper_opti, Build_model, model_evaluation, Reverse_ml, model_prediction, display_correlation_heatmap, \
     download_model, deploy_data, deploy_result, imputation_data1, imputation_data2, imputation_result, \
-    feature_selection_api
+    feature_selection_api, OptimizeModel
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -52,6 +52,7 @@ urlpatterns = [
     path('api/download_model/', download_model, name='download_model'),
     path('api/reverseml/', Reverse_ml, name='dropping'),
     path('api/deploy_data/',deploy_data,name="deploy_data"),
-    path('api/deploy_result/', deploy_result, name="deploy_result")
+    path('api/deploy_result/', deploy_result, name="deploy_result"),
+    path('api/pso_optimizations/', PsoOptimizeModel.as_view(), name='optimize_model'),
 
 ]
